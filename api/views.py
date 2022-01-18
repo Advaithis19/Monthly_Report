@@ -26,13 +26,13 @@ class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
 
-class GrantList(generics.ListCreateAPIView):
+class GrantList(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = GrantSerializer
     queryset = Grants.objects.all()
 
 
-class GrantDetail(generics.RetrieveDestroyAPIView):
+class GrantDetail(generics.RetrieveAPIView):
 
     serializer_class = GrantSerializer
 
@@ -41,7 +41,7 @@ class GrantDetail(generics.RetrieveDestroyAPIView):
         return get_object_or_404(Grants, id=id)
 
 
-class CreateGrant(APIView):
+class CreateGrant(generics.CreateAPIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request, format=None):
@@ -59,7 +59,7 @@ class EditGrant(generics.UpdateAPIView):
     queryset = Grants.objects.all()
 
 
-class DeleteGrant(generics.RetrieveDestroyAPIView):
+class DeleteGrant(generics.DestroyAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = GrantSerializer
     queryset = Grants.objects.all()

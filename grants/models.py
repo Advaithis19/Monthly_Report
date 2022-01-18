@@ -3,6 +3,7 @@ from django.db.models.constraints import UniqueConstraint
 from django.db.models.deletion import CASCADE
 from django.utils import timezone
 from django.contrib.auth import get_user_model
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 User = get_user_model()
 
@@ -12,7 +13,10 @@ class Grants(models.Model):
     title = models.CharField(max_length=50)
     agency = models.CharField(max_length=50)
     sanc_amt = models.DecimalField(max_digits=15, decimal_places=2)
-    year = models.IntegerField(default=2022)
+    year = models.IntegerField(default=2022, validators=[
+        MaxValueValidator(2030),
+        MinValueValidator(2022)
+    ])
     remarks = models.CharField(max_length=50, null=True)
     slug = models.SlugField(max_length=250)
     date_added = models.DateField(default=timezone.now())
