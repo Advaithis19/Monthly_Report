@@ -1,14 +1,41 @@
 import React, { useState, useEffect } from "react";
-import axiosInstance from "../../utils/axios";
-import { useParams } from "react-router-dom";
+import useAxios from "../../utils/axios";
+import { useNavigate, useParams } from "react-router-dom";
+
+import CssBaseline from "@material-ui/core/CssBaseline";
+import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
+import Typography from "@material-ui/core/Typography";
+
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    marginTop: theme.spacing(8),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+}));
 
 const GrantDetail = () => {
+  let navigate = useNavigate();
+  let api = useAxios();
   let [grant, setGrant] = useState(null);
   const { id } = useParams();
 
   let getGrant = async () => {
-    let response = await axiosInstance.get("grants/" + id);
-    if (response.status === 200) setGrant(response.data);
+    api
+      .get("grants/" + id)
+      .then((response) => {
+        setGrant(response.data);
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          alert("Authentication has expired! Please re-login");
+          navigate("/logout");
+        } else {
+          alert("Something went wrong! Please logout and try again");
+        }
+      });
   };
 
   useEffect(() => {

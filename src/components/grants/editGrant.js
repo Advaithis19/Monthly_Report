@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axiosInstance from "../../utils/axios";
+import useAxios from "../../utils/axios";
 import { useNavigate, useParams } from "react-router-dom";
 // import "bootstrap/dist/css/bootstrap.min.css";
 // import { Form, Button } from "react-bootstrap";
@@ -29,6 +29,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const EditGrant = () => {
+  let api = useAxios();
+  api.defaults.xsrfCookieName = "csrftoken";
+  api.defaults.xsrfHeaderName = "X-CSRFToken";
+
   function slugify(string) {
     const a =
       "àáâäæãåāăąçćčđďèéêëēėęěğǵḧîïíīįìłḿñńǹňôöòóœøōõőṕŕřßśšşșťțûüùúūǘůűųẃẍÿýžźż·/_,:;";
@@ -64,18 +68,27 @@ const EditGrant = () => {
   const [formData, updateFormData] = useState(initialFormData);
 
   let getEditInstance = async () => {
-    let res = await axiosInstance.get("grants/" + id);
-    if (res.status === 200) {
-      updateFormData({
-        ...formData,
-        ["title"]: res.data.title,
-        ["agency"]: res.data.agency,
-        ["sanc_amt"]: res.data.sanc_amt,
-        ["year"]: res.data.year,
-        ["remarks"]: res.data.remarks,
-        ["slug"]: res.data.slug,
+    api
+      .get("grants/" + id)
+      .then((res) => {
+        updateFormData({
+          ...formData,
+          ["title"]: res.data.title,
+          ["agency"]: res.data.agency,
+          ["sanc_amt"]: res.data.sanc_amt,
+          ["year"]: res.data.year,
+          ["remarks"]: res.data.remarks,
+          ["slug"]: res.data.slug,
+        });
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          alert("Authentication has expired! Please re-login");
+          navigate("/logout");
+        } else {
+          alert("Something went wrong! Please logout and try again");
+        }
       });
-    }
   };
 
   useEffect(() => {
@@ -97,20 +110,33 @@ const EditGrant = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
 
-    axiosInstance.put(`grants/edit/` + id + "/", {
-      title: formData.title,
-      agency: formData.agency,
-      sanc_amt: formData.sanc_amt,
-      year: formData.year,
-      remarks: formData.remarks,
-      slug: formData.slug,
-    });
-    navigate("/grants");
-    window.location.reload();
+    api
+      .put(`grants/edit/` + id + "/", {
+        title: formData.title,
+        agency: formData.agency,
+        sanc_amt: formData.sanc_amt,
+        year: formData.year,
+        remarks: formData.remarks,
+        slug: formData.slug,
+      })
+      .then(() => {
+        navigate("/grants");
+        window.location.reload();
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          alert("Authentication has expired! Please re-login");
+          navigate("/logout");
+        } else if (error.response.status === 403) {
+          alert("You do not have permission to perform this action!");
+          navigate("/grants");
+        } else {
+          alert("Error! Please check the values entered for any mistakes....");
+        }
+      });
   };
 
   const classes = useStyles();

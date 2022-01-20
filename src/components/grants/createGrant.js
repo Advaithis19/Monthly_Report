@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import axiosInstance from "../../utils/axios";
+import useAxios from "../../utils/axios";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 // import "bootstrap/dist/css/bootstrap.min.css";
 // import { Form, Button } from "react-bootstrap";
@@ -35,6 +36,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CreateGrant = () => {
+  let api = useAxios();
+  api.defaults.xsrfCookieName = "csrftoken";
+  api.defaults.xsrfHeaderName = "X-CSRFToken";
+
   //https://gist.github.com/hagemann/382adfc57adbd5af078dc93feef01fe1
   function slugify(string) {
     const a =
@@ -64,8 +69,8 @@ const CreateGrant = () => {
     year: "",
     remarks: "",
     slug: "",
-    // PI: "",
-    // CO_PI: "",
+    PI: "",
+    CO_PI: "",
   });
 
   const [postData, updateFormData] = useState(initialFormData);
@@ -85,7 +90,7 @@ const CreateGrant = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let formData = new FormData();
     formData.append("title", postData.title);
@@ -94,11 +99,23 @@ const CreateGrant = () => {
     formData.append("year", postData.year);
     formData.append("remarks", postData.remarks);
     formData.append("slug", postData.slug);
-    formData.append("PI", 2);
-    formData.append("CO_PI", 2);
-    axiosInstance.post(`grants/create/`, formData);
-    navigate("/grants/");
-    window.location.reload();
+    formData.append("PI", 43);
+    formData.append("CO_PI", 43);
+
+    api
+      .post(`grants/create/`, formData)
+      .then(() => {
+        navigate("/grants/");
+        window.location.reload();
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          alert("Authentication has expired! Please re-login");
+          navigate("/logout");
+        } else {
+          alert("Error! Please check the values entered for any mistakes....");
+        }
+      });
   };
 
   const classes = useStyles();

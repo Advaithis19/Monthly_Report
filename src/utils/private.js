@@ -1,8 +1,10 @@
 import { Navigate, Outlet } from "react-router-dom";
 
 function PrivateOutlet() {
-  let access_token = localStorage.getItem("access_token");
-  return access_token ? <Outlet /> : <Navigate to="/login" />;
+  let authTokens = localStorage.getItem("authTokens")
+    ? localStorage.getItem("authTokens")
+    : null;
+  return authTokens ? <Outlet /> : <Navigate to="/login" />;
 }
 
 export default PrivateOutlet;

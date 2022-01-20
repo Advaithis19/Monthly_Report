@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import axiosInstance from "../../utils/axios";
-import { useNavigate } from "react-router-dom";
+// import axiosInstance from "../../utils/axios";
+import { useNavigate, Link } from "react-router-dom";
+import axios from "axios";
 //MaterialUI
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -8,7 +9,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
-import Link from "@material-ui/core/Link";
+// import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
@@ -104,6 +105,7 @@ const SignUp = () => {
     email: "",
     username: "",
     password: "",
+    password2: "",
     first_name: "",
     last_name: "",
     is_teacher: true,
@@ -166,21 +168,32 @@ const SignUp = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("formData", formData);
 
-    axiosInstance.post(`users/create/`, {
-      email: formData.email,
-      username: formData.username,
-      password: formData.password,
-      first_name: formData.first_name,
-      last_name: formData.last_name,
-      is_teacher: formData.is_teacher,
-      is_admin: formData.is_admin,
-      is_superadmin: formData.is_superadmin,
-      department: formData.department,
-    });
-
-    navigate("/login");
+    axios
+      .post(`http://127.0.0.1:8000/api/users/create/`, {
+        email: formData.email,
+        username: formData.username,
+        password: formData.password,
+        password2: formData.password2,
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+        is_teacher: formData.is_teacher,
+        is_admin: formData.is_admin,
+        is_superadmin: formData.is_superadmin,
+        department: formData.department,
+      })
+      .then(() => {
+        alert("Registration completed! Redirecting you to login page...");
+        alert(
+          "To complete the registration process, please activate your account through the link that has been sent to your mail....."
+        );
+        navigate("/login");
+      })
+      .catch((error) => {
+        if (error.response.status === 400) {
+          alert(error.response.data.non_field_errors[0]);
+        }
+      });
   };
 
   const classes = useStyles();
@@ -256,6 +269,19 @@ const SignUp = () => {
                 variant="outlined"
                 required
                 fullWidth
+                name="password2"
+                label="Confirm Password"
+                type="password"
+                id="password2"
+                autoComplete="confirm-password"
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
                 name="first_name"
                 label="First Name"
                 id="first_name"
@@ -317,7 +343,7 @@ const SignUp = () => {
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link to="/login" variant="body2">
                 Already have an account? Sign in
               </Link>
             </Grid>

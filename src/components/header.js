@@ -1,66 +1,56 @@
-import React, { useContext } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
+import React from "react";
+// import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from "react-router-dom";
 
-const Header = () => {
-  let access_token = localStorage.getItem("access_token")
-    ? localStorage.getItem("access_token")
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import jwt_decode from "jwt-decode";
+
+const Navbar = () => {
+  let authTokens = localStorage.getItem("authTokens")
+    ? JSON.parse(localStorage.getItem("authTokens"))
     : null;
 
   return (
     <div>
-      <header className="headerWarp" role="banner" style={{ width: "100%" }}>
-        <div className="brandInner" style={{ width: "100%" }}>
-          <div className="logo">
-            <a href="/" title="Home" rel="home" className="site-logo">
-              {/* <img
-                style={{ height: "7rem", width: "7rem" }}
-                src="https://scontent.fblr4-3.fna.fbcdn.net/v/t1.6435-9/87503689_111002383835295_3256861726187978752_n.png?_nc_cat=108&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=joJoEuK2r7UAX-K5KK3&_nc_ht=scontent.fblr4-3.fna&oh=acac6bab4aed6333fb3268f1823145e0&oe=61D6BA2C"
-                alt="Home"
-              /> */}
-            </a>
-          </div>
-          <div className="brandName">
-            <div className="l-region l-region--branding">
-              <div
-                id="block-block-28"
-                className="block block--block block--block-28"
-              >
-                <div className="block__content">
-                  <h3 className="rtecenter">
-                    <span style={{ fontSize: "16px" }}>
-                      Rashtreeya Sikshana Samithi Trust
-                    </span>
-                  </h3>
-                  <h1 className="rtecenter">
-                    <span style={{ fontSize: "26px" }}>
-                      <a href="/" title="Home">
-                        R V College of Engineering{" "}
-                      </a>
-                    </span>
-                  </h1>
-                  <h6 className="rtecenter">
-                    <span style={{ fontSize: "12px" }}>
-                      Autonomous Institution affiliated to Visvesvaraya
-                      Technological University, Belagavi
-                    </span>
-                  </h6>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
-      <p>
-        {access_token ? (
-          <Link to="/logout">Logout</Link>
-        ) : (
-          <Link to="/login">Login</Link>
-        )}
-      </p>
-      <hr />
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="static">
+          <Toolbar>
+            {/* <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              sx={{ mr: 2 }}
+            >
+              <MenuIcon />
+            </IconButton> */}
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              {authTokens ? (
+                <span>
+                  Welcome back, {jwt_decode(authTokens.access).username}
+                </span>
+              ) : (
+                <span></span>
+              )}
+            </Typography>
+            {authTokens ? (
+              <Link to="/logout">
+                <Button color="inherit">Logout</Button>
+              </Link>
+            ) : (
+              <Link to="/login">
+                <Button color="inherit">Login</Button>
+              </Link>
+            )}
+          </Toolbar>
+        </AppBar>
+      </Box>
     </div>
   );
 };
 
-export default Header;
+export default Navbar;

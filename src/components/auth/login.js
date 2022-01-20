@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import axiosInstance from "../../utils/axios";
 import { useNavigate, Link } from "react-router-dom";
+import axios from "axios";
 //MaterialUI
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -13,6 +13,8 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+// import Alert from "../alert";
+// import { render } from "@testing-library/react";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -50,20 +52,41 @@ const SignIn = () => {
     });
   };
 
+  //for password reset submission
+  // const handlePasswordResetSubmit = async () => {
+  //   axios
+  //     .post(`http://127.0.0.1:8000/api/users/password_reset/`, {
+  //       email: formData.email,
+  //     })
+  //     .then(() => {
+  //       console.log("done");
+  //     })
+  //     .catch((err) => {
+  //       console.log("error", err);
+  //     });
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    let response = await axiosInstance.post(`token/`, {
-      email: formData.email,
-      password: formData.password,
-    });
+    axios
+      .post(`http://127.0.0.1:8000/api/token/`, {
+        email: formData.email,
+        password: formData.password,
+      })
+      .then((response) => {
+        localStorage.setItem("authTokens", JSON.stringify(response.data));
+        navigate("/grants");
+        window.location.reload();
+      })
+      .catch((err) => {
+        alert("Something went wrong!");
 
-    localStorage.setItem("access_token", response.data.access);
-    localStorage.setItem("refresh_token", response.data.refresh);
-    axiosInstance.defaults.headers["Authorization"] =
-      "JWT " + localStorage.getItem("access_token");
-    navigate("/grants");
-    window.location.reload();
+        //for account activation
+        // alert(
+        //   "Something went wrong! Perhaps entered details are wrong....have you tried activating your account?"
+        // );
+      });
   };
 
   const classes = useStyles();
@@ -116,11 +139,10 @@ const SignIn = () => {
             Sign In
           </Button>
           <Grid container>
-            <Grid item xs>
-              {/* <Link to="#" variant="body2">
-                Forgot password?
-              </Link> */}
-            </Grid>
+            {/* for password reset submission */}
+            {/* <Grid item xs>
+              <p onClick={handlePasswordResetSubmit}>Forgot password?</p>
+            </Grid> */}
             <Grid item>
               <Link to="/register" variant="body2">
                 {"Don't have an account? Sign Up"}

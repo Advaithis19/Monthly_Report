@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import useAxios from "../../utils/axios";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
@@ -43,7 +43,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Grants = () => {
+const FilteredGrants = () => {
+  const { start_date, end_date } = useParams();
   let navigate = useNavigate();
   let api = useAxios();
   const classes = useStyles();
@@ -52,7 +53,7 @@ const Grants = () => {
 
   let getGrants = async () => {
     api
-      .get("grants/")
+      .get("grants/filter/date/" + start_date + "/" + end_date + "/")
       .then((response) => {
         setGrants(response.data);
       })
@@ -140,4 +141,4 @@ const Grants = () => {
   );
 };
 
-export default Grants;
+export default FilteredGrants;
