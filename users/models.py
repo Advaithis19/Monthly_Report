@@ -69,21 +69,25 @@ class User(AbstractBaseUser, PermissionsMixin):
         (BASICSC, 'Basic Sciences'),
     ]
 
-    email = models.EmailField(max_length=255, unique=True)
-    username = models.CharField(max_length=150, unique=True)
-    first_name = models.CharField(max_length=150, blank=True)
-    last_name = models.CharField(max_length=150, blank=True)
-    start_date = models.DateTimeField(default=timezone.now)
+    email = models.EmailField("email", max_length=255, unique=True)
+    username = models.CharField("username", max_length=150, unique=True)
+    first_name = models.CharField("first name", max_length=150, blank=True)
+    last_name = models.CharField("last name", max_length=150, blank=True)
+    start_date = models.DateTimeField("date of join", default=timezone.now)
 
-    is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(
+        "staff?", default=False)
+    is_active = models.BooleanField("user active?", default=True)
 
     # below attributes are defined for providing other functionalities
-    is_teacher = models.BooleanField(default=False)
-    is_admin = models.BooleanField(default=False)
-    is_superadmin = models.BooleanField(default=False)
+    is_teacher = models.BooleanField("teacher?", default=False)
+    is_admin = models.BooleanField(
+        "admin?", default=False)
+    is_superadmin = models.BooleanField(
+        "super-admin?", default=False)
 
     department = models.CharField(
+        "department",
         max_length=3,
         choices=DEPARTMENT,
         default=INFORMATIONSC,
@@ -94,6 +98,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'first_name']
     EMAIL_FIELD = 'email'
+
+    class Meta:
+        ordering = ('-start_date',)
+        db_table = 'user'
 
     def __str__(self):
         return self.username

@@ -1,12 +1,15 @@
 from django.shortcuts import get_object_or_404
 from api.utils import format_to_combined
-from grants.models import Grants
+from grants.models import Grant
 from .serializers import GrantSerializer
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework.permissions import BasePermission, SAFE_METHODS
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class GrantUserWritePermission(BasePermission):
@@ -28,7 +31,8 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         # Add custom claims
         token['username'] = user.username
-        token['department'] = user.department
+        # token['department'] = user.department
+        token['is_teacher'] = user.is_teacher
         # ...
 
         return token
@@ -44,14 +48,24 @@ class GrantList(generics.ListAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        return Grants.objects.filter(PI=user) | Grants.objects.filter(CO_PI=user)
+        department = user.department
+
+        if user.is_teacher:
+            return Grant.objects.filter(PI=user) | Grant.objects.filter(CO_PI=user)
+
+        if user.is_admin:
+            users_in_dept = User.objects.filter(department=department)
+            return Grant.objects.filter(PI__in=users_in_dept) | Grant.objects.filter(CO_PI__in=users_in_dept)
+
+        if user.is_superadmin:
+            return Grant.objects.all()
 
 
 class GrantDetail(generics.RetrieveAPIView):
 
     permission_classes = [GrantUserWritePermission]
     serializer_class = GrantSerializer
-    queryset = Grants.objects.all()
+    queryset = Grant.objects.all()
 
     def get_object(self):
         obj = get_object_or_404(self.get_queryset(), id=self.kwargs["pk"])
@@ -76,7 +90,7 @@ class CreateGrant(generics.ListCreateAPIView):
 class EditGrant(generics.RetrieveUpdateAPIView):
     permission_classes = [GrantUserWritePermission]
     serializer_class = GrantSerializer
-    queryset = Grants.objects.all()
+    queryset = Grant.objects.all()
 
     def get_object(self):
         obj = get_object_or_404(self.get_queryset(), id=self.kwargs["pk"])
@@ -87,7 +101,7 @@ class EditGrant(generics.RetrieveUpdateAPIView):
 class DeleteGrant(generics.RetrieveDestroyAPIView):
     permission_classes = [GrantUserWritePermission]
     serializer_class = GrantSerializer
-    queryset = Grants.objects.all()
+    queryset = Grant.objects.all()
 
     def get_object(self):
         obj = get_object_or_404(self.get_queryset(), id=self.kwargs["pk"])
@@ -102,10 +116,21 @@ class GrantListDateFilter(generics.ListAPIView):
 
     def get_queryset(self):
         user = self.request.user
+        department = user.department
 
         start_date_range = self.kwargs['start_date']
         end_date_range = self.kwargs['end_date']
 
-        combined_set = Grants.objects.filter(
-            PI=user) | Grants.objects.filter(CO_PI=user)
-        return combined_set.filter(date_added__range=(start_date_range, end_date_range))
+        if user.is_teacher:
+            combined_set = Grant.objects.filter(
+                PI=user) | Grant.objects.filter(CO_PI=user)
+            return combined_set.filter(date_added__range=(start_date_range, end_date_range))
+
+        if user.is_admin:
+            users_in_dept = User.objects.filter(department=department)
+            combined_set = Grant.objects.filter(
+                PI__in=users_in_dept) | Grant.objects.filter(CO_PI__in=users_in_dept)
+            return combined_set.filter(date_added__range=(start_date_range, end_date_range))
+
+        if user.is_superadmin:
+            return Grant.objects.filter(date_added__range=(start_date_range, end_date_range))
