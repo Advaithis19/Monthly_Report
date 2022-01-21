@@ -184,9 +184,9 @@ const SignUp = () => {
       })
       .then(() => {
         alert("Registration completed! Redirecting you to login page...");
-        alert(
-          "To complete the registration process, please activate your account through the link that has been sent to your mail....."
-        );
+        // alert(
+        //   "To complete the registration process, please activate your account through the link that has been sent to your mail....."
+        // );
         navigate("/login");
       })
       .catch((error) => {

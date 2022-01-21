@@ -61,8 +61,8 @@ const EditGrant = () => {
     year: "",
     remarks: "",
     slug: "",
-    // PI: "",
-    // CO_PI: "",
+    PI: 2,
+    CO_PI: 3,
   });
 
   const [formData, updateFormData] = useState(initialFormData);

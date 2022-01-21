@@ -16,6 +16,7 @@ import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import EditIcon from "@material-ui/icons/Edit";
 import Button from "@material-ui/core/Button";
 import exportFromJSON from "export-from-json";
+import jwt_decode from "jwt-decode";
 
 const useStyles = makeStyles((theme) => ({
   cardMedia: {
@@ -113,23 +114,27 @@ const FilteredGrants = () => {
                       <TableCell align="left">{grant.agency}</TableCell>
 
                       <TableCell align="left">{grant.sanc_amt}</TableCell>
-
-                      <TableCell align="left">
-                        <Link
-                          color="textPrimary"
-                          to={"/grants/edit/" + grant.id}
-                          className={classes.link}
-                        >
-                          <EditIcon></EditIcon>
-                        </Link>
-                        <Link
-                          color="textPrimary"
-                          to={"/grants/delete/" + grant.id}
-                          className={classes.link}
-                        >
-                          <DeleteForeverIcon></DeleteForeverIcon>
-                        </Link>
-                      </TableCell>
+                      <TableCell align="left">{grant.year}</TableCell>
+                      {jwt_decode(
+                        JSON.parse(localStorage.getItem("authTokens")).access
+                      ).is_teacher && (
+                        <TableCell align="left">
+                          <Link
+                            color="textPrimary"
+                            to={"/grants/edit/" + grant.id}
+                            className={classes.link}
+                          >
+                            <EditIcon></EditIcon>
+                          </Link>
+                          <Link
+                            color="textPrimary"
+                            to={"/grants/delete/" + grant.id}
+                            className={classes.link}
+                          >
+                            <DeleteForeverIcon></DeleteForeverIcon>
+                          </Link>
+                        </TableCell>
+                      )}
                     </TableRow>
                   );
                 })}
@@ -139,13 +144,17 @@ const FilteredGrants = () => {
                       Export To Excel
                     </button>
                   </TableCell>
-                  <TableCell colSpan={4} align="right">
-                    <Link to={"/grants/create"}>
-                      <Button variant="contained" color="primary">
-                        New Grant
-                      </Button>
-                    </Link>
-                  </TableCell>
+                  {jwt_decode(
+                    JSON.parse(localStorage.getItem("authTokens")).access
+                  ).is_teacher && (
+                    <TableCell colSpan={4} align="right">
+                      <Link to={"/grants/create"}>
+                        <Button variant="contained" color="primary">
+                          New Grant
+                        </Button>
+                      </Link>
+                    </TableCell>
+                  )}
                 </TableRow>
               </TableBody>
             </Table>

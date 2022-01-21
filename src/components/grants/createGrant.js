@@ -99,8 +99,8 @@ const CreateGrant = () => {
     formData.append("year", postData.year);
     formData.append("remarks", postData.remarks);
     formData.append("slug", postData.slug);
-    formData.append("PI", 43);
-    formData.append("CO_PI", 43);
+    formData.append("PI", 2);
+    formData.append("CO_PI", 3);
 
     api
       .post(`grants/create/`, formData)
