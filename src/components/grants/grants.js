@@ -15,6 +15,7 @@ import TableRow from "@material-ui/core/TableRow";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import EditIcon from "@material-ui/icons/Edit";
 import Button from "@material-ui/core/Button";
+import exportFromJSON from "export-from-json";
 
 const useStyles = makeStyles((theme) => ({
   cardMedia: {
@@ -43,6 +44,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+let data = [{ foo: "foo" }, { bar: "bar" }];
+const fileName = "download";
+const exportType = "csv";
+
 const Grants = () => {
   let navigate = useNavigate();
   let api = useAxios();
@@ -55,6 +60,7 @@ const Grants = () => {
       .get("grants/")
       .then((response) => {
         setGrants(response.data);
+        data = response.data;
       })
       .catch((error) => {
         if (error.response.status === 401) {
@@ -69,6 +75,10 @@ const Grants = () => {
   useEffect(() => {
     getGrants();
   }, [setGrants]);
+
+  let ExportToExcel = () => {
+    exportFromJSON({ data, fileName, exportType });
+  };
 
   if (!grants || grants.length === 0)
     return <p>Can not find any grants, sorry</p>;
@@ -123,6 +133,11 @@ const Grants = () => {
                   );
                 })}
                 <TableRow>
+                  <TableCell colSpan={4} align="left">
+                    <button type="button" onClick={ExportToExcel}>
+                      Export To Excel
+                    </button>
+                  </TableCell>
                   <TableCell colSpan={4} align="right">
                     <Link to={"create"}>
                       <Button variant="contained" color="primary">

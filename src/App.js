@@ -16,6 +16,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 // import ActivateAccount from "./components/auth/activateAccount";
 import GrantsHome from "./components/grants/grantsHome";
 import FilteredGrants from "./components/grants/filteredGrants";
+import PublicationsHome from "./components/publications/publicationsHome";
+import Publications from "./components/publications/publicationFiller";
+import FilteredPublications from "./components/publications/filteredPublications";
 
 function App() {
   return (
@@ -24,6 +27,7 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<PrivateOutlet />}>
+            {/* grants routes */}
             <Route path="/grants" element={<GrantsHome />}>
               <Route index element={<Grants />} />
               <Route
@@ -35,6 +39,15 @@ function App() {
             <Route path="/grants/create" element={<CreateGrant />} />
             <Route path="/grants/edit/:id" element={<EditGrant />} />
             <Route path="/grants/delete/:id" element={<DeleteGrant />} />
+
+            {/* publication route */}
+            <Route path="/publications" element={<PublicationsHome />}>
+              <Route index element={<Publications />} />
+              <Route
+                path="filter/year/:start_year/:end_year"
+                element={<FilteredPublications />}
+              />
+            </Route>
           </Route>
           <Route path="/register" element={<SignUp />} />
           <Route path="/login" element={<SignIn />} />

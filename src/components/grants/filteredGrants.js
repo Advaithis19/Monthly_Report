@@ -15,6 +15,7 @@ import TableRow from "@material-ui/core/TableRow";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import EditIcon from "@material-ui/icons/Edit";
 import Button from "@material-ui/core/Button";
+import exportFromJSON from "export-from-json";
 
 const useStyles = makeStyles((theme) => ({
   cardMedia: {
@@ -43,6 +44,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+let data = [{ foo: "foo" }, { bar: "bar" }];
+const fileName = "download";
+const exportType = "csv";
+
 const FilteredGrants = () => {
   const { start_date, end_date } = useParams();
   let navigate = useNavigate();
@@ -56,6 +61,7 @@ const FilteredGrants = () => {
       .get("grants/filter/date/" + start_date + "/" + end_date + "/")
       .then((response) => {
         setGrants(response.data);
+        data = response.data;
       })
       .catch((error) => {
         if (error.response.status === 401) {
@@ -70,6 +76,10 @@ const FilteredGrants = () => {
   useEffect(() => {
     getGrants();
   }, [setGrants]);
+
+  let ExportToExcel = () => {
+    exportFromJSON({ data, fileName, exportType });
+  };
 
   if (!grants || grants.length === 0)
     return <p>Can not find any grants, sorry</p>;
@@ -94,7 +104,7 @@ const FilteredGrants = () => {
                       <TableCell component="th" scope="row">
                         <Link
                           color="textPrimary"
-                          to={"" + grant.id}
+                          to={"/grants/" + grant.id}
                           className={classes.link}
                         >
                           {grant.title}
@@ -107,14 +117,14 @@ const FilteredGrants = () => {
                       <TableCell align="left">
                         <Link
                           color="textPrimary"
-                          to={"edit/" + grant.id}
+                          to={"/grants/edit/" + grant.id}
                           className={classes.link}
                         >
                           <EditIcon></EditIcon>
                         </Link>
                         <Link
                           color="textPrimary"
-                          to={"delete/" + grant.id}
+                          to={"/grants/delete/" + grant.id}
                           className={classes.link}
                         >
                           <DeleteForeverIcon></DeleteForeverIcon>
@@ -124,8 +134,13 @@ const FilteredGrants = () => {
                   );
                 })}
                 <TableRow>
+                  <TableCell colSpan={4} align="left">
+                    <button type="button" onClick={ExportToExcel}>
+                      Export To Excel
+                    </button>
+                  </TableCell>
                   <TableCell colSpan={4} align="right">
-                    <Link to={"create"}>
+                    <Link to={"/grants/create"}>
                       <Button variant="contained" color="primary">
                         New Grant
                       </Button>
