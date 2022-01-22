@@ -20,6 +20,8 @@ import PublicationsHome from "./components/publications/publicationsHome";
 import Publications from "./components/publications/publicationFiller";
 import FilteredPublications from "./components/publications/filteredPublications";
 
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+
 function App() {
   return (
     <div className="App">

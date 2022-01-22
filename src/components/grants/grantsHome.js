@@ -3,6 +3,7 @@ import DatePickerComponent from "../dateComponent";
 import dayjs from "dayjs";
 import { Outlet, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { Link } from "react-router-dom";
 
 const GrantsHome = () => {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ const GrantsHome = () => {
     let iso_startDate = dayjs(dateobj.startDate).format("YYYY-MM-DD");
     let iso_endDate = dayjs(dateobj.endDate).format("YYYY-MM-DD");
     navigate("filter/date/" + iso_startDate + "/" + iso_endDate);
-    window.location.reload();
+    // window.location.reload();
   };
 
   return (
@@ -47,6 +48,7 @@ const GrantsHome = () => {
       />
       <p onClick={submitChangedDates}>Click here to submit</p>
       <Outlet />
+      <Link to={"/grants"}>All grants</Link>
     </div>
   );
 };

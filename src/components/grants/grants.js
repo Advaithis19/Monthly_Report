@@ -17,6 +17,8 @@ import EditIcon from "@material-ui/icons/Edit";
 import Button from "@material-ui/core/Button";
 import exportFromJSON from "export-from-json";
 import jwt_decode from "jwt-decode";
+import { getGrants } from "../../services/grants";
+import { trackPromise } from "react-promise-tracker";
 
 const useStyles = makeStyles((theme) => ({
   cardMedia: {
@@ -45,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-let data = [{ foo: "foo" }, { bar: "bar" }];
+let dataForExport = [{ foo: "foo" }, { bar: "bar" }];
 const fileName = "download";
 const exportType = "csv";
 
@@ -56,29 +58,34 @@ const Grants = () => {
 
   let [grants, setGrants] = useState([]);
 
-  let getGrants = async () => {
-    api
-      .get("grants/")
-      .then((response) => {
-        setGrants(response.data);
-        data = response.data;
-      })
-      .catch((error) => {
-        if (error.response.status === 401) {
-          alert("Authentication has expired! Please re-login");
-          navigate("/logout");
-        } else {
-          alert("Something went wrong! Please logout and try again");
-        }
-      });
-  };
-
   useEffect(() => {
-    getGrants();
-  }, [setGrants]);
+    let mounted = true;
+    trackPromise(
+      getGrants(api)
+        .then((response) => {
+          if (mounted) {
+            setGrants(response.data);
+            dataForExport = response.data;
+          }
+        })
+        .catch((error) => {
+          if (mounted) {
+            if (error.response.status === 401) {
+              alert("Authentication has expired! Please re-login");
+              navigate("/logout");
+            } else {
+              alert("Something went wrong! Please logout and try again");
+            }
+          }
+        })
+    );
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   let ExportToExcel = () => {
-    exportFromJSON({ data, fileName, exportType });
+    exportFromJSON({ dataForExport, fileName, exportType });
   };
 
   if (!grants || grants.length === 0)
