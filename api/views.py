@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404
 from api.utils import format_to_combined
 from grants.models import Grant
+from users.serializers import UserSelectSerializer
 from .serializers import GrantSerializer
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
@@ -31,7 +32,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         # Add custom claims
         token['username'] = user.username
-        # token['department'] = user.department
         token['is_teacher'] = user.is_teacher
         # ...
 
@@ -137,3 +137,11 @@ class GrantListDateFilter(generics.ListAPIView):
 
             if user.is_superadmin:
                 return Grant.objects.filter(date_added__range=(start_date_range, end_date_range))
+
+
+class UserList(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = UserSelectSerializer
+
+    def get_queryset(self):
+        return User.objects.filter(is_teacher=True)
