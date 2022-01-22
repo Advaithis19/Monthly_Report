@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import useAxios from "../../utils/axios";
 import { useNavigate, useParams } from "react-router-dom";
 // import "bootstrap/dist/css/bootstrap.min.css";
@@ -11,6 +11,10 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import Select from "react-select";
+import { getGrantInstance } from "../../services/grants";
+import { getUsers } from "../../services/users";
+import { trackPromise } from "react-promise-tracker";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -61,39 +65,83 @@ const EditGrant = () => {
     year: "",
     remarks: "",
     slug: "",
-    PI: 2,
-    CO_PI: 3,
+    PI: "",
+    CO_PI: "",
   });
 
   const [formData, updateFormData] = useState(initialFormData);
-
-  let getEditInstance = async () => {
-    api
-      .get("grants/" + id)
-      .then((res) => {
-        updateFormData({
-          ...formData,
-          ["title"]: res.data.title,
-          ["agency"]: res.data.agency,
-          ["sanc_amt"]: res.data.sanc_amt,
-          ["year"]: res.data.year,
-          ["remarks"]: res.data.remarks,
-          ["slug"]: res.data.slug,
-        });
-      })
-      .catch((error) => {
-        if (error.response.status === 401) {
-          alert("Authentication has expired! Please re-login");
-          navigate("/logout");
-        } else {
-          alert("Something went wrong! Please logout and try again");
-        }
-      });
-  };
+  const [users, setUsers] = useState([]);
+  const userlist = [];
+  const usersRef = useRef();
 
   useEffect(() => {
-    getEditInstance();
-  }, [updateFormData]);
+    let mounted = true;
+    trackPromise(
+      getUsers(api)
+        .then((response) => {
+          if (mounted) {
+            usersRef.current = response.data;
+            setUsers(usersRef.current);
+          }
+        })
+        .catch((error) => {
+          if (mounted) {
+            if (error.response.status === 401) {
+              alert("Authentication has expired! Please re-login");
+              navigate("/logout");
+            } else {
+              alert("Something went wrong! Please logout and try again");
+            }
+          }
+        })
+    );
+    trackPromise(
+      getGrantInstance(api, id)
+        .then((res) => {
+          if (mounted) {
+            updateFormData({
+              ...formData,
+              ["title"]: res.data.title,
+              ["agency"]: res.data.agency,
+              ["sanc_amt"]: res.data.sanc_amt,
+              ["year"]: res.data.year,
+              ["remarks"]: res.data.remarks,
+              ["slug"]: res.data.slug,
+              ["PI"]: findMatchingUser(res.data.PI, usersRef.current),
+              ["CO_PI"]: findMatchingUser(res.data.CO_PI, usersRef.current),
+            });
+          }
+        })
+        .catch((error) => {
+          if (mounted) {
+            if (error.response.status === 401) {
+              alert("Authentication has expired! Please re-login");
+              navigate("/logout");
+            } else {
+              alert("Something went wrong! Please logout and try again");
+            }
+          }
+        })
+    );
+
+    return () => {
+      mounted = false;
+    };
+  }, [setUsers, updateFormData]);
+
+  const findMatchingUser = (userInstance, userResponseArray) => {
+    let result = userResponseArray.filter((userResponseInstance) => {
+      return (
+        userInstance ===
+        userResponseInstance.first_name + " " + userResponseInstance.last_name
+      );
+    })[0];
+    let resObj = {
+      label: result.first_name + " " + result.last_name,
+      value: result.id,
+    };
+    return resObj;
+  };
 
   const handleChange = (e) => {
     if ([e.target.name] == "title") {
@@ -110,6 +158,20 @@ const EditGrant = () => {
     }
   };
 
+  const handlePISelect = (obj) => {
+    updateFormData({
+      ...formData,
+      ["PI"]: obj,
+    });
+  };
+
+  const handleCO_PISelect = (obj) => {
+    updateFormData({
+      ...formData,
+      ["CO_PI"]: obj,
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -121,10 +183,12 @@ const EditGrant = () => {
         year: formData.year,
         remarks: formData.remarks,
         slug: formData.slug,
+        PI: formData.PI.value,
+        CO_PI: formData.CO_PI.value,
       })
       .then(() => {
         navigate("/grants");
-        window.location.reload();
+        // window.location.reload();
       })
       .catch((error) => {
         if (error.response.status === 401) {
@@ -143,6 +207,12 @@ const EditGrant = () => {
 
   return (
     <Container component="main" maxWidth="sm">
+      {users.forEach((user) => {
+        userlist.push({
+          label: user.first_name + " " + user.last_name,
+          value: user.id,
+        });
+      })}
       <CssBaseline />
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
@@ -216,6 +286,30 @@ const EditGrant = () => {
                 onChange={handleChange}
                 multiline
                 rows={8}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Select
+                required
+                id="PI"
+                label="Principal Investigator"
+                name="PI"
+                autoComplete="PI"
+                value={formData.PI}
+                options={userlist}
+                onChange={handlePISelect}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Select
+                required
+                id="PI"
+                label="Co-Principal Investigator"
+                name="CO_PI"
+                autoComplete="CO_PI"
+                value={formData.CO_PI}
+                options={userlist}
+                onChange={handleCO_PISelect}
               />
             </Grid>
           </Grid>

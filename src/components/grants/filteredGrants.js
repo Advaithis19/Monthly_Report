@@ -47,8 +47,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-let dataForExport = [{ foo: "foo" }, { bar: "bar" }];
-const fileName = "download";
+let data = [{ foo: "foo" }, { bar: "bar" }];
+const fileName = "report";
 const exportType = "csv";
 
 const FilteredGrants = () => {
@@ -66,7 +66,7 @@ const FilteredGrants = () => {
         .then((response) => {
           if (mounted) {
             setGrants(response.data);
-            dataForExport = response.data;
+            data = response.data;
           }
         })
         .catch((error) => {
@@ -86,7 +86,7 @@ const FilteredGrants = () => {
   }, [start_date, end_date]);
 
   let ExportToExcel = () => {
-    exportFromJSON({ dataForExport, fileName, exportType });
+    exportFromJSON({ data, fileName, exportType });
   };
 
   if (!grants || grants.length === 0)
