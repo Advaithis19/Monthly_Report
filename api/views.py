@@ -48,17 +48,19 @@ class GrantList(generics.ListAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        department = user.department
 
-        if user.is_teacher:
-            return Grant.objects.filter(PI=user) | Grant.objects.filter(CO_PI=user)
+        if user.is_authenticated:
+            department = user.department
 
-        if user.is_admin:
-            users_in_dept = User.objects.filter(department=department)
-            return Grant.objects.filter(PI__in=users_in_dept) | Grant.objects.filter(CO_PI__in=users_in_dept)
+            if user.is_teacher:
+                return Grant.objects.filter(PI=user) | Grant.objects.filter(CO_PI=user)
 
-        if user.is_superadmin:
-            return Grant.objects.all()
+            if user.is_admin:
+                users_in_dept = User.objects.filter(department=department)
+                return Grant.objects.filter(PI__in=users_in_dept) | Grant.objects.filter(CO_PI__in=users_in_dept)
+
+            if user.is_superadmin:
+                return Grant.objects.all()
 
 
 class GrantDetail(generics.RetrieveAPIView):
@@ -116,21 +118,22 @@ class GrantListDateFilter(generics.ListAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        department = user.department
+        if user.is_authenticated:
+            department = user.department
 
-        start_date_range = self.kwargs['start_date']
-        end_date_range = self.kwargs['end_date']
+            start_date_range = self.kwargs['start_date']
+            end_date_range = self.kwargs['end_date']
 
-        if user.is_teacher:
-            combined_set = Grant.objects.filter(
-                PI=user) | Grant.objects.filter(CO_PI=user)
-            return combined_set.filter(date_added__range=(start_date_range, end_date_range))
+            if user.is_teacher:
+                combined_set = Grant.objects.filter(
+                    PI=user) | Grant.objects.filter(CO_PI=user)
+                return combined_set.filter(date_added__range=(start_date_range, end_date_range))
 
-        if user.is_admin:
-            users_in_dept = User.objects.filter(department=department)
-            combined_set = Grant.objects.filter(
-                PI__in=users_in_dept) | Grant.objects.filter(CO_PI__in=users_in_dept)
-            return combined_set.filter(date_added__range=(start_date_range, end_date_range))
+            if user.is_admin:
+                users_in_dept = User.objects.filter(department=department)
+                combined_set = Grant.objects.filter(
+                    PI__in=users_in_dept) | Grant.objects.filter(CO_PI__in=users_in_dept)
+                return combined_set.filter(date_added__range=(start_date_range, end_date_range))
 
-        if user.is_superadmin:
-            return Grant.objects.filter(date_added__range=(start_date_range, end_date_range))
+            if user.is_superadmin:
+                return Grant.objects.filter(date_added__range=(start_date_range, end_date_range))
