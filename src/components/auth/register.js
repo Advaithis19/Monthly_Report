@@ -2,103 +2,74 @@ import React, { useState } from "react";
 // import axiosInstance from "../../utils/axios";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-//MaterialUI
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-// import Link from "@material-ui/core/Link";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-import Box from "@mui/material/Box";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
+import { useForm } from "react-hook-form";
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
+//MaterialUI
+// import Avatar from "@material-ui/core/Avatar";
+// import Button from "@material-ui/core/Button";
+// import CssBaseline from "@material-ui/core/CssBaseline";
+// import TextField from "@material-ui/core/TextField";
+// import FormControlLabel from "@material-ui/core/FormControlLabel";
+// import Checkbox from "@material-ui/core/Checkbox";
+// import Link from "@material-ui/core/Link";
+// import Grid from "@material-ui/core/Grid";
+// import Typography from "@material-ui/core/Typography";
+// import { makeStyles } from "@material-ui/core/styles";
+// import Container from "@material-ui/core/Container";
+// import Box from "@mui/material/Box";
+// import InputLabel from "@mui/material/InputLabel";
+// import MenuItem from "@mui/material/MenuItem";
+// import FormControl from "@mui/material/FormControl";
+// import Select from "@mui/material/Select";
+
+import departments from "../../constants/departments";
+import roles from "../../constants/roles";
+
+// Bootstrap UI
+import { Form } from "react-bootstrap";
+
+// MUI
+import FormControl from "@mui/material/FormControl";
+import TextField from "@mui/material/TextField";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import Button from "@mui/material/Button";
+import Grid from "@material-ui/core/Grid";
+import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
+
+//yup
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
 
 const SignUp = () => {
-  const departments = [
-    {
-      full: "Aerospace Engineering",
-      short: "AE",
-    },
-    {
-      full: "Biotechnology",
-      short: "BT",
-    },
-    {
-      full: "Chemical Engineering",
-      short: "CE",
-    },
-    {
-      full: "Civil Engineering",
-      short: "CIV",
-    },
-    {
-      full: "Computer Science and Engineering",
-      short: "CSE",
-    },
-    {
-      full: "Electrical and Electronics Engineering",
-      short: "EEE",
-    },
-    {
-      full: "Electronics and Communication Engineering",
-      short: "ECE",
-    },
-    {
-      full: "Electronics and Instrumentation Engineering",
-      short: "EIE",
-    },
-    {
-      full: "Industrial Engineering and Management",
-      short: "IEM",
-    },
-    {
-      full: "Information Science and Engineering",
-      short: "ISE",
-    },
-    {
-      full: "Master of Computer Applications",
-      short: "MCA",
-    },
-    {
-      full: "Mechanical Engineering",
-      short: "ME",
-    },
-    {
-      full: "Electronics and Telecommunication Engineering (Telecommunication Engineering)",
-      short: "ETE",
-    },
-    {
-      full: "Basic Sciences",
-      short: "BSC",
-    },
-  ];
+  // form validation rules
+  const validationSchema = Yup.object().shape({
+    password: Yup.string()
+      .required("Password is required")
+      .min(8, "Password must be at least 8 characters"),
+    password2: Yup.string()
+      .required("Confirm Password is required")
+      .oneOf([Yup.ref("password")], "Passwords must match"),
+    email: Yup.string()
+      .matches(/[a-zA-Z]+@rvce\.edu\.in/, "Please enter RVCE email address")
+      .required("Email is required"),
+    username: Yup.string()
+      .required("Username is required")
+      .max(20, "Password must be within 20 characters"),
+    first_name: Yup.string()
+      .required("First name is required")
+      .max(20, "Password must be within 20 characters"),
+    last_name: Yup.string()
+      .required("Last name is required")
+      .max(20, "Password must be within 20 characters"),
+  });
+  const formOptions = { resolver: yupResolver(validationSchema) };
+
+  // get functions to build form with useForm() hook
+  const { register, handleSubmit, formState } = useForm(formOptions);
+  const { errors } = formState;
 
   const navigate = useNavigate();
   const initialFormData = Object.freeze({
@@ -120,68 +91,70 @@ const SignUp = () => {
   const [departmentSelect, setDepartmentSelect] = useState(true);
 
   const handleChange = (e) => {
-    if ([e.target.name] == "type_select") {
-      setType(e.target.value);
-      if ([e.target.value] == "super_admin") {
-        updateFormData({
-          ...formData,
+    updateFormData({
+      ...formData,
+      // Trimming any whitespace
+      [e.target.name]: e.target.value.trim(),
+    });
+  };
 
-          ["is_superadmin"]: true,
-          ["is_teacher"]: false,
-          ["is_admin"]: false,
-        });
-        setDepartmentSelect(false);
-      } else if ([e.target.value] == "teacher") {
-        updateFormData({
-          ...formData,
-
-          ["is_superadmin"]: false,
-          ["is_teacher"]: true,
-          ["is_admin"]: false,
-        });
-        setDepartmentSelect(true);
-      } else {
-        updateFormData({
-          ...formData,
-
-          ["is_superadmin"]: false,
-          ["is_teacher"]: false,
-          ["is_admin"]: true,
-        });
-        setDepartmentSelect(true);
-      }
-    } else if ([e.target.name] == "department_select") {
-      setDepartment(e.target.value);
+  const handleRoleSelect = (e) => {
+    setType(e.target.value);
+    if ([e.target.value] == "super_admin") {
       updateFormData({
         ...formData,
 
-        ["department"]: e.target.value,
+        ["is_superadmin"]: true,
+        ["is_teacher"]: false,
+        ["is_admin"]: false,
       });
+      setDepartmentSelect(false);
+    } else if ([e.target.value] == "teacher") {
+      updateFormData({
+        ...formData,
+
+        ["is_superadmin"]: false,
+        ["is_teacher"]: true,
+        ["is_admin"]: false,
+      });
+      setDepartmentSelect(true);
     } else {
       updateFormData({
         ...formData,
-        // Trimming any whitespace
-        [e.target.name]: e.target.value.trim(),
+
+        ["is_superadmin"]: false,
+        ["is_teacher"]: false,
+        ["is_admin"]: true,
       });
+      setDepartmentSelect(true);
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleDepartmentSelect = (e) => {
+    setDepartment(e.target.value);
+    updateFormData({
+      ...formData,
+
+      ["department"]: e.target.value,
+    });
+  };
+
+  const onSubmit = () => {
+    // console.log("formData", formData);
+    let postData = new FormData();
+    postData.append("email", formData.email);
+    postData.append("username", formData.username);
+    postData.append("password", formData.password);
+    postData.append("password2", formData.password2);
+    postData.append("first_name", formData.first_name);
+    postData.append("last_name", formData.last_name);
+    postData.append("is_teacher", formData.is_teacher);
+    postData.append("is_admin", formData.is_admin);
+    postData.append("is_superadmin", formData.is_superadmin);
+    postData.append("department", formData.department);
 
     axios
-      .post(`http://127.0.0.1:8000/api/users/create/`, {
-        email: formData.email,
-        username: formData.username,
-        password: formData.password,
-        password2: formData.password2,
-        first_name: formData.first_name,
-        last_name: formData.last_name,
-        is_teacher: formData.is_teacher,
-        is_admin: formData.is_admin,
-        is_superadmin: formData.is_superadmin,
-        department: formData.department,
-      })
+      .post(`http://127.0.0.1:8000/api/users/create/`, postData)
       .then(() => {
         alert("Registration completed! Redirecting you to login page...");
         // alert(
@@ -196,149 +169,160 @@ const SignUp = () => {
       });
   };
 
-  const classes = useStyles();
-
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}></Avatar>
-        <Typography component="h1" variant="h5">
-          Sign up
-        </Typography>
-        <form className={classes.form} noValidate>
-          <Grid container spacing={2}>
-            <Box sx={{ width: 500 }}>
+    <Container maxWidth="sm">
+      <Box mt={3}>
+        <Form onSubmit={handleSubmit(onSubmit)}>
+          <Form.Group className="mb-3" controlId="formBasicRole">
+            <FormControl fullWidth>
+              <InputLabel id="role-select-label">Role</InputLabel>
+              <Select
+                labelId="role-select-label"
+                value={type}
+                label="Role"
+                onChange={handleRoleSelect}
+              >
+                {roles.map((role) => {
+                  return (
+                    <MenuItem key={role.key} value={role.key}>
+                      {role.value}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <TextField
+              // basic
+              type="email"
+              name="email"
+              //mui
+              label="Email address"
+              variant="outlined"
+              fullWidth
+              //hook form
+              {...register("email")}
+              //to override onChange
+              onChange={handleChange}
+            />
+            {errors.email?.message}
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formBasicUsername">
+            <TextField
+              // basic
+              type="text"
+              onChange={handleChange}
+              name="username"
+              //mui
+              label="Username"
+              variant="outlined"
+              fullWidth
+              //hook form
+              {...register("username")}
+              //to override onChange
+              onChange={handleChange}
+            />
+            {errors.username?.message}
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formBasicPassword">
+            <TextField
+              // basic
+              type="password"
+              onChange={handleChange}
+              name="password"
+              //mui
+              label="Password"
+              variant="outlined"
+              fullWidth
+              //hook form
+              {...register("password")}
+              //to override onChange
+              onChange={handleChange}
+            />
+            {errors.password?.message}
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formBasicPasswordConfirm">
+            <TextField
+              // basic
+              type="password"
+              onChange={handleChange}
+              name="password2"
+              //mui
+              label="Confirm Password"
+              variant="outlined"
+              fullWidth
+              //hook form
+              {...register("password2")}
+              //to override onChange
+              onChange={handleChange}
+            />
+            {errors.password2?.message}
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formBasicFirstname">
+            <TextField
+              // basic
+              type="text"
+              onChange={handleChange}
+              name="first_name"
+              //mui
+              label="First Name"
+              variant="outlined"
+              fullWidth
+              //hook form
+              {...register("first_name")}
+              //to override onChange
+              onChange={handleChange}
+            />
+            {errors.first_name?.message}
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formBasicLastname">
+            <TextField
+              // basic
+              type="text"
+              onChange={handleChange}
+              name="last_name"
+              //mui
+              label="Last Name"
+              variant="outlined"
+              fullWidth
+              //hook form
+              {...register("last_name")}
+              //to override onChange
+              onChange={handleChange}
+            />
+            {errors.last_name?.message}
+          </Form.Group>
+
+          {departmentSelect && (
+            <Form.Group className="mb-3" controlId="formBasicDepartment">
               <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">
-                  Select type of user
-                </InputLabel>
+                <InputLabel id="department-select-label">Department</InputLabel>
                 <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={type}
-                  label="Type of user"
-                  name="type_select"
-                  onChange={handleChange}
+                  labelId="department-select-label"
+                  value={department}
+                  label="Department"
+                  onChange={handleDepartmentSelect}
                 >
-                  <MenuItem value={"teacher"}>Teacher</MenuItem>
-                  <MenuItem value={"admin"}>Admin/HoD</MenuItem>
-                  <MenuItem value={"super_admin"}>Principal/Dean</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="username"
-                label="Username"
-                name="username"
-                autoComplete="username"
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password2"
-                label="Confirm Password"
-                type="password"
-                id="password2"
-                autoComplete="confirm-password"
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="first_name"
-                label="First Name"
-                id="first_name"
-                autoComplete="first-name"
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="last_name"
-                label="Last Name"
-                id="last_name"
-                autoComplete="last-name"
-                onChange={handleChange}
-              />
-            </Grid>
-            {departmentSelect && (
-              <Box sx={{ width: 500 }}>
-                <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">
-                    Select Department
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={department}
-                    label="Department"
-                    name="department_select"
-                    onChange={handleChange}
-                  >
-                    {departments.map((department) => (
+                  {departments.map((department) => {
+                    return (
                       <MenuItem key={department.short} value={department.short}>
                         {department.full}
                       </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Box>
-            )}
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
-              />
-            </Grid>
-          </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            onClick={handleSubmit}
-          >
+                    );
+                  })}
+                </Select>
+              </FormControl>
+            </Form.Group>
+          )}
+
+          <Button variant="contained" color="primary" type="submit" fullWidth>
             Sign Up
           </Button>
           <Grid container justifyContent="flex-end">
@@ -348,8 +332,8 @@ const SignUp = () => {
               </Link>
             </Grid>
           </Grid>
-        </form>
-      </div>
+        </Form>
+      </Box>
     </Container>
   );
 };
