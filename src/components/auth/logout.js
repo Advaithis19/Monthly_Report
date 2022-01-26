@@ -18,7 +18,7 @@ const Logout = () => {
         localStorage.removeItem("authTokens");
         // api.defaults.headers["Authorization"] = null;
         navigate("/login");
-        window.location.reload();
+        // window.location.reload();
       })
       .catch(() => {
         alert("Something went wrong!");

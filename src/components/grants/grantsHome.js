@@ -2,8 +2,12 @@ import React, { useState } from "react";
 import DatePickerComponent from "../dateComponent";
 import dayjs from "dayjs";
 import { Outlet, useNavigate } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from "react-router-dom";
+
+//MUI
+import Button from "@material-ui/core/Button";
+import Grid from "@mui/material/Grid";
+import Container from "@material-ui/core/Container";
 
 const GrantsHome = () => {
   const navigate = useNavigate();
@@ -34,22 +38,42 @@ const GrantsHome = () => {
   };
 
   return (
-    <div>
-      <p>Filter by date</p>
-      Start date:
-      <DatePickerComponent
-        onDateChange={handleStartDateChange}
-        selectedDate={dateobj.startDate}
-      />
-      End date:
-      <DatePickerComponent
-        onDateChange={handleEndDateChange}
-        selectedDate={dateobj.endDate}
-      />
-      <p onClick={submitChangedDates}>Click here to submit</p>
-      <Outlet />
-      <Link to={"/grants"}>All grants</Link>
-    </div>
+    <Container maxWidth="lg" component="main">
+      <Grid container rowSpacing={2}>
+        <Grid item xs={12}>
+          <h3>Filter by date</h3>
+        </Grid>
+        <Grid item xs={6}>
+          Start date:
+          <DatePickerComponent
+            onDateChange={handleStartDateChange}
+            selectedDate={dateobj.startDate}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          End date:
+          <DatePickerComponent
+            onDateChange={handleEndDateChange}
+            selectedDate={dateobj.endDate}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Button variant="outlined" onClick={submitChangedDates}>
+            Click here to submit
+          </Button>
+        </Grid>
+        <Grid item xs={12}>
+          <Outlet />
+        </Grid>
+        <Grid item xs={12}>
+          <Link to={"/grants"}>
+            <Button variant="contained" color="primary" style={{ height: 40 }}>
+              All grants
+            </Button>
+          </Link>
+        </Grid>
+      </Grid>
+    </Container>
   );
 };
 

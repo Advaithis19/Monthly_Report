@@ -1,5 +1,4 @@
-import React from "react";
-// import "bootstrap/dist/css/bootstrap.min.css";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import AppBar from "@mui/material/AppBar";
@@ -7,6 +6,8 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from "@mui/icons-material/Menu";
 import jwt_decode from "jwt-decode";
 
 const Navbar = () => {
@@ -14,12 +15,22 @@ const Navbar = () => {
     ? JSON.parse(localStorage.getItem("authTokens"))
     : null;
 
+  let [userState, setUserState] = useState("loggedOut");
+
+  useEffect(() => {
+    if (authTokens != null) {
+      setUserState("loggedIn");
+    } else {
+      setUserState("loggedOut");
+    }
+  }, [setUserState]);
+
   return (
     <div>
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static">
+        <AppBar position="static" color="default">
           <Toolbar>
-            {/* <IconButton
+            <IconButton
               size="large"
               edge="start"
               color="inherit"
@@ -27,9 +38,9 @@ const Navbar = () => {
               sx={{ mr: 2 }}
             >
               <MenuIcon />
-            </IconButton> */}
+            </IconButton>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              {authTokens ? (
+              {userState === "loggedIn" ? (
                 <span>
                   Welcome back, {jwt_decode(authTokens.access).username}
                 </span>
@@ -37,13 +48,17 @@ const Navbar = () => {
                 <span></span>
               )}
             </Typography>
-            {authTokens ? (
+            {userState === "loggedIn" ? (
               <Link to="/logout">
-                <Button color="inherit">Logout</Button>
+                <Button color="inherit" variant="outlined">
+                  Logout
+                </Button>
               </Link>
             ) : (
               <Link to="/login">
-                <Button color="inherit">Login</Button>
+                <Button color="inherit" variant="outlined">
+                  Login
+                </Button>
               </Link>
             )}
           </Toolbar>

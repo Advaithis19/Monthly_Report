@@ -1,26 +1,7 @@
 import React, { useState } from "react";
-// import axiosInstance from "../../utils/axios";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { useForm } from "react-hook-form";
-
-//MaterialUI
-// import Avatar from "@material-ui/core/Avatar";
-// import Button from "@material-ui/core/Button";
-// import CssBaseline from "@material-ui/core/CssBaseline";
-// import TextField from "@material-ui/core/TextField";
-// import FormControlLabel from "@material-ui/core/FormControlLabel";
-// import Checkbox from "@material-ui/core/Checkbox";
-// import Link from "@material-ui/core/Link";
-// import Grid from "@material-ui/core/Grid";
-// import Typography from "@material-ui/core/Typography";
-// import { makeStyles } from "@material-ui/core/styles";
-// import Container from "@material-ui/core/Container";
-// import Box from "@mui/material/Box";
-// import InputLabel from "@mui/material/InputLabel";
-// import MenuItem from "@mui/material/MenuItem";
-// import FormControl from "@mui/material/FormControl";
-// import Select from "@mui/material/Select";
 
 import departments from "../../constants/departments";
 import roles from "../../constants/roles";
@@ -36,6 +17,7 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
 import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 
@@ -53,7 +35,10 @@ const SignUp = () => {
       .required("Confirm Password is required")
       .oneOf([Yup.ref("password")], "Passwords must match"),
     email: Yup.string()
-      .matches(/[a-zA-Z]+@rvce\.edu\.in/, "Please enter RVCE email address")
+      .matches(
+        /[a-zA-Z]+[0-9]*[a-zA-Z]*@rvce\.edu\.in/i,
+        "Please enter RVCE email address"
+      )
       .required("Email is required"),
     username: Yup.string()
       .required("Username is required")
@@ -140,7 +125,6 @@ const SignUp = () => {
   };
 
   const onSubmit = () => {
-    // console.log("formData", formData);
     let postData = new FormData();
     postData.append("email", formData.email);
     postData.append("username", formData.username);
@@ -171,7 +155,10 @@ const SignUp = () => {
 
   return (
     <Container maxWidth="sm">
-      <Box mt={3}>
+      <Box mt={3} mb={3}>
+        <Typography component="h1" variant="h5" gutterBottom>
+          Sign up
+        </Typography>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <Form.Group className="mb-3" controlId="formBasicRole">
             <FormControl fullWidth>
@@ -210,95 +197,106 @@ const SignUp = () => {
             {errors.email?.message}
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicUsername">
-            <TextField
-              // basic
-              type="text"
-              onChange={handleChange}
-              name="username"
-              //mui
-              label="Username"
-              variant="outlined"
-              fullWidth
-              //hook form
-              {...register("username")}
-              //to override onChange
-              onChange={handleChange}
-            />
-            {errors.username?.message}
-          </Form.Group>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={6}>
+              <Form.Group className="mb-3" controlId="formBasicPassword">
+                <TextField
+                  // basic
+                  type="password"
+                  onChange={handleChange}
+                  name="password"
+                  //mui
+                  label="Password"
+                  variant="outlined"
+                  fullWidth
+                  //hook form
+                  {...register("password")}
+                  //to override onChange
+                  onChange={handleChange}
+                />
+                {errors.password?.message}
+              </Form.Group>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Form.Group className="mb-3" controlId="formBasicPasswordConfirm">
+                <TextField
+                  // basic
+                  type="password"
+                  onChange={handleChange}
+                  name="password2"
+                  //mui
+                  label="Confirm Password"
+                  variant="outlined"
+                  fullWidth
+                  //hook form
+                  {...register("password2")}
+                  //to override onChange
+                  onChange={handleChange}
+                />
+                {errors.password2?.message}
+              </Form.Group>
+            </Grid>
+          </Grid>
 
-          <Form.Group className="mb-3" controlId="formBasicPassword">
-            <TextField
-              // basic
-              type="password"
-              onChange={handleChange}
-              name="password"
-              //mui
-              label="Password"
-              variant="outlined"
-              fullWidth
-              //hook form
-              {...register("password")}
-              //to override onChange
-              onChange={handleChange}
-            />
-            {errors.password?.message}
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formBasicPasswordConfirm">
-            <TextField
-              // basic
-              type="password"
-              onChange={handleChange}
-              name="password2"
-              //mui
-              label="Confirm Password"
-              variant="outlined"
-              fullWidth
-              //hook form
-              {...register("password2")}
-              //to override onChange
-              onChange={handleChange}
-            />
-            {errors.password2?.message}
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formBasicFirstname">
-            <TextField
-              // basic
-              type="text"
-              onChange={handleChange}
-              name="first_name"
-              //mui
-              label="First Name"
-              variant="outlined"
-              fullWidth
-              //hook form
-              {...register("first_name")}
-              //to override onChange
-              onChange={handleChange}
-            />
-            {errors.first_name?.message}
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formBasicLastname">
-            <TextField
-              // basic
-              type="text"
-              onChange={handleChange}
-              name="last_name"
-              //mui
-              label="Last Name"
-              variant="outlined"
-              fullWidth
-              //hook form
-              {...register("last_name")}
-              //to override onChange
-              onChange={handleChange}
-            />
-            {errors.last_name?.message}
-          </Form.Group>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={4}>
+              <Form.Group className="mb-3" controlId="formBasicUsername">
+                <TextField
+                  // basic
+                  type="text"
+                  onChange={handleChange}
+                  name="username"
+                  //mui
+                  label="Username"
+                  variant="outlined"
+                  fullWidth
+                  //hook form
+                  {...register("username")}
+                  //to override onChange
+                  onChange={handleChange}
+                />
+                {errors.username?.message}
+              </Form.Group>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Form.Group className="mb-3" controlId="formBasicFirstname">
+                <TextField
+                  // basic
+                  type="text"
+                  onChange={handleChange}
+                  name="first_name"
+                  //mui
+                  label="First Name"
+                  variant="outlined"
+                  fullWidth
+                  //hook form
+                  {...register("first_name")}
+                  //to override onChange
+                  onChange={handleChange}
+                />
+                {errors.first_name?.message}
+              </Form.Group>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Form.Group className="mb-3" controlId="formBasicLastname">
+                <TextField
+                  // basic
+                  type="text"
+                  onChange={handleChange}
+                  name="last_name"
+                  //mui
+                  label="Last Name"
+                  variant="outlined"
+                  fullWidth
+                  //hook form
+                  {...register("last_name")}
+                  //to override onChange
+                  onChange={handleChange}
+                />
+                {errors.last_name?.message}
+              </Form.Group>
+            </Grid>
+          </Grid>
 
           {departmentSelect && (
             <Form.Group className="mb-3" controlId="formBasicDepartment">

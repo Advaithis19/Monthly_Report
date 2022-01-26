@@ -104,6 +104,7 @@ const FilteredGrants = () => {
                   <TableCell align="left">Agency</TableCell>
                   <TableCell align="left">Sanctioned Amount</TableCell>
                   <TableCell align="left">Year</TableCell>
+                  <TableCell align="left"></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

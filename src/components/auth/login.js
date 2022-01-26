@@ -1,44 +1,45 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-
-//MaterialUI
-// import Avatar from "@material-ui/core/Avatar";
-// import Button from "@material-ui/core/Button";
-// import CssBaseline from "@material-ui/core/CssBaseline";
-// import TextField from "@material-ui/core/TextField";
-// import FormControlLabel from "@material-ui/core/FormControlLabel";
-// import Checkbox from "@material-ui/core/Checkbox";
-// import Link from "@material-ui/core/Link";
-// import Grid from "@material-ui/core/Grid";
-// import Typography from "@material-ui/core/Typography";
-// import { makeStyles } from "@material-ui/core/styles";
-// import Container from "@material-ui/core/Container";
+import { useForm } from "react-hook-form";
 
 // import Alert from "../alert";
 // import { render } from "@testing-library/react";
 
-// const useStyles = makeStyles((theme) => ({
-//   paper: {
-//     marginTop: theme.spacing(8),
-//     display: "flex",
-//     flexDirection: "column",
-//     alignItems: "center",
-//   },
-//   avatar: {
-//     margin: theme.spacing(1),
-//     backgroundColor: theme.palette.secondary.main,
-//   },
-//   form: {
-//     width: "100%", // Fix IE 11 issue.
-//     marginTop: theme.spacing(1),
-//   },
-//   submit: {
-//     margin: theme.spacing(3, 0, 2),
-//   },
-// }));
+// Bootstrap UI
+import { Form } from "react-bootstrap";
+
+// MUI
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
+import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
+
+//yup
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
 
 const SignIn = () => {
+  // form validation rules
+  const validationSchema = Yup.object().shape({
+    email: Yup.string()
+      .matches(
+        /[a-zA-Z]+[0-9]*[a-zA-Z]*@rvce\.edu\.in/i,
+        "Please enter RVCE email address"
+      )
+      .required("Email is required"),
+    password: Yup.string()
+      .required("Password is required")
+      .min(8, "Password must be at least 8 characters"),
+  });
+  const formOptions = { resolver: yupResolver(validationSchema) };
+
+  // get functions to build form with useForm() hook
+  const { register, handleSubmit, formState } = useForm(formOptions);
+  const { errors } = formState;
+
   const navigate = useNavigate();
   const initialFormData = Object.freeze({
     email: "",
@@ -68,9 +69,7 @@ const SignIn = () => {
   //     });
   // };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const onSubmit = async (e) => {
     let postData = new FormData();
     postData.append("email", formData.email);
     postData.append("password", formData.password);
@@ -80,7 +79,7 @@ const SignIn = () => {
       .then((response) => {
         localStorage.setItem("authTokens", JSON.stringify(response.data));
         navigate("/grants");
-        window.location.reload();
+        // window.location.reload();
       })
       .catch((err) => {
         alert("Something went wrong!");
@@ -92,71 +91,61 @@ const SignIn = () => {
       });
   };
 
-  // const classes = useStyles();
-
   return (
-    // <Container component="main" maxWidth="xs">
-    //   <CssBaseline />
-    //   <div className={classes.paper}>
-    //     <Avatar className={classes.avatar}></Avatar>
-    //     <Typography component="h1" variant="h5">
-    //       Sign in
-    //     </Typography>
-    //     <form className={classes.form} noValidate>
-    //       <TextField
-    //         variant="outlined"
-    //         margin="normal"
-    //         required
-    //         fullWidth
-    //         id="email"
-    //         label="Email Address"
-    //         name="email"
-    //         autoComplete="email"
-    //         autoFocus
-    //         onChange={handleChange}
-    //       />
-    //       <TextField
-    //         variant="outlined"
-    //         margin="normal"
-    //         required
-    //         fullWidth
-    //         name="password"
-    //         label="Password"
-    //         type="password"
-    //         id="password"
-    //         autoComplete="current-password"
-    //         onChange={handleChange}
-    //       />
-    //       <FormControlLabel
-    //         control={<Checkbox value="remember" color="primary" />}
-    //         label="Remember me"
-    //       />
-    //       <Button
-    //         type="submit"
-    //         fullWidth
-    //         variant="contained"
-    //         color="primary"
-    //         className={classes.submit}
-    //         onClick={handleSubmit}
-    //       >
-    //         Sign In
-    //       </Button>
-    //       <Grid container>
-    //         {/* for password reset submission */}
-    //         {/* <Grid item xs>
-    //           <p onClick={handlePasswordResetSubmit}>Forgot password?</p>
-    //         </Grid> */}
-    //         <Grid item>
-    //           <Link to="/register" variant="body2">
-    //             {"Don't have an account? Sign Up"}
-    //           </Link>
-    //         </Grid>
-    //       </Grid>
-    //     </form>
-    //   </div>
-    // </Container>
+    <Container maxWidth="sm">
+      <Box mt={3} mb={3}>
+        <Typography component="h1" variant="h5" gutterBottom>
+          Sign in
+        </Typography>
+        <Form onSubmit={handleSubmit(onSubmit)}>
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <TextField
+              // basic
+              type="email"
+              name="email"
+              //mui
+              label="Email address"
+              variant="outlined"
+              fullWidth
+              //hook form
+              {...register("email")}
+              //to override onChange
+              onChange={handleChange}
+            />
+            {errors.email?.message}
+          </Form.Group>
 
-    <div>Hi this is the login route</div>
+          <Form.Group className="mb-3" controlId="formBasicPassword">
+            <TextField
+              // basic
+              type="password"
+              onChange={handleChange}
+              name="password"
+              //mui
+              label="Password"
+              variant="outlined"
+              fullWidth
+              //hook form
+              {...register("password")}
+              //to override onChange
+              onChange={handleChange}
+            />
+            {errors.password?.message}
+          </Form.Group>
+
+          <Button variant="contained" color="primary" type="submit" fullWidth>
+            Sign In
+          </Button>
+          <Grid container>
+            <Grid item>
+              <Link to="/register" variant="body2">
+                Don't have an account? Sign up
+              </Link>
+            </Grid>
+          </Grid>
+        </Form>
+      </Box>
+    </Container>
   );
 };
 

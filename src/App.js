@@ -1,12 +1,11 @@
 import React from "react";
-import "./index.css";
+// import "./index.css";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Navbar from "./components/header";
 // import Footer from "./components/footer";
 import Grants from "./components/grants/grants";
 import GrantDetail from "./components/grants/grantDetail";
 import EditGrant from "./components/grants/editGrant";
-import DeleteGrant from "./components/grants/deleteGrant";
 import CreateGrant from "./components/grants/createGrant";
 import SignIn from "./components/auth/login";
 import SignUp from "./components/auth/register";
@@ -40,7 +39,6 @@ function App() {
             <Route path="/grants/:id" element={<GrantDetail />} />
             <Route path="/grants/create" element={<CreateGrant />} />
             <Route path="/grants/edit/:id" element={<EditGrant />} />
-            <Route path="/grants/delete/:id" element={<DeleteGrant />} />
 
             {/* publication route */}
             <Route path="/publications" element={<PublicationsHome />}>

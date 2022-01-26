@@ -1,40 +1,59 @@
 import React, { useState, useEffect, useRef } from "react";
 import useAxios from "../../utils/axios";
 import { useNavigate, useParams } from "react-router-dom";
-// import "bootstrap/dist/css/bootstrap.min.css";
-// import { Form, Button } from "react-bootstrap";
+import { useForm } from "react-hook-form";
+import { years } from "../../constants/years";
 
-// Material UI
-// import Button from "@material-ui/core/Button";
-// import CssBaseline from "@material-ui/core/CssBaseline";
-// import TextField from "@material-ui/core/TextField";
-// import Grid from "@material-ui/core/Grid";
-// import Typography from "@material-ui/core/Typography";
+// Bootstrap UI
+import { Form } from "react-bootstrap";
+
+// MUI
+import Grid from "@mui/material/Grid";
+import FormControl from "@mui/material/FormControl";
+import TextField from "@mui/material/TextField";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import Button from "@mui/material/Button";
+import Typography from "@material-ui/core/Typography";
+import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
+//styling
 // import { makeStyles } from "@material-ui/core/styles";
-// import Container from "@material-ui/core/Container";
 
-import Select from "react-select";
 import { getGrantInstance } from "../../services/grants";
 import { getUsers } from "../../services/users";
 import { trackPromise } from "react-promise-tracker";
 
-// const useStyles = makeStyles((theme) => ({
-//   paper: {
-//     marginTop: theme.spacing(8),
-//     display: "flex",
-//     flexDirection: "column",
-//     alignItems: "center",
-//   },
-//   form: {
-//     width: "100%", // Fix IE 11 issue.
-//     marginTop: theme.spacing(3),
-//   },
-//   submit: {
-//     margin: theme.spacing(3, 0, 2),
-//   },
-// }));
+//yup
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
 
 const EditGrant = () => {
+  // form validation rules
+  const validationSchema = Yup.object().shape({
+    title: Yup.string().test(
+      "len",
+      "Titleeee is required",
+      (val) => val.length == 0
+    ),
+    agency: Yup.string().test(
+      "len",
+      "Agency is required",
+      (val) => val.length == 0
+    ),
+    sanc_amt: Yup.string().test(
+      "len",
+      "Amount is required",
+      (val) => val.length == 0
+    ),
+  });
+  const formOptions = { resolver: yupResolver(validationSchema) };
+
+  // get functions to build form with useForm() hook
+  const { register, handleSubmit, formState } = useForm(formOptions);
+  const { errors } = formState;
+
   let api = useAxios();
   api.defaults.xsrfCookieName = "csrftoken";
   api.defaults.xsrfHeaderName = "X-CSRFToken";
@@ -64,7 +83,7 @@ const EditGrant = () => {
     title: "",
     agency: "",
     sanc_amt: "",
-    year: "",
+    year: 2022,
     remarks: "",
     slug: "",
     PI: "",
@@ -73,7 +92,6 @@ const EditGrant = () => {
 
   const [formData, updateFormData] = useState(initialFormData);
   const [users, setUsers] = useState([]);
-  const userlist = [];
   const usersRef = useRef();
 
   useEffect(() => {
@@ -82,7 +100,12 @@ const EditGrant = () => {
       getUsers(api)
         .then((response) => {
           if (mounted) {
-            usersRef.current = response.data;
+            usersRef.current = response.data.map((user) => {
+              return {
+                label: user.first_name + " " + user.last_name,
+                value: user.id,
+              };
+            });
             setUsers(usersRef.current);
           }
         })
@@ -132,17 +155,9 @@ const EditGrant = () => {
   }, [setUsers, updateFormData]);
 
   const findMatchingUser = (userInstance, userResponseArray) => {
-    let result = userResponseArray.filter((userResponseInstance) => {
-      return (
-        userInstance ===
-        userResponseInstance.first_name + " " + userResponseInstance.last_name
-      );
-    })[0];
-    let resObj = {
-      label: result.first_name + " " + result.last_name,
-      value: result.id,
-    };
-    return resObj;
+    return userResponseArray.filter((userResponseInstance) => {
+      return userInstance === userResponseInstance.label;
+    })[0].value;
   };
 
   const handleChange = (e) => {
@@ -160,23 +175,29 @@ const EditGrant = () => {
     }
   };
 
-  const handlePISelect = (obj) => {
+  const handlePISelect = (e) => {
     updateFormData({
       ...formData,
-      ["PI"]: obj,
+      ["PI"]: e.target.value,
     });
   };
 
-  const handleCO_PISelect = (obj) => {
+  const handleCO_PISelect = (e) => {
     updateFormData({
       ...formData,
-      ["CO_PI"]: obj,
+      ["CO_PI"]: e.target.value,
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleYearSelect = (e) => {
+    updateFormData({
+      ...formData,
+      ["year"]: e.target.value,
+    });
+  };
 
+  const onSubmit = async (e) => {
+    // console.log(formData);
     let postData = new FormData();
     postData.append("title", formData.title);
     postData.append("agency", formData.agency);
@@ -184,13 +205,13 @@ const EditGrant = () => {
     postData.append("year", formData.year);
     postData.append("remarks", formData.remarks);
     postData.append("slug", formData.slug);
-    postData.append("PI", formData.PI.value);
-    postData.append("CO_PI", formData.CO_PI.value);
+    postData.append("PI", formData.PI);
+    postData.append("CO_PI", formData.CO_PI);
 
     api
       .put(`grants/edit/` + id + "/", postData)
       .then(() => {
-        navigate("/grants");
+        navigate("/grants/" + id);
         // window.location.reload();
       })
       .catch((error) => {
@@ -199,138 +220,186 @@ const EditGrant = () => {
           navigate("/logout");
         } else if (error.response.status === 403) {
           alert("You do not have permission to perform this action!");
-          navigate("/grants");
+          navigate("/grants/" + id);
         } else {
           alert("Error! Please check the values entered for any mistakes....");
         }
       });
   };
 
-  // const classes = useStyles();
-
   return (
-    // <Container component="main" maxWidth="sm">
-    //   {users.forEach((user) => {
-    //     userlist.push({
-    //       label: user.first_name + " " + user.last_name,
-    //       value: user.id,
-    //     });
-    //   })}
-    //   <CssBaseline />
-    //   <div className={classes.paper}>
-    //     <Typography component="h1" variant="h5">
-    //       Edit Grant
-    //     </Typography>
-    //     <form className={classes.form} noValidate>
-    //       <Grid container spacing={2}>
-    //         <Grid item xs={12}>
-    //           <TextField
-    //             variant="outlined"
-    //             required
-    //             fullWidth
-    //             id="title"
-    //             label="Grant Title"
-    //             name="title"
-    //             autoComplete="title"
-    //             value={formData.title}
-    //             onChange={handleChange}
-    //           />
-    //         </Grid>
-    //         <Grid item xs={12}>
-    //           <TextField
-    //             variant="outlined"
-    //             required
-    //             fullWidth
-    //             id="agency"
-    //             label="Agency"
-    //             name="agency"
-    //             autoComplete="agency"
-    //             value={formData.agency}
-    //             onChange={handleChange}
-    //             multiline
-    //           />
-    //         </Grid>
-    //         <Grid item xs={12}>
-    //           <TextField
-    //             variant="outlined"
-    //             required
-    //             fullWidth
-    //             id="sanc_amt"
-    //             label="Sanctioned Amount"
-    //             name="sanc_amt"
-    //             autoComplete="sanc_amt"
-    //             value={formData.sanc_amt}
-    //             onChange={handleChange}
-    //           />
-    //         </Grid>
-    //         <Grid item xs={12}>
-    //           <TextField
-    //             variant="outlined"
-    //             required
-    //             fullWidth
-    //             id="year"
-    //             label="Year"
-    //             name="year"
-    //             autoComplete="year"
-    //             value={formData.year}
-    //             onChange={handleChange}
-    //           />
-    //         </Grid>
-    //         <Grid item xs={12}>
-    //           <TextField
-    //             variant="outlined"
-    //             required
-    //             fullWidth
-    //             id="remarks"
-    //             label="Remarks"
-    //             name="remarks"
-    //             autoComplete="remarks"
-    //             value={formData.remarks}
-    //             onChange={handleChange}
-    //             multiline
-    //             rows={8}
-    //           />
-    //         </Grid>
-    //         <Grid item xs={12}>
-    //           <Select
-    //             required
-    //             id="PI"
-    //             label="Principal Investigator"
-    //             name="PI"
-    //             autoComplete="PI"
-    //             value={formData.PI}
-    //             options={userlist}
-    //             onChange={handlePISelect}
-    //           />
-    //         </Grid>
-    //         <Grid item xs={12}>
-    //           <Select
-    //             required
-    //             id="PI"
-    //             label="Co-Principal Investigator"
-    //             name="CO_PI"
-    //             autoComplete="CO_PI"
-    //             value={formData.CO_PI}
-    //             options={userlist}
-    //             onChange={handleCO_PISelect}
-    //           />
-    //         </Grid>
-    //       </Grid>
-    //       <Button
-    //         type="submit"
-    //         fullWidth
-    //         variant="contained"
-    //         color="primary"
-    //         className={classes.submit}
-    //         onClick={handleSubmit}
-    //       >
-    //         Update Grant
-    //       </Button>
-    //     </form>
-    //   </div>
-    // </Container>
+    <Container maxWidth="sm">
+      <Box mt={3} mb={3}>
+        <Typography component="h1" variant="h5" gutterBottom>
+          Edit Grant
+        </Typography>
+        <Form onSubmit={handleSubmit(onSubmit)}>
+          <Form.Group className="mb-3" controlId="formBasicTitle">
+            <TextField
+              // basic
+              type="text"
+              name="title"
+              value={formData.title}
+              //mui
+              label="Grant Title"
+              variant="outlined"
+              fullWidth
+              //hook form
+              {...register("title")}
+              //to override onChange
+              onChange={handleChange}
+            />
+            {errors.title?.message}
+          </Form.Group>
 
-    <div>Hi this is the edit grant route</div>
+          <Form.Group className="mb-3" controlId="formBasicAgency">
+            <TextField
+              // basic
+              type="text"
+              name="agency"
+              value={formData.agency}
+              //mui
+              label="Agency"
+              variant="outlined"
+              fullWidth
+              multiline
+              //hook form
+              {...register("agency")}
+              //to override onChange
+              onChange={handleChange}
+            />
+            {errors.agency?.message}
+          </Form.Group>
+
+          <Grid container spacing={2}>
+            <Grid item sm={12} md={8}>
+              <Form.Group className="mb-3" controlId="formBasicAmount">
+                <TextField
+                  // basic
+                  type="text"
+                  name="sanc_amt"
+                  value={formData.sanc_amt}
+                  //mui
+                  label="Sanctioned Amount"
+                  variant="outlined"
+                  fullWidth
+                  //hook form
+                  {...register("sanc_amt")}
+                  //to override onChange
+                  onChange={handleChange}
+                />
+                {errors.sanc_amt?.message}
+              </Form.Group>
+            </Grid>
+            <Grid item sm={12} md={4}>
+              <Form.Group className="mb-3" controlId="formBasicYear">
+                <FormControl fullWidth>
+                  <InputLabel id="year-select-label">Select Year</InputLabel>
+                  <Select
+                    // basic
+                    name="year"
+                    value={formData.year}
+                    onChange={handleYearSelect}
+                    // mui
+                    labelId="year-select-label"
+                    label="Select Year"
+                  >
+                    {years.map((year) => {
+                      return (
+                        <MenuItem key={year} value={year}>
+                          {year}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
+              </Form.Group>
+            </Grid>
+          </Grid>
+
+          <Form.Group className="mb-3" controlId="formBasicRemarks">
+            <TextField
+              // basic
+              type="text"
+              name="remarks"
+              //mui
+              label="Remarks"
+              variant="outlined"
+              fullWidth
+              multiline
+              rows={8}
+              onChange={handleChange}
+            />
+            {errors.remarks?.message}
+          </Form.Group>
+
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={6}>
+              <Form.Group
+                className="mb-3"
+                controlId="formBasicPrincipleInvestigator"
+              >
+                <FormControl fullWidth>
+                  <InputLabel id="pi-select-label">
+                    Principal Investigator
+                  </InputLabel>
+                  <Select
+                    // basic
+                    name="PI"
+                    value={formData.PI}
+                    onChange={handlePISelect}
+                    // mui
+                    labelId="pi-select-label"
+                    label="Principal Investigator"
+                  >
+                    {users.map((user) => {
+                      return (
+                        <MenuItem key={user.value} value={user.value}>
+                          {user.label}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
+              </Form.Group>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Form.Group
+                className="mb-3"
+                controlId="formBasicCoPrincipleInvestigator"
+              >
+                <FormControl fullWidth>
+                  <InputLabel id="co_pi-select-label">
+                    Co-Principal Investigator
+                  </InputLabel>
+                  <Select
+                    // basic
+                    name="CO_PI"
+                    value={formData.CO_PI}
+                    onChange={handleCO_PISelect}
+                    // mui
+                    labelId="co_pi-select-label"
+                    label="Co-Principal Investigator"
+                  >
+                    {users.map((user) => {
+                      return (
+                        <MenuItem key={user.value} value={user.value}>
+                          {user.label}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
+              </Form.Group>
+            </Grid>
+          </Grid>
+
+          <Button variant="contained" color="primary" type="submit" fullWidth>
+            Edit
+          </Button>
+        </Form>
+      </Box>
+    </Container>
   );
 };
 
