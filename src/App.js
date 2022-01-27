@@ -19,47 +19,51 @@ import PublicationsHome from "./components/publications/publicationsHome";
 import Publications from "./components/publications/publicationFiller";
 import FilteredPublications from "./components/publications/filteredPublications";
 
+import { AuthProvider } from "./context/AuthContext";
+
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 function App() {
   return (
     <div className="App">
       <Router>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<PrivateOutlet />}>
-            {/* grants routes */}
-            <Route path="/grants" element={<GrantsHome />}>
-              <Route index element={<Grants />} />
-              <Route
-                path="filter/date/:start_date/:end_date"
-                element={<FilteredGrants />}
-              />
-            </Route>
-            <Route path="/grants/:id" element={<GrantDetail />} />
-            <Route path="/grants/create" element={<CreateGrant />} />
-            <Route path="/grants/edit/:id" element={<EditGrant />} />
+        <AuthProvider>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<PrivateOutlet />}>
+              {/* grants routes */}
+              <Route path="/grants" element={<GrantsHome />}>
+                <Route index element={<Grants />} />
+                <Route
+                  path="filter/date/:start_date/:end_date"
+                  element={<FilteredGrants />}
+                />
+              </Route>
+              <Route path="/grants/:id" element={<GrantDetail />} />
+              <Route path="/grants/create" element={<CreateGrant />} />
+              <Route path="/grants/edit/:id" element={<EditGrant />} />
 
-            {/* publication route */}
-            <Route path="/publications" element={<PublicationsHome />}>
-              <Route index element={<Publications />} />
-              <Route
-                path="filter/year/:start_year/:end_year"
-                element={<FilteredPublications />}
-              />
+              {/* publication route */}
+              <Route path="/publications" element={<PublicationsHome />}>
+                <Route index element={<Publications />} />
+                <Route
+                  path="filter/year/:start_year/:end_year"
+                  element={<FilteredPublications />}
+                />
+              </Route>
             </Route>
-          </Route>
-          <Route path="/register" element={<SignUp />} />
-          <Route path="/login" element={<SignIn />} />
-          <Route path="/logout" element={<Logout />} />
+            <Route path="/register" element={<SignUp />} />
+            <Route path="/login" element={<SignIn />} />
+            <Route path="/logout" element={<Logout />} />
 
-          {/* for password reset */}
-          {/* <Route
+            {/* for password reset */}
+            {/* <Route
             path="/accounts/activate/:uid/:token"
             element={<ActivateAccount />}
           /> */}
-        </Routes>
-        {/* <Footer /> */}
+          </Routes>
+          {/* <Footer /> */}
+        </AuthProvider>
       </Router>
     </div>
   );

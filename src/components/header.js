@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 
+//MUI
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -8,22 +9,14 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
-import jwt_decode from "jwt-decode";
+
+import AuthContext from "../context/AuthContext";
 
 const Navbar = () => {
-  let authTokens = localStorage.getItem("authTokens")
-    ? JSON.parse(localStorage.getItem("authTokens"))
-    : null;
+  //context api consumption - declaration
+  let { user } = useContext(AuthContext);
 
-  let [userState, setUserState] = useState("loggedOut");
-
-  useEffect(() => {
-    if (authTokens != null) {
-      setUserState("loggedIn");
-    } else {
-      setUserState("loggedOut");
-    }
-  }, [setUserState]);
+  useEffect(() => {}, [user]);
 
   return (
     <div>
@@ -40,15 +33,13 @@ const Navbar = () => {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              {userState === "loggedIn" ? (
-                <span>
-                  Welcome back, {jwt_decode(authTokens.access).username}
-                </span>
+              {user ? (
+                <span>Welcome back, {user.username}</span>
               ) : (
                 <span></span>
               )}
             </Typography>
-            {userState === "loggedIn" ? (
+            {user ? (
               <Link to="/logout">
                 <Button color="inherit" variant="outlined">
                   Logout

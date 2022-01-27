@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { useForm } from "react-hook-form";
+import AuthContext from "../../context/AuthContext";
 
 // import Alert from "../alert";
 // import { render } from "@testing-library/react";
@@ -22,6 +23,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 
 const SignIn = () => {
+  //context api consumption - declaration
+  let { setAuthTokens } = useContext(AuthContext);
+
   // form validation rules
   const validationSchema = Yup.object().shape({
     email: Yup.string()
@@ -77,7 +81,12 @@ const SignIn = () => {
     axios
       .post(`http://127.0.0.1:8000/api/token/`, postData)
       .then((response) => {
+        // console.log(
+        //   "setting context authTokens with..",
+        //   jwt_decode(response.data.access)
+        // );
         localStorage.setItem("authTokens", JSON.stringify(response.data));
+        setAuthTokens(response.data);
         navigate("/grants");
         // window.location.reload();
       })

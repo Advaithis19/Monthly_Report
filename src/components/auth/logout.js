@@ -1,9 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 // import useAxios from "../../utils/axios";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import AuthContext from "../../context/AuthContext";
 
 const Logout = () => {
+  //context api consumption - declaration
+  let { setAuthTokens } = useContext(AuthContext);
+
   const navigate = useNavigate();
   // let api = useAxios();
 
@@ -13,9 +17,8 @@ const Logout = () => {
         refresh_token: localStorage.getItem("refresh_token"),
       })
       .then(() => {
-        // localStorage.removeItem("access_token");
-        // localStorage.removeItem("refresh_token");
         localStorage.removeItem("authTokens");
+        setAuthTokens(null);
         // api.defaults.headers["Authorization"] = null;
         navigate("/login");
         // window.location.reload();
