@@ -4,6 +4,9 @@ import dayjs from "dayjs";
 import { Outlet, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
+//custom css
+import "../../static/stylings.css";
+
 //MUI
 import Button from "@material-ui/core/Button";
 import Grid from "@mui/material/Grid";
@@ -38,34 +41,45 @@ const GrantsHome = () => {
   };
 
   return (
-    <Container maxWidth="lg" component="main">
+    <Container maxWidth="lg" component="main" className="main">
       <Grid container rowSpacing={2}>
+        <Grid
+          container
+          rowSpacing={2}
+          columnSpacing={2}
+          className="filterContainer"
+        >
+          <Grid item xs={12} className="filterHeading">
+            <h3>Filter by date</h3>
+          </Grid>
+          <Grid item xs={6} className="filterItem1">
+            <div>Start date:</div>
+            <DatePickerComponent
+              onDateChange={handleStartDateChange}
+              selectedDate={dateobj.startDate}
+            />
+          </Grid>
+          <Grid item xs={6} className="filterItem2">
+            <div>End date:</div>
+            <DatePickerComponent
+              onDateChange={handleEndDateChange}
+              selectedDate={dateobj.endDate}
+            />
+          </Grid>
+          <Grid item xs={12} className="filterSubmit">
+            <Button variant="outlined" onClick={submitChangedDates}>
+              Click here to submit
+            </Button>
+          </Grid>
+        </Grid>
+
         <Grid item xs={12}>
-          <h3>Filter by date</h3>
-        </Grid>
-        <Grid item xs={6}>
-          Start date:
-          <DatePickerComponent
-            onDateChange={handleStartDateChange}
-            selectedDate={dateobj.startDate}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          End date:
-          <DatePickerComponent
-            onDateChange={handleEndDateChange}
-            selectedDate={dateobj.endDate}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Button variant="outlined" onClick={submitChangedDates}>
-            Click here to submit
-          </Button>
-        </Grid>
-        <Grid item xs={12}>
+          <div className="tableHeading">
+            <h1>Grants</h1>
+          </div>
           <Outlet />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} className="newGrant">
           <Link to={"/grants"}>
             <Button variant="contained" color="primary" style={{ height: 40 }}>
               All grants

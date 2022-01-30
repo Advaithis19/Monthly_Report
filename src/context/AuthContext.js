@@ -6,23 +6,30 @@ const AuthContext = createContext();
 export default AuthContext;
 
 export const AuthProvider = ({ children }) => {
-  let [authTokens, setAuthTokens] = useState(null);
+  let [authTokens, setAuthTokens] = useState(() =>
+    localStorage.getItem("authTokens")
+      ? JSON.parse(localStorage.getItem("authTokens"))
+      : null
+  );
 
-  let [user, setUser] = useState(null);
+  let [user, setUser] = useState(
+    authTokens ? jwt_decode(authTokens.access) : null
+  );
 
   let contextData = {
     user: user,
     setAuthTokens: setAuthTokens,
-    authTokens: authTokens,
+    // authTokens: authTokens,
   };
 
   useEffect(() => {
     if (authTokens) {
       setUser(jwt_decode(authTokens.access));
+      console.log(user);
     } else {
       setUser(null);
     }
-  }, [authTokens, setUser]);
+  }, [authTokens]);
 
   return (
     <AuthContext.Provider value={contextData}>{children}</AuthContext.Provider>

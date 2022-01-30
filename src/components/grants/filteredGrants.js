@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import useAxios from "../../utils/axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
+//MUI
+import Grid from "@mui/material/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-// import Link from "@material-ui/core/Link";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -12,9 +13,8 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
-import EditIcon from "@material-ui/icons/Edit";
 import Button from "@material-ui/core/Button";
+
 import exportFromJSON from "export-from-json";
 import jwt_decode from "jwt-decode";
 import { getFilteredGrants } from "../../services/grants";
@@ -93,84 +93,61 @@ const FilteredGrants = () => {
     return <p>Can not find any grants, sorry</p>;
 
   return (
-    <React.Fragment>
-      <Container maxWidth="md" component="main">
-        <Paper className={classes.root}>
-          <TableContainer className={classes.container}>
-            <Table stickyHeader aria-label="sticky table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Title</TableCell>
-                  <TableCell align="left">Agency</TableCell>
-                  <TableCell align="left">Sanctioned Amount</TableCell>
-                  <TableCell align="left">Year</TableCell>
-                  <TableCell align="left"></TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {grants.map((grant) => {
-                  return (
-                    <TableRow key={grant.id}>
-                      <TableCell component="th" scope="row">
-                        <Link
-                          color="textPrimary"
-                          to={"/grants/" + grant.id}
-                          className={classes.link}
-                        >
-                          {grant.title}
-                        </Link>
-                      </TableCell>
-                      <TableCell align="left">{grant.agency}</TableCell>
-
-                      <TableCell align="left">{grant.sanc_amt}</TableCell>
-                      <TableCell align="left">{grant.year}</TableCell>
-                      {jwt_decode(
-                        JSON.parse(localStorage.getItem("authTokens")).access
-                      ).is_teacher && (
-                        <TableCell align="left">
-                          <Link
-                            color="textPrimary"
-                            to={"/grants/edit/" + grant.id}
-                            className={classes.link}
-                          >
-                            <EditIcon></EditIcon>
-                          </Link>
-                          <Link
-                            color="textPrimary"
-                            to={"/grants/delete/" + grant.id}
-                            className={classes.link}
-                          >
-                            <DeleteForeverIcon></DeleteForeverIcon>
-                          </Link>
+    <Container maxWidth="md" component="main">
+      <Grid container rowSpacing={2}>
+        <Grid item xs={12}>
+          <Paper sx={{ width: "100%", overflow: "hidden" }}>
+            <TableContainer sx={{ maxHeight: 440 }} component={Paper}>
+              <Table stickyHeader aria-label="grants table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="center">Title</TableCell>
+                    <TableCell align="center">Agency</TableCell>
+                    <TableCell align="center">Year</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {grants.map((grant) => {
+                    return (
+                      <TableRow key={grant.id}>
+                        <TableCell scope="row" align="center">
+                          <Link to={"/grants/" + grant.id}>{grant.title}</Link>
                         </TableCell>
-                      )}
-                    </TableRow>
-                  );
-                })}
-                <TableRow>
-                  <TableCell colSpan={4} align="left">
-                    <button type="button" onClick={ExportToExcel}>
-                      Export To Excel
-                    </button>
-                  </TableCell>
-                  {jwt_decode(
-                    JSON.parse(localStorage.getItem("authTokens")).access
-                  ).is_teacher && (
-                    <TableCell colSpan={4} align="right">
-                      <Link to={"/grants/create"}>
-                        <Button variant="contained" color="primary">
-                          New Grant
-                        </Button>
-                      </Link>
-                    </TableCell>
-                  )}
-                </TableRow>
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Paper>
-      </Container>
-    </React.Fragment>
+                        <TableCell align="center">{grant.agency}</TableCell>
+                        <TableCell align="center">{grant.year}</TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Paper>
+        </Grid>
+        <Grid item sm={6} className="bottomButton">
+          <Button
+            variant="contained"
+            style={{ height: 40 }}
+            onClick={ExportToExcel}
+          >
+            Export To Excel
+          </Button>
+        </Grid>
+        {jwt_decode(JSON.parse(localStorage.getItem("authTokens")).access)
+          .is_teacher && (
+          <Grid item sm={6} className="bottomButton">
+            <Link to={"create"}>
+              <Button
+                variant="contained"
+                style={{ height: 40 }}
+                color="primary"
+              >
+                New Grant
+              </Button>
+            </Link>
+          </Grid>
+        )}
+      </Grid>
+    </Container>
   );
 };
 

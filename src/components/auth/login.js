@@ -81,14 +81,9 @@ const SignIn = () => {
     axios
       .post(`http://127.0.0.1:8000/api/token/`, postData)
       .then((response) => {
-        // console.log(
-        //   "setting context authTokens with..",
-        //   jwt_decode(response.data.access)
-        // );
         localStorage.setItem("authTokens", JSON.stringify(response.data));
         setAuthTokens(response.data);
         navigate("/grants");
-        // window.location.reload();
       })
       .catch((err) => {
         alert("Something went wrong!");

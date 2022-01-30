@@ -1,0 +1,43 @@
+.filterHeading {
+  text-align: center;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  margin-top: 3%;
+}
+
+.filterItem1 {
+  text-align: right;
+}
+
+.filterItem2 {
+  text-align: left;
+}
+
+.filterSubmit {
+  text-align: center;
+}
+
+.filterContainer {
+  margin: 5% 0 2% 0;
+  border: 2px solid rgb(77, 47, 47);
+  padding-bottom: 2%;
+  padding-right: 5%;
+  padding-left: 5%;
+  background-color: aliceblue;
+}
+
+.newGrant {
+  text-align: center;
+}
+
+.main {
+  margin: 5%;
+}
+
+.tableHeading {
+  text-align: center;
+}
+
+.bottomButton {
+  text-align: center;
+}

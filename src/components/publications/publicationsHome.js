@@ -13,6 +13,9 @@ import InputLabel from "@mui/material/InputLabel";
 
 import { publicationYears } from "../../constants/years";
 
+//custom css
+import "../../static/stylings.css";
+
 const PublicationsHome = () => {
   const navigate = useNavigate();
   const [yearobj, setYear] = useState({
@@ -40,13 +43,19 @@ const PublicationsHome = () => {
   };
 
   return (
-    <Container maxWidth="lg" component="main">
+    <Container maxWidth="lg" component="main" className="main">
       <Grid container rowSpacing={2} columnSpacing={2}>
-        <Grid item xs={12}>
-          <h3>Filter by year</h3>
-        </Grid>
-        <Grid item xs={4}>
-          {/* Start year:
+        <Grid
+          container
+          rowSpacing={2}
+          columnSpacing={2}
+          className="filterContainer"
+        >
+          <Grid item xs={12} className="filterHeading">
+            <h3>Filter by year</h3>
+          </Grid>
+          <Grid item xs={6} className="filterItem1">
+            {/* Start year:
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
@@ -61,31 +70,31 @@ const PublicationsHome = () => {
               </MenuItem>
             ))}
           </Select> */}
-          <FormControl fullWidth>
-            <InputLabel id="syear-select-label">
-              Select start-year to filter by
-            </InputLabel>
-            <Select
-              // basic
-              name="syear_select"
-              value={yearobj.startYear}
-              onChange={handleStartYearChange}
-              // mui
-              labelId="syear-select-label"
-              label="Select start-year to filter by"
-            >
-              {publicationYears.map((year) => {
-                return (
-                  <MenuItem key={year} value={year}>
-                    {year}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={4}>
-          {/* End year:
+            <FormControl fullWidth>
+              <InputLabel id="syear-select-label">
+                Select start-year to filter by
+              </InputLabel>
+              <Select
+                // basic
+                name="syear_select"
+                value={yearobj.startYear}
+                onChange={handleStartYearChange}
+                // mui
+                labelId="syear-select-label"
+                label="Select start-year to filter by"
+              >
+                {publicationYears.map((year) => {
+                  return (
+                    <MenuItem key={year} value={year}>
+                      {year}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={6} className="filterItem2">
+            {/* End year:
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
@@ -100,35 +109,40 @@ const PublicationsHome = () => {
               </MenuItem>
             ))}
           </Select> */}
-          <FormControl fullWidth>
-            <InputLabel id="eyear-select-label">
-              Select end-year to filter by
-            </InputLabel>
-            <Select
-              // basic
-              name="eyear_select"
-              value={yearobj.endYear}
-              onChange={handleEndYearChange}
-              // mui
-              labelId="eyear-select-label"
-              label="Select end-year to filter by"
-            >
-              {publicationYears.map((year) => {
-                return (
-                  <MenuItem key={year} value={year}>
-                    {year}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </FormControl>
+            <FormControl fullWidth>
+              <InputLabel id="eyear-select-label">
+                Select end-year to filter by
+              </InputLabel>
+              <Select
+                // basic
+                name="eyear_select"
+                value={yearobj.endYear}
+                onChange={handleEndYearChange}
+                // mui
+                labelId="eyear-select-label"
+                label="Select end-year to filter by"
+              >
+                {publicationYears.map((year) => {
+                  return (
+                    <MenuItem key={year} value={year}>
+                      {year}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} className="filterSubmit">
+            <Button variant="outlined" onClick={submitChangedDates}>
+              Click here to submit
+            </Button>
+          </Grid>
         </Grid>
+
         <Grid item xs={12}>
-          <Button variant="outlined" onClick={submitChangedDates}>
-            Click here to submit
-          </Button>
-        </Grid>
-        <Grid item xs={12}>
+          <div className="tableHeading">
+            <h1>Publications</h1>
+          </div>
           <Outlet />
         </Grid>
       </Grid>

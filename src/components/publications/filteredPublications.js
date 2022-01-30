@@ -15,6 +15,9 @@ import TableRow from "@material-ui/core/TableRow";
 import Grid from "@mui/material/Grid";
 import Typography from "@material-ui/core/Typography";
 
+//custom css
+import "../../static/stylings.css";
+
 import { getFilteredPublications } from "../../services/publications";
 import { trackPromise } from "react-promise-tracker";
 

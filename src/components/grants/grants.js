@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import useAxios from "../../utils/axios";
 import { Link, useNavigate } from "react-router-dom";
+import jwt_decode from "jwt-decode";
+
+//custom css
+import "../../static/stylings.css";
 
 //MUI
 import { makeStyles } from "@material-ui/core/styles";
@@ -92,7 +96,7 @@ const Grants = () => {
             </TableContainer>
           </Paper>
         </Grid>
-        <Grid item sm={6}>
+        <Grid item sm={6} className="bottomButton">
           <Button
             variant="contained"
             style={{ height: 40 }}
@@ -101,13 +105,20 @@ const Grants = () => {
             Export To Excel
           </Button>
         </Grid>
-        <Grid item sm={6}>
-          <Link to={"create"}>
-            <Button variant="contained" style={{ height: 40 }} color="primary">
-              New Grant
-            </Button>
-          </Link>
-        </Grid>
+        {jwt_decode(JSON.parse(localStorage.getItem("authTokens")).access)
+          .is_teacher && (
+          <Grid item sm={6} className="bottomButton">
+            <Link to={"create"}>
+              <Button
+                variant="contained"
+                style={{ height: 40 }}
+                color="primary"
+              >
+                New Grant
+              </Button>
+            </Link>
+          </Grid>
+        )}
       </Grid>
     </Container>
   );
