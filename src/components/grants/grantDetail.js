@@ -31,6 +31,11 @@ const GrantDetail = () => {
   const { id } = useParams();
   const [confirmOpen, setConfirmOpen] = useState(false);
 
+  let goToEdit = () => {
+    navigate("/grants/edit/" + id);
+    window.location.reload();
+  };
+
   let getGrant = async () => {
     api
       .get("grants/" + id)
@@ -120,11 +125,14 @@ const GrantDetail = () => {
             </TableContainer>
           </Grid>
           <Grid item xs={6}>
-            <Link color="textPrimary" to={"/grants/edit/" + grant.id}>
-              <Button variant="outlined" color="primary" endIcon={<EditIcon />}>
-                Update
-              </Button>
-            </Link>
+            <Button
+              variant="outlined"
+              color="primary"
+              endIcon={<EditIcon />}
+              onClick={goToEdit}
+            >
+              Update
+            </Button>
           </Grid>
           <Grid item xs={6}>
             <Button

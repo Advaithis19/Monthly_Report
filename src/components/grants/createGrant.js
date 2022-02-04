@@ -18,7 +18,8 @@ import Button from "@mui/material/Button";
 import Typography from "@material-ui/core/Typography";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
-//styling
+
+// styling
 // import { makeStyles } from "@material-ui/core/styles";
 
 import { getUsers } from "../../services/users";
@@ -162,7 +163,6 @@ const CreateGrant = () => {
       .post(`grants/create/`, postData)
       .then(() => {
         navigate("/grants/");
-        // window.location.reload();
       })
       .catch((error) => {
         if (error.response.status === 401) {

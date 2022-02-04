@@ -32,6 +32,11 @@ const Grants = () => {
 
   let [grants, setGrants] = useState([]);
 
+  let goToCreate = () => {
+    navigate("create");
+    window.location.reload();
+  };
+
   useEffect(() => {
     let mounted = true;
     trackPromise(
@@ -108,15 +113,14 @@ const Grants = () => {
         {jwt_decode(JSON.parse(localStorage.getItem("authTokens")).access)
           .is_teacher && (
           <Grid item sm={6} className="bottomButton">
-            <Link to={"create"}>
-              <Button
-                variant="contained"
-                style={{ height: 40 }}
-                color="primary"
-              >
-                New Grant
-              </Button>
-            </Link>
+            <Button
+              variant="contained"
+              style={{ height: 40 }}
+              color="primary"
+              onClick={goToCreate}
+            >
+              New Grant
+            </Button>
           </Grid>
         )}
       </Grid>

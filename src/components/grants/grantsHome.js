@@ -11,6 +11,8 @@ import "../../static/stylings.css";
 import Button from "@material-ui/core/Button";
 import Grid from "@mui/material/Grid";
 import Container from "@material-ui/core/Container";
+import DatePicker from "@mui/lab/DatePicker";
+import TextField from "@mui/material/TextField";
 
 const GrantsHome = () => {
   const navigate = useNavigate();
@@ -19,17 +21,17 @@ const GrantsHome = () => {
     endDate: new Date(),
   });
 
-  const handleStartDateChange = (date) => {
+  const handleStartDateChange = (e) => {
     setDate({
       ...dateobj,
-      ["startDate"]: date,
+      ["startDate"]: e,
     });
   };
 
-  const handleEndDateChange = (date) => {
+  const handleEndDateChange = (e) => {
     setDate({
       ...dateobj,
-      ["endDate"]: date,
+      ["endDate"]: e,
     });
   };
 
@@ -37,7 +39,6 @@ const GrantsHome = () => {
     let iso_startDate = dayjs(dateobj.startDate).format("YYYY-MM-DD");
     let iso_endDate = dayjs(dateobj.endDate).format("YYYY-MM-DD");
     navigate("filter/date/" + iso_startDate + "/" + iso_endDate);
-    // window.location.reload();
   };
 
   return (
@@ -53,17 +54,19 @@ const GrantsHome = () => {
             <h3>Filter by date</h3>
           </Grid>
           <Grid item xs={6} className="filterItem1">
-            <div>Start date:</div>
-            <DatePickerComponent
-              onDateChange={handleStartDateChange}
-              selectedDate={dateobj.startDate}
+            <DatePicker
+              label="Select start date to filter by"
+              value={dateobj.startDate}
+              onChange={handleStartDateChange}
+              renderInput={(params) => <TextField {...params} />}
             />
           </Grid>
           <Grid item xs={6} className="filterItem2">
-            <div>End date:</div>
-            <DatePickerComponent
-              onDateChange={handleEndDateChange}
-              selectedDate={dateobj.endDate}
+            <DatePicker
+              label="Select end date to filter by"
+              value={dateobj.endDate}
+              onChange={handleEndDateChange}
+              renderInput={(params) => <TextField {...params} />}
             />
           </Grid>
           <Grid item xs={12} className="filterSubmit">
