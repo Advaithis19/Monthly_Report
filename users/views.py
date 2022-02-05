@@ -20,6 +20,8 @@ from django.shortcuts import render, redirect
 from django.core.mail import send_mail, BadHeaderError
 from django.contrib.auth.tokens import default_token_generator
 from django.db.models.query_utils import Q
+from django import template
+from django.core.mail import EmailMultiAlternatives
 
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 
@@ -38,18 +40,27 @@ class CustomUserCreate(APIView):
             current_site = get_current_site(request)
             if user:
                 mail_subject = 'Activate your blog account.'
-                message = render_to_string('users/accounts/activate_account_email.txt', {
+                plaintext = template.loader.get_template(
+                    'users/accounts/activate_account_email.txt')
+                htmltemp = template.loader.get_template(
+                    'users/accounts/activate_account_email.html')
+                context = {
                     'user': user,
                     'domain': current_site.domain,
                     'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                     'token': account_activation_token.make_token(user),
                     'protocol': 'http',
-                })
+                }
                 to_email = serializer.validated_data.get('email')
-                email = EmailMessage(
-                    mail_subject, message, to=[to_email]
-                )
-                email.send()
+                text_content = plaintext.render(context)
+                html_content = htmltemp.render(context)
+                try:
+                    msg = EmailMultiAlternatives(mail_subject, text_content, "Monthly Report", [
+                        to_email], headers={'Reply-To': EMAIL_HOST_USER})
+                    msg.attach_alternative(html_content, "text/html")
+                    msg.send()
+                except BadHeaderError:
+                    return render(request=request, template_name="users/accounts/activate_account_invalid.html")
                 json = serializer.data
                 return Response(json, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -74,9 +85,8 @@ class BlacklistTokenUpdateView(APIView):
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
+
 # activation confirmation view
-
-
 def activate(request, uidb64, token):
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
@@ -90,9 +100,8 @@ def activate(request, uidb64, token):
     else:
         return render(request=request, template_name="users/accounts/activate_account_invalid.html")
 
+
 # password reset view
-
-
 def password_reset_request(request):
     if request.method == "POST":
         password_reset_form = PasswordResetForm(request.POST)
@@ -103,7 +112,10 @@ def password_reset_request(request):
                 for user in associated_users:
                     current_site = get_current_site(request)
                     subject = "Password Reset Requested"
-                    email_template_name = "users/password/password_reset_email.txt"
+                    plaintext = template.loader.get_template(
+                        'users/password/password_reset_email.txt')
+                    htmltemp = template.loader.get_template(
+                        'users/password/password_reset_email.html')
                     context = {
                         "email": user.email,
                         'domain': current_site.domain,
@@ -113,14 +125,17 @@ def password_reset_request(request):
                         'token': default_token_generator.make_token(user),
                         'protocol': 'http',
                     }
-                    email = render_to_string(
-                        email_template_name, context=context)
+                    text_content = plaintext.render(context)
+                    html_content = htmltemp.render(context)
                     try:
-                        send_mail(subject, email, EMAIL_HOST_USER,
-                                  [user.email], fail_silently=False)
+                        msg = EmailMultiAlternatives(subject, text_content, "Monthly Report", [
+                            user.email], headers={'Reply-To': EMAIL_HOST_USER})
+                        msg.attach_alternative(html_content, "text/html")
+                        msg.send()
                     except BadHeaderError:
                         return render(request=request, template_name="users/password/password_reset_invalid.html")
                     return redirect("/accounts/password_reset/done/")
+        # return Response(status=status.HTTP_400_BAD_REQUEST)
     password_reset_form = PasswordResetForm()
     return render(request=request, template_name="users/password/password_reset.html", context={"password_reset_form": password_reset_form})
 

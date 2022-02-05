@@ -49,6 +49,9 @@ INSTALLED_APPS = [
     'crispy_forms',
 ]
 
+# crispy template pack
+CRISPY_TEMPLATE_PACK = 'uni_form'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'corsheaders.middleware.CorsMiddleware',
