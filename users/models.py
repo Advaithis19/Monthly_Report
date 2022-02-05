@@ -75,9 +75,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField("last name", max_length=150, blank=True)
     start_date = models.DateTimeField("date of join", default=timezone.now)
 
-    is_staff = models.BooleanField(
-        "staff?", default=False)
-    is_active = models.BooleanField("user active?", default=True)
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     # below attributes are defined for providing other functionalities
     is_teacher = models.BooleanField("teacher?", default=False)
