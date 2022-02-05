@@ -52,6 +52,8 @@ const SignIn = () => {
 
   const [formData, updateFormData] = useState(initialFormData);
 
+  const HOST_SERVER_URL = "http://127.0.0.1:8000/";
+
   const handleChange = (e) => {
     updateFormData({
       ...formData,
@@ -141,6 +143,17 @@ const SignIn = () => {
             Sign In
           </Button>
           <Grid container>
+            <Grid item></Grid>
+          </Grid>
+          <Grid container>
+            <Grid item xs>
+              <a
+                href={HOST_SERVER_URL + "api/users/password_reset/"}
+                variant="body2"
+              >
+                Forgot password?
+              </a>
+            </Grid>
             <Grid item>
               <Link to="/register" variant="body2">
                 Don't have an account? Sign up
