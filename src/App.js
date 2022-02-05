@@ -60,12 +60,6 @@ function App() {
               <Route path="/register" element={<SignUp />} />
               <Route path="/login" element={<SignIn />} />
               <Route path="/logout" element={<Logout />} />
-
-              {/* for password reset */}
-              {/* <Route
-            path="/accounts/activate/:uid/:token"
-            element={<ActivateAccount />}
-          /> */}
             </Routes>
             {/* <Footer /> */}
           </AuthProvider>

@@ -87,13 +87,14 @@ const SignIn = () => {
         setAuthTokens(response.data);
         navigate("/grants");
       })
-      .catch((err) => {
-        alert("Something went wrong!");
-
-        //for account activation
-        // alert(
-        //   "Something went wrong! Perhaps entered details are wrong....have you tried activating your account?"
-        // );
+      .catch((error) => {
+        if (error.response.status === 401) {
+          alert(
+            "Something went wrong! Entered details may be incorrect... Have you tried activating your account?"
+          );
+        } else {
+          alert("Something went wrong!");
+        }
       });
   };
 
@@ -150,6 +151,7 @@ const SignIn = () => {
               <a
                 href={HOST_SERVER_URL + "api/users/password_reset/"}
                 variant="body2"
+                target="_blank"
               >
                 Forgot password?
               </a>
