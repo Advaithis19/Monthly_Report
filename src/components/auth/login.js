@@ -13,8 +13,8 @@ import { Form } from "react-bootstrap";
 // MUI
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 

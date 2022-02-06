@@ -15,12 +15,12 @@ import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 
 // styling
-// import { makeStyles } from "@material-ui/core/styles";
+// import { makeStyles } from "@mui/material/styles";
 
 import { getUsers } from "../../services/users";
 import { trackPromise } from "react-promise-tracker";

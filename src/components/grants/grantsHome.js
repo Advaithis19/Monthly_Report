@@ -8,9 +8,9 @@ import { Link } from "react-router-dom";
 import "../../static/stylings.css";
 
 //MUI
-import Button from "@material-ui/core/Button";
+import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
-import Container from "@material-ui/core/Container";
+import Container from "@mui/material/Container";
 import DatePicker from "@mui/lab/DatePicker";
 import TextField from "@mui/material/TextField";
 
