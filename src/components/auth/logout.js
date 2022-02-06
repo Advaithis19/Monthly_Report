@@ -1,5 +1,4 @@
 import React, { useEffect, useContext } from "react";
-// import useAxios from "../../utils/axios";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import AuthContext from "../../context/AuthContext";
@@ -9,7 +8,6 @@ const Logout = () => {
   let { setAuthTokens } = useContext(AuthContext);
 
   const navigate = useNavigate();
-  // let api = useAxios();
 
   let logout = async () => {
     axios
@@ -19,9 +17,7 @@ const Logout = () => {
       .then(() => {
         localStorage.removeItem("authTokens");
         setAuthTokens(null);
-        // api.defaults.headers["Authorization"] = null;
         navigate("/login");
-        // window.location.reload();
       })
       .catch(() => {
         alert("Something went wrong!");

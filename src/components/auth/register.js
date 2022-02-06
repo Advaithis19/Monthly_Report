@@ -75,7 +75,6 @@ const SignUp = () => {
   const [type, setType] = useState("teacher");
   const [department, setDepartment] = useState("ISE");
   const [departmentSelect, setDepartmentSelect] = useState(true);
-  const [reload, setReload] = useState(true);
 
   const handleChange = (e) => {
     updateFormData({
@@ -153,12 +152,6 @@ const SignUp = () => {
         }
       });
   };
-
-  useEffect(() => {
-    console.log("reload", reload);
-    console.log("useEffect called!");
-    if (reload) setReload(false);
-  }, [reload]);
 
   return (
     <Container maxWidth="sm">

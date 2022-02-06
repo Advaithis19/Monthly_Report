@@ -63,7 +63,6 @@ const SignIn = () => {
 
   let goToRegister = () => {
     navigate("/register");
-    // window.location.reload();
   };
 
   const onSubmit = async (e) => {
