@@ -4,7 +4,6 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 
 //MUI
 import Grid from "@mui/material/Grid";
-import makeStyles from '@mui/styles/makeStyles';
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -20,33 +19,6 @@ import jwt_decode from "jwt-decode";
 import { getFilteredGrants } from "../../services/grants";
 import { trackPromise } from "react-promise-tracker";
 
-const useStyles = makeStyles((theme) => ({
-  cardMedia: {
-    paddingTop: "56.25%", // 16:9
-  },
-  link: {
-    margin: theme.spacing(1, 1.5),
-  },
-  cardHeader: {
-    backgroundColor:
-      theme.palette.mode === "light"
-        ? theme.palette.grey[200]
-        : theme.palette.grey[700],
-  },
-  grantTitle: {
-    fontSize: "16px",
-    textAlign: "left",
-  },
-  grantText: {
-    display: "flex",
-    justifyContent: "left",
-    alignItems: "baseline",
-    fontSize: "12px",
-    textAlign: "left",
-    marginBottom: theme.spacing(2),
-  },
-}));
-
 let data = [{ foo: "foo" }, { bar: "bar" }];
 const fileName = "report";
 const exportType = "csv";
@@ -55,7 +27,6 @@ const FilteredGrants = () => {
   const { start_date, end_date } = useParams();
   let navigate = useNavigate();
   let api = useAxios();
-  const classes = useStyles();
 
   let [grants, setGrants] = useState([]);
 

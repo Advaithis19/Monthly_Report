@@ -32,18 +32,18 @@ const EditGrant = () => {
   const validationSchema = Yup.object().shape({
     title: Yup.string().test(
       "len",
-      "Titleeee is required",
-      (val) => val.length == 0
+      "Title is required",
+      (val) => val.length > 0
     ),
     agency: Yup.string().test(
       "len",
       "Agency is required",
-      (val) => val.length == 0
+      (val) => val.length > 0
     ),
     sanc_amt: Yup.string().test(
       "len",
       "Amount is required",
-      (val) => val.length == 0
+      (val) => val.length > 0
     ),
   });
   const formOptions = { resolver: yupResolver(validationSchema) };
