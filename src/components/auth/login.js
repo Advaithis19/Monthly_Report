@@ -61,19 +61,10 @@ const SignIn = () => {
     });
   };
 
-  //for password reset submission
-  // const handlePasswordResetSubmit = async () => {
-  //   axios
-  //     .post(`http://127.0.0.1:8000/api/users/password_reset/`, {
-  //       email: formData.email,
-  //     })
-  //     .then(() => {
-  //       console.log("done");
-  //     })
-  //     .catch((err) => {
-  //       console.log("error", err);
-  //     });
-  // };
+  let goToRegister = () => {
+    navigate("/register");
+    window.location.reload();
+  };
 
   const onSubmit = async (e) => {
     let postData = new FormData();
@@ -146,20 +137,26 @@ const SignIn = () => {
           <Grid container>
             <Grid item></Grid>
           </Grid>
-          <Grid container>
+          <Grid container className="mt-2">
             <Grid item xs>
-              <a
-                href={HOST_SERVER_URL + "api/users/password_reset/"}
-                variant="body2"
-                target="_blank"
-              >
-                Forgot password?
-              </a>
+              <Button variant="outlined" style={{ height: 40 }} color="primary">
+                <a
+                  href={HOST_SERVER_URL + "api/users/password_reset/"}
+                  target="_blank"
+                >
+                  Forgot password?
+                </a>
+              </Button>
             </Grid>
             <Grid item>
-              <Link to="/register" variant="body2">
+              <Button
+                variant="outlined"
+                style={{ height: 40 }}
+                color="primary"
+                onClick={goToRegister}
+              >
                 Don't have an account? Sign up
-              </Link>
+              </Button>
             </Grid>
           </Grid>
         </Form>

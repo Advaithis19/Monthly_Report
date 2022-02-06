@@ -42,7 +42,6 @@ const PublicationsHome = () => {
     navigate(
       "filter/year/" + yearobj.startYear.value + "/" + yearobj.endYear.value
     );
-    window.location.reload();
   };
 
   return (
