@@ -34,7 +34,7 @@ const Grants = () => {
 
   let goToCreate = () => {
     navigate("create");
-    window.location.reload();
+    // window.location.reload();
   };
 
   useEffect(() => {

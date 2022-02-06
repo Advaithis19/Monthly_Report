@@ -18,8 +18,6 @@ import Button from "@mui/material/Button";
 import Typography from "@material-ui/core/Typography";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
-//styling
-// import { makeStyles } from "@material-ui/core/styles";
 
 import { getGrantInstance } from "../../services/grants";
 import { getUsers } from "../../services/users";

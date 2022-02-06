@@ -1,5 +1,4 @@
 import React from "react";
-// import "./index.css";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Navbar from "./components/header";
 // import Footer from "./components/footer";
@@ -27,45 +26,61 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
+import {
+  ThemeProvider,
+  createMuiTheme,
+  makeStyles,
+} from "@material-ui/core/styles";
+
+const theme = createMuiTheme();
+
+const useStyles = makeStyles((theme) => {
+  root: {
+    // some CSS that access to theme
+  }
+});
+
 function App() {
   return (
-    <div className="App">
-      <LocalizationProvider dateAdapter={DateAdapter}>
-        <Router>
-          <AuthProvider>
-            <Navbar />
-            <Routes>
-              <Route path="/" element={<PrivateOutlet />}>
-                {/* grants routes */}
-                <Route path="/grants" element={<GrantsHome />}>
-                  <Route index element={<Grants />} />
-                  <Route
-                    path="filter/date/:start_date/:end_date"
-                    element={<FilteredGrants />}
-                  />
-                </Route>
-                <Route path="/grants/:id" element={<GrantDetail />} />
-                <Route path="/grants/create" element={<CreateGrant />} />
-                <Route path="/grants/edit/:id" element={<EditGrant />} />
+    <ThemeProvider theme={theme}>
+      <div className="App">
+        <LocalizationProvider dateAdapter={DateAdapter}>
+          <Router>
+            <AuthProvider>
+              <Navbar />
+              <Routes>
+                <Route path="/" element={<PrivateOutlet />}>
+                  {/* grants routes */}
+                  <Route path="/grants" element={<GrantsHome />}>
+                    <Route index element={<Grants />} />
+                    <Route
+                      path="filter/date/:start_date/:end_date"
+                      element={<FilteredGrants />}
+                    />
+                  </Route>
+                  <Route path="/grants/:id" element={<GrantDetail />} />
+                  <Route path="/grants/create" element={<CreateGrant />} />
+                  <Route path="/grants/edit/:id" element={<EditGrant />} />
 
-                {/* publication route */}
-                <Route path="/publications" element={<PublicationsHome />}>
-                  <Route index element={<Publications />} />
-                  <Route
-                    path="filter/year/:start_year/:end_year"
-                    element={<FilteredPublications />}
-                  />
+                  {/* publication route */}
+                  <Route path="/publications" element={<PublicationsHome />}>
+                    <Route index element={<Publications />} />
+                    <Route
+                      path="filter/year/:start_year/:end_year"
+                      element={<FilteredPublications />}
+                    />
+                  </Route>
                 </Route>
-              </Route>
-              <Route path="/register" element={<SignUp />} />
-              <Route path="/login" element={<SignIn />} />
-              <Route path="/logout" element={<Logout />} />
-            </Routes>
-            {/* <Footer /> */}
-          </AuthProvider>
-        </Router>
-      </LocalizationProvider>
-    </div>
+                <Route path="/register" element={<SignUp />} />
+                <Route path="/login" element={<SignIn />} />
+                <Route path="/logout" element={<Logout />} />
+              </Routes>
+              {/* <Footer /> */}
+            </AuthProvider>
+          </Router>
+        </LocalizationProvider>
+      </div>
+    </ThemeProvider>
   );
 }
 

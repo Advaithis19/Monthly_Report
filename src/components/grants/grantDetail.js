@@ -33,7 +33,7 @@ const GrantDetail = () => {
 
   let goToEdit = () => {
     navigate("/grants/edit/" + id);
-    window.location.reload();
+    // window.location.reload();
   };
 
   let getGrant = async () => {
@@ -137,7 +137,7 @@ const GrantDetail = () => {
           <Grid item xs={6}>
             <Button
               variant="outlined"
-              color="danger"
+              color="secondary"
               startIcon={<DeleteIcon />}
               onClick={() => setConfirmOpen(true)}
             >

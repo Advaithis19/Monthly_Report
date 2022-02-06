@@ -80,6 +80,7 @@ const CreateGrant = () => {
 
   const [formData, updateFormData] = useState(initialFormData);
   const [users, setUsers] = useState([]);
+  const [reload, setReload] = useState(true);
 
   useEffect(() => {
     let mounted = true;
@@ -108,10 +109,12 @@ const CreateGrant = () => {
           }
         })
     );
+    console.log("useEffect called");
+    setReload(false);
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [reload]);
 
   const handleChange = (e) => {
     if ([e.target.name] == "title") {
