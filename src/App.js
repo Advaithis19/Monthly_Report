@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Navbar from "./components/header";
-// import Footer from "./components/footer";
+import Footer from "./components/footer";
 import Grants from "./components/grants/grants";
 import GrantDetail from "./components/grants/grantDetail";
 import EditGrant from "./components/grants/editGrant";
@@ -65,7 +65,7 @@ function App() {
                 <Route path="/login" element={<SignIn />} />
                 <Route path="/logout" element={<Logout />} />
               </Routes>
-              {/* <Footer /> */}
+              <Footer />
             </AuthProvider>
           </Router>
         </LocalizationProvider>

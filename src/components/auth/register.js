@@ -154,9 +154,17 @@ const SignUp = () => {
   };
 
   return (
-    <Container maxWidth="sm">
+    <Container
+      maxWidth="sm"
+      className="border-solid border-1 border-[#27447e] my-5 shadow-md"
+    >
       <Box mt={3} mb={3}>
-        <Typography component="h1" variant="h5" gutterBottom>
+        <Typography
+          component="h1"
+          variant="h5"
+          gutterBottom
+          className="text-center mb-4"
+        >
           Sign up
         </Typography>
         <Form onSubmit={handleSubmit(onSubmit)}>
@@ -323,7 +331,7 @@ const SignUp = () => {
           <Button variant="contained" color="primary" type="submit" fullWidth>
             Sign Up
           </Button>
-          <Grid container justifyContent="flex-end">
+          <Grid container justifyContent="flex-end" className="mt-2">
             <Grid item>
               <Link to="/login" variant="body2">
                 Already have an account? Sign in

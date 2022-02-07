@@ -89,9 +89,18 @@ const SignIn = () => {
   };
 
   return (
-    <Container maxWidth="sm">
+    <Container
+      maxWidth="sm"
+      className="border-solid border-1 border-[#27447e] my-5 shadow-md"
+      color="default"
+    >
       <Box mt={3} mb={3}>
-        <Typography component="h1" variant="h5" gutterBottom>
+        <Typography
+          component="h1"
+          variant="h5"
+          gutterBottom
+          className="text-center mb-4"
+        >
           Sign in
         </Typography>
         <Form onSubmit={handleSubmit(onSubmit)}>
@@ -133,29 +142,17 @@ const SignIn = () => {
           <Button variant="contained" color="primary" type="submit" fullWidth>
             Sign In
           </Button>
-          <Grid container>
-            <Grid item></Grid>
-          </Grid>
-          <Grid container className="mt-2">
-            <Grid item xs>
-              <Button variant="outlined" style={{ height: 40 }} color="primary">
-                <a
-                  href={HOST_SERVER_URL + "api/users/password_reset/"}
-                  target="_blank"
-                >
-                  Forgot password?
-                </a>
-              </Button>
-            </Grid>
-            <Grid item>
-              <Button
-                variant="outlined"
-                style={{ height: 40 }}
-                color="primary"
-                onClick={goToRegister}
+          <Grid container className="mt-3">
+            <Grid item xs={6} className="text-left">
+              <a
+                href={HOST_SERVER_URL + "api/users/password_reset/"}
+                target="_blank"
               >
-                Don't have an account? Sign up
-              </Button>
+                Forgot password?
+              </a>
+            </Grid>
+            <Grid item xs={6} className="text-right">
+              <Link to="/register">Don't have an account? Sign up</Link>
             </Grid>
           </Grid>
         </Form>
