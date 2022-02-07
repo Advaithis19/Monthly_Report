@@ -63,6 +63,10 @@ const Navbar = () => {
     setAnchorEl(null);
   };
 
+  const handleSidebarOpen = () => {
+    if (user) setToggleMenu(true);
+  };
+
   const handleLogout = () => {
     setAnchorEl(null);
     navigate("/logout");
@@ -86,6 +90,7 @@ const Navbar = () => {
       }}
       open={isMenuOpen}
       onClose={handleMenuClose}
+      disableScrollLock={true}
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleLogout}>Logout</MenuItem>
@@ -159,7 +164,7 @@ const Navbar = () => {
                 aria-label="menu"
                 className="cursor-pointer"
                 sx={{ mr: 2 }}
-                onClick={() => setToggleMenu(true)}
+                onClick={handleSidebarOpen}
               >
                 <MenuIcon />
               </IconButton>

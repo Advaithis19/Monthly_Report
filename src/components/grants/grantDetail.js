@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import useAxios from "../../utils/axios";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 //MUI
-// import { makeStyles } from "@mui/material/styles";
 import Container from "@mui/material/Container";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -33,7 +32,6 @@ const GrantDetail = () => {
 
   let goToEdit = () => {
     navigate("/grants/edit/" + id);
-    // window.location.reload();
   };
 
   let getGrant = async () => {
@@ -78,24 +76,28 @@ const GrantDetail = () => {
   if (!grant || grant.length === 0)
     return <p>Can not find required grant, sorry</p>;
   return (
-    <Container maxWidth="md" component="main">
+    <Container
+      maxWidth="md"
+      component="main"
+      className="border-solid border-1 border-[#27447e] my-5 shadow-xl shadow-blue-500/50"
+    >
       <Box mt={3} mb={3}>
         <Grid container rowSpacing={3}>
           <Grid item xs={12}>
             <TableContainer component={Paper}>
-              <Table sx={{ minWidth: 650 }} aria-label="detailed grant table">
+              <Table
+                sx={{ minWidth: 650 }}
+                aria-label="detailed grant table"
+                className="border-solid border-1 border-[#27447e]"
+              >
                 <TableHead>
                   <TableRow>
                     <TableCell align="center" colSpan={2}>
-                      Grant - {grant.id}
+                      {grant.title}
                     </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  <TableRow>
-                    <TableCell>Title</TableCell>
-                    <TableCell>{grant.title}</TableCell>
-                  </TableRow>
                   <TableRow>
                     <TableCell>Agency</TableCell>
                     <TableCell>{grant.agency}</TableCell>
@@ -124,22 +126,27 @@ const GrantDetail = () => {
               </Table>
             </TableContainer>
           </Grid>
-          <Grid item xs={6}>
+
+          <div className="w-[100%] h-[0.25px] bg-gray-400 mx-auto mt-5" />
+
+          <Grid item xs={6} className="text-center">
             <Button
               variant="outlined"
               color="primary"
               endIcon={<EditIcon />}
               onClick={goToEdit}
+              className="w-[50%]"
             >
               Update
             </Button>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={6} className="text-center">
             <Button
               variant="outlined"
-              color="secondary"
+              color="error"
               startIcon={<DeleteIcon />}
               onClick={() => setConfirmOpen(true)}
+              className="w-[50%]"
             >
               Delete
             </Button>

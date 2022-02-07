@@ -226,7 +226,10 @@ const EditGrant = () => {
   };
 
   return (
-    <Container maxWidth="sm">
+    <Container
+      maxWidth="sm"
+      className="border-solid border-1 border-[#27447e] my-5 shadow-xl shadow-blue-500/50"
+    >
       <Box mt={3} mb={3}>
         <Typography component="h1" variant="h5" gutterBottom>
           Edit Grant

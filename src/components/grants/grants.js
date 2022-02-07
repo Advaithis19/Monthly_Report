@@ -3,9 +3,6 @@ import useAxios from "../../utils/axios";
 import { Link, useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 
-//custom css
-import "../../static/stylings.css";
-
 // mui
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
@@ -34,7 +31,6 @@ const Grants = () => {
 
   let goToCreate = () => {
     navigate("create");
-    // window.location.reload();
   };
 
   useEffect(() => {
@@ -68,7 +64,11 @@ const Grants = () => {
   };
 
   if (!grants || grants.length === 0)
-    return <p>Can not find any grants, sorry</p>;
+    return (
+      <div>
+        <p className="">Can not find any grants, sorry</p>
+      </div>
+    );
 
   return (
     <Container maxWidth="md" component="main">
@@ -79,7 +79,7 @@ const Grants = () => {
               <Table
                 stickyHeader
                 aria-label="grants table"
-                className="border-solid border-1 border-[#27447e] shadow-md"
+                className="border-solid border-1 border-[#27447e] shadow-xl shadow-blue-500/50"
               >
                 <TableHead>
                   <TableRow>
@@ -105,7 +105,7 @@ const Grants = () => {
             </TableContainer>
           </Paper>
         </Grid>
-        <Grid item sm={6} className="bottomButton">
+        <Grid item sm={6} className="">
           <Button
             variant="contained"
             style={{ height: 40 }}
@@ -116,7 +116,7 @@ const Grants = () => {
         </Grid>
         {jwt_decode(JSON.parse(localStorage.getItem("authTokens")).access)
           .is_teacher && (
-          <Grid item sm={6} className="bottomButton">
+          <Grid item sm={6} className="">
             <Button
               variant="contained"
               style={{ height: 40 }}

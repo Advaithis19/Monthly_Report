@@ -14,11 +14,9 @@ import TableRow from "@mui/material/TableRow";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 
-//custom css
-import "../../static/stylings.css";
-
 import { getFilteredPublications } from "../../services/publications";
 import { trackPromise } from "react-promise-tracker";
+import { color } from "@mui/system";
 
 const FilteredPublications = () => {
   const publicationURL = "http://shivampjt.pythonanywhere.com/";
@@ -54,7 +52,11 @@ const FilteredPublications = () => {
         <Grid item xs={12}>
           <Paper sx={{ width: "100%", overflow: "hidden" }}>
             <TableContainer sx={{ maxHeight: 440 }} component={Paper}>
-              <Table stickyHeader aria-label="publications table">
+              <Table
+                stickyHeader
+                aria-label="publications table"
+                className="border-solid border-1 border-[#27447e] shadow-xl shadow-blue-500/50"
+              >
                 <TableHead>
                   <TableRow>
                     <TableCell align="center">Title</TableCell>
@@ -92,11 +94,19 @@ const FilteredPublications = () => {
             </TableContainer>
           </Paper>
         </Grid>
-        <Grid item sm={12}>
+
+        <div className="w-[100%] h-[0.25px] bg-gray-400 mx-auto mt-5" />
+
+        <Grid item sm={12} className="my-3">
           <Typography>
-            To create/delete publications or to access more detailed information
-            about specific publications of your interest, please visit{" "}
-            <a href={publicationURL}>{publicationURL}</a>
+            <p className="font-semibold text-lg">
+              To create/delete publications or to access more detailed
+              information about specific publications of your interest, please
+              visit{" "}
+              <a href={publicationURL} style={{ color: "#436ef0" }}>
+                {publicationURL}
+              </a>
+            </p>
           </Typography>
         </Grid>
       </Grid>

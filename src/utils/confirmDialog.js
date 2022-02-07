@@ -14,6 +14,7 @@ const ConfirmDialog = (props) => {
       open={open}
       onClose={() => setOpen(false)}
       aria-labelledby="confirm-dialog"
+      disableScrollLock={true}
     >
       <DialogTitle id="confirm-dialog">{title}</DialogTitle>
       <DialogContent>{children}</DialogContent>

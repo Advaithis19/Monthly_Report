@@ -69,7 +69,11 @@ const FilteredGrants = () => {
         <Grid item xs={12}>
           <Paper sx={{ width: "100%", overflow: "hidden" }}>
             <TableContainer sx={{ maxHeight: 440 }} component={Paper}>
-              <Table stickyHeader aria-label="grants table">
+              <Table
+                stickyHeader
+                aria-label="grants table"
+                className="border-solid border-1 border-[#27447e] shadow-xl shadow-blue-500/50"
+              >
                 <TableHead>
                   <TableRow>
                     <TableCell align="center">Title</TableCell>
