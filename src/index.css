@@ -13,6 +13,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* #root {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} */
+
 .gradient-bg-welcome {
   background-color: #0f0e13;
   background-image: radial-gradient(
@@ -45,7 +52,7 @@ body {
 }
 
 .blue-glassmorphism {
-  background: rgba(39, 68, 126, 0.5);
+  background: rgba(39, 68, 126, 0.8);
   border-radius: 16px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(5px);
