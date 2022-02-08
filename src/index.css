@@ -12,6 +12,13 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   padding: 0%;
+  /* font-size: max(1em, 12px); */
+}
+
+td,
+th {
+  border: solid 2px rgba(0, 0, 0, 0.2);
+  padding: 15px;
 }
 
 /* #root {

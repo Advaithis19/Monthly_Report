@@ -4,13 +4,6 @@ import { useNavigate, useParams } from "react-router-dom";
 
 //MUI
 import Container from "@mui/material/Container";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "@mui/material/Button";
@@ -84,50 +77,42 @@ const GrantDetail = () => {
       <Box mt={3} mb={3}>
         <Grid container rowSpacing={3}>
           <Grid item xs={12}>
-            <TableContainer component={Paper}>
-              <Table
-                sx={{ minWidth: 650 }}
-                aria-label="detailed grant table"
-                className="border-solid border-1 border-[#27447e]"
-              >
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="center" colSpan={2}>
-                      {grant.title}
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <TableRow>
-                    <TableCell>Agency</TableCell>
-                    <TableCell>{grant.agency}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Sanctioned amount</TableCell>
-                    <TableCell>{grant.sanc_amt}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Year</TableCell>
-                    <TableCell>{grant.year}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Remarks</TableCell>
-                    <TableCell>{grant.remarks}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Principal Investigator</TableCell>
-                    <TableCell>{grant.PI}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Co-Principal Investigator</TableCell>
-                    <TableCell>{grant.CO_PI}</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </TableContainer>
+            <table className="border-solid border-1 border-black mx-auto font-sans text-md overflow-auto w-[75%] mb-3">
+              <thead className="">
+                <tr className="text-center">
+                  <th colSpan={2}>{grant.title}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Agency</td>
+                  <td>{grant.agency}</td>
+                </tr>
+                <tr>
+                  <td>Sanctioned amount</td>
+                  <td>{grant.sanc_amt}</td>
+                </tr>
+                <tr>
+                  <td>Year</td>
+                  <td>{grant.year}</td>
+                </tr>
+                <tr>
+                  <td>Remarks</td>
+                  <td>{grant.remarks}</td>
+                </tr>
+                <tr>
+                  <td>Principal Investigator</td>
+                  <td>{grant.PI}</td>
+                </tr>
+                <tr>
+                  <td>Co-Principal Investigator</td>
+                  <td>{grant.CO_PI}</td>
+                </tr>
+              </tbody>
+            </table>
           </Grid>
 
-          <div className="w-[100%] h-[0.25px] bg-gray-400 mx-auto mt-5" />
+          <div className="w-[100%] h-[0.25px] bg-gray-400 mx-auto mt-3" />
 
           <Grid item xs={6} className="text-center">
             <Button

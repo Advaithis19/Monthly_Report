@@ -19,13 +19,11 @@ export const AuthProvider = ({ children }) => {
   let contextData = {
     user: user,
     setAuthTokens: setAuthTokens,
-    // authTokens: authTokens,
   };
 
   useEffect(() => {
     if (authTokens) {
       setUser(jwt_decode(authTokens.access));
-      console.log(user);
     } else {
       setUser(null);
     }

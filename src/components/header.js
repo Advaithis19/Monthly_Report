@@ -75,6 +75,11 @@ const Navbar = () => {
     if (user) setToggleMenu(true);
   };
 
+  const handleProfileOpen = () => {
+    setAnchorEl(null);
+    navigate("/profile/" + user.user_id);
+  };
+
   const handleLogout = () => {
     setAnchorEl(null);
     navigate("/logout");
@@ -102,7 +107,7 @@ const Navbar = () => {
       onClose={handleMenuClose}
       disableScrollLock={true}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem onClick={handleProfileOpen}>Profile</MenuItem>
       <MenuItem onClick={handleLogout}>Logout</MenuItem>
     </Menu>
   );
@@ -188,7 +193,7 @@ const Navbar = () => {
               </IconButton>
               {toggleMenu && user && (
                 <ul
-                  className="z-10 fixed -top-0 left-0 p-3 w-[20vw] h-screen shadow-2xl list-none
+                  className="z-10 fixed -top-0 left-0 p-3 md:w-[20vw] h-screen shadow-2xl list-none
             flex flex-col justify-start items-start rounded-md blue-glassmorphism text-white animate-slide-out overflow-auto"
                 >
                   <li className="text-xl w-full my-2 right-2 cursor-pointer sticky top-2">

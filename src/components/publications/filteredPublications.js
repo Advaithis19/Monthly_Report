@@ -4,19 +4,11 @@ import { useParams } from "react-router-dom";
 
 // mui
 import Container from "@mui/material/Container";
-import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 
 import { getFilteredPublications } from "../../services/publications";
 import { trackPromise } from "react-promise-tracker";
-import { color } from "@mui/system";
 
 const FilteredPublications = () => {
   const publicationURL = "http://shivampjt.pythonanywhere.com/";
@@ -24,6 +16,10 @@ const FilteredPublications = () => {
   const { start_year, end_year } = useParams();
 
   let [publications, setPublications] = useState([]);
+
+  const goToDetail = (id) => {
+    window.location.href = publicationURL + "paperdetails/" + id;
+  };
 
   useEffect(() => {
     let mounted = true;
@@ -50,49 +46,37 @@ const FilteredPublications = () => {
     <Container maxWidth="md" component="main">
       <Grid container rowSpacing={2}>
         <Grid item xs={12}>
-          <Paper sx={{ width: "100%", overflow: "hidden" }}>
-            <TableContainer sx={{ maxHeight: 440 }} component={Paper}>
-              <Table
-                stickyHeader
-                aria-label="publications table"
-                className="border-solid border-1 border-[#27447e] shadow-xl shadow-blue-500/50"
-              >
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="center">Title</TableCell>
-                    <TableCell align="center">Month/Year</TableCell>
-                    <TableCell align="center">ISSN</TableCell>
-                    <TableCell align="center">Level</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {publications.map((publication) => {
-                    return (
-                      <TableRow key={publication.ID}>
-                        <TableCell scope="row" align="center">
-                          <a
-                            href={
-                              publicationURL + "paperdetails/" + publication.ID
-                            }
-                          >
-                            {publication.Title}
-                          </a>
-                        </TableCell>
-                        <TableCell align="center">
-                          {publication.Month}/{publication.Year}
-                        </TableCell>
+          <table className="border-solid border-1 border-black mx-auto font-sans text-md overflow-auto w-[75%] mb-3">
+            <thead className="">
+              <tr>
+                <th align="center">Title</th>
+                <th align="center">Month/Year</th>
+                <th align="center">ISSN</th>
+                <th align="center">Level</th>
+              </tr>
+            </thead>
+            <tbody>
+              {publications.map((publication) => {
+                return (
+                  <tr
+                    key={publication.ID}
+                    className="hover:bg-[#27447e] hover:text-white cursor-pointer"
+                    onClick={() => goToDetail(publication.ID)}
+                  >
+                    <td scope="row" align="center">
+                      {publication.Title}
+                    </td>
+                    <td align="center">
+                      {publication.Month}/{publication.Year}
+                    </td>
 
-                        <TableCell align="center">{publication.ISSN}</TableCell>
-                        <TableCell align="center">
-                          {publication.Level}
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Paper>
+                    <td align="center">{publication.ISSN}</td>
+                    <td align="center">{publication.Level}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </Grid>
 
         <div className="w-[100%] h-[0.25px] bg-gray-400 mx-auto mt-5" />

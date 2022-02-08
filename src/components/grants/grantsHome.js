@@ -46,10 +46,10 @@ const GrantsHome = () => {
     >
       <Grid container rowSpacing={2}>
         <Grid container rowSpacing={2} columnSpacing={2} className="">
-          <Grid item xs={12} className="text-3xl font-semibold">
+          <Grid item xs={12} className="text-3xl font-semibold pb-3">
             <h3>Filter by date</h3>
           </Grid>
-          <Grid item xs={6} className="">
+          <Grid item xs={6} className="grid justify-items-end pb-3">
             <DatePicker
               label="Select start date to filter by"
               value={dateobj.startDate}
@@ -57,7 +57,7 @@ const GrantsHome = () => {
               renderInput={(params) => <TextField {...params} />}
             />
           </Grid>
-          <Grid item xs={6} className="">
+          <Grid item xs={6} className="grid justify-items-start pb-3">
             <DatePicker
               label="Select end date to filter by"
               value={dateobj.endDate}
@@ -66,13 +66,13 @@ const GrantsHome = () => {
             />
           </Grid>
           <Grid item xs={12}>
-            <Button
+            <button
               variant="outlined"
               onClick={submitChangedDates}
-              className=""
+              className="w-[20%] border-1 border-[#27447e] rounded-2xl py-2 px-1 text-md text-semibold bg-[#b6def2] hover:bg-[#27447e] hover:text-white hover:bg-[#] transition duration-300"
             >
               Click here to submit
-            </Button>
+            </button>
           </Grid>
         </Grid>
 
@@ -89,14 +89,9 @@ const GrantsHome = () => {
 
         <Grid item xs={12} className="">
           <Link to={"/grants"}>
-            <Button
-              variant="outlined"
-              color="primary"
-              style={{ height: 40 }}
-              className="w-[30%]"
-            >
+            <button className="w-[30%] border-1 border-[#27447e] rounded-2xl py-2 px-1 text-lg text-bold bg-[#b6def2] hover:bg-[#27447e] hover:text-white hover:bg-[#] transition duration-300">
               All grants
-            </Button>
+            </button>
           </Link>
         </Grid>
       </Grid>

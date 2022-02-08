@@ -10,13 +10,12 @@ import SignIn from "./components/auth/login";
 import SignUp from "./components/auth/register";
 import Logout from "./components/auth/logout";
 import PrivateOutlet from "./utils/private";
-import "bootstrap/dist/css/bootstrap.min.css";
-// import ActivateAccount from "./components/auth/activateAccount";
 import GrantsHome from "./components/grants/grantsHome";
 import FilteredGrants from "./components/grants/filteredGrants";
 import PublicationsHome from "./components/publications/publicationsHome";
 import Publications from "./components/publications/publicationFiller";
 import FilteredPublications from "./components/publications/filteredPublications";
+import Profile from "./components/profile";
 
 import { AuthProvider } from "./context/AuthContext";
 import { AlertProvider } from "./context/AlertContext";
@@ -29,7 +28,11 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
-const theme = createTheme({});
+const theme = createTheme({
+  palette: {
+    mode: "light",
+  },
+});
 
 function App() {
   return (
@@ -63,6 +66,7 @@ function App() {
                       />
                     </Route>
                   </Route>
+                  <Route path="/profile/:id" element={<Profile />} />
                   <Route path="/register" element={<SignUp />} />
                   <Route path="/login" element={<SignIn />} />
                   <Route path="/logout" element={<Logout />} />

@@ -46,11 +46,11 @@ const PublicationsHome = () => {
       style={{ margin: "2% auto" }}
     >
       <Grid container rowSpacing={2} columnSpacing={2}>
-        <Grid container rowSpacing={2} columnSpacing={2} className="">
-          <Grid item xs={12} className="text-3xl font-semibold">
+        <Grid container rowSpacing={2} columnSpacing={2}>
+          <Grid item xs={12} className="text-3xl font-semibold pb-3">
             <h3>Filter by year</h3>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={6} className="grid justify-items-end pb-3">
             <FormControl className="w-[50%]">
               <InputLabel id="syear-select-label">
                 Select start year to filter by
@@ -63,6 +63,7 @@ const PublicationsHome = () => {
                 // mui
                 labelId="syear-select-label"
                 label="Select start year to filter by"
+                inputProps={{ MenuProps: { disableScrollLock: true } }}
               >
                 {publicationYears.map((year) => {
                   return (
@@ -75,7 +76,7 @@ const PublicationsHome = () => {
             </FormControl>
           </Grid>
 
-          <Grid item xs={6} className="">
+          <Grid item xs={6} className="grid justify-items-start pb-3">
             <FormControl className="w-[50%]">
               <InputLabel id="eyear-select-label">
                 Select end year to filter by
@@ -85,13 +86,10 @@ const PublicationsHome = () => {
                 name="end_year"
                 value={yearobj.endYear}
                 onChange={handleEndYearChange}
-                // styles={{
-                //   // Fixes the overlapping problem of the component
-                //   menu: (provided) => ({ ...provided, zIndex: 9999 }),
-                // }}
                 // mui
                 labelId="eyear-select-label"
                 label="Select end year to filter by"
+                inputProps={{ MenuProps: { disableScrollLock: true } }}
               >
                 {publicationYears.map((year) => {
                   return (
@@ -104,9 +102,13 @@ const PublicationsHome = () => {
             </FormControl>
           </Grid>
           <Grid item xs={12} className="">
-            <Button variant="outlined" onClick={submitChangedDates}>
+            <button
+              variant="outlined"
+              onClick={submitChangedDates}
+              className="w-[20%] border-1 border-[#27447e] rounded-2xl py-2 px-1 text-md text-semibold bg-[#b6def2] hover:bg-[#27447e] hover:text-white hover:bg-[#] transition duration-300"
+            >
               Click here to submit
-            </Button>
+            </button>
           </Grid>
         </Grid>
 

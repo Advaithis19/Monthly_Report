@@ -5,13 +5,6 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 //MUI
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
-import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
 import Button from "@mui/material/Button";
 
 import exportFromJSON from "export-from-json";
@@ -29,6 +22,10 @@ const FilteredGrants = () => {
   let api = useAxios();
 
   let [grants, setGrants] = useState([]);
+
+  const goToDetail = (id) => {
+    navigate("/grants/" + id);
+  };
 
   useEffect(() => {
     let mounted = true;
@@ -67,36 +64,30 @@ const FilteredGrants = () => {
     <Container maxWidth="md" component="main">
       <Grid container rowSpacing={2}>
         <Grid item xs={12}>
-          <Paper sx={{ width: "100%", overflow: "hidden" }}>
-            <TableContainer sx={{ maxHeight: 440 }} component={Paper}>
-              <Table
-                stickyHeader
-                aria-label="grants table"
-                className="border-solid border-1 border-[#27447e] shadow-xl shadow-blue-500/50"
-              >
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="center">Title</TableCell>
-                    <TableCell align="center">Agency</TableCell>
-                    <TableCell align="center">Year</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {grants.map((grant) => {
-                    return (
-                      <TableRow key={grant.id}>
-                        <TableCell scope="row" align="center">
-                          <Link to={"/grants/" + grant.id}>{grant.title}</Link>
-                        </TableCell>
-                        <TableCell align="center">{grant.agency}</TableCell>
-                        <TableCell align="center">{grant.year}</TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Paper>
+          <table className="border-solid border-1 border-black mx-auto font-sans text-md overflow-auto w-[75%] mb-3">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Agency</th>
+                <th>Year</th>
+              </tr>
+            </thead>
+            <tbody>
+              {grants.map((grant) => {
+                return (
+                  <tr
+                    key={grant.id}
+                    className="hover:bg-[#27447e] hover:text-white cursor-pointer"
+                    onClick={() => goToDetail(grant.id)}
+                  >
+                    <td>{grant.title}</td>
+                    <td>{grant.agency}</td>
+                    <td>{grant.year}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </Grid>
         <Grid item sm={6} className="bottomButton">
           <Button
