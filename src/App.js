@@ -19,6 +19,7 @@ import Publications from "./components/publications/publicationFiller";
 import FilteredPublications from "./components/publications/filteredPublications";
 
 import { AuthProvider } from "./context/AuthContext";
+import { AlertProvider } from "./context/AlertContext";
 
 // date provider
 import DateAdapter from "@mui/lab/AdapterDayjs";
@@ -37,35 +38,37 @@ function App() {
         <LocalizationProvider dateAdapter={DateAdapter}>
           <Router>
             <AuthProvider>
-              <Navbar />
-              <Routes>
-                <Route path="/" element={<PrivateOutlet />}>
-                  {/* grants routes */}
-                  <Route path="/grants" element={<GrantsHome />}>
-                    <Route index element={<Grants />} />
-                    <Route
-                      path="filter/date/:start_date/:end_date"
-                      element={<FilteredGrants />}
-                    />
-                  </Route>
-                  <Route path="/grants/:id" element={<GrantDetail />} />
-                  <Route path="/grants/create" element={<CreateGrant />} />
-                  <Route path="/grants/edit/:id" element={<EditGrant />} />
+              <AlertProvider>
+                <Navbar />
+                <Routes>
+                  <Route path="/" element={<PrivateOutlet />}>
+                    {/* grants routes */}
+                    <Route path="/grants" element={<GrantsHome />}>
+                      <Route index element={<Grants />} />
+                      <Route
+                        path="filter/date/:start_date/:end_date"
+                        element={<FilteredGrants />}
+                      />
+                    </Route>
+                    <Route path="/grants/:id" element={<GrantDetail />} />
+                    <Route path="/grants/create" element={<CreateGrant />} />
+                    <Route path="/grants/edit/:id" element={<EditGrant />} />
 
-                  {/* publication route */}
-                  <Route path="/publications" element={<PublicationsHome />}>
-                    <Route index element={<Publications />} />
-                    <Route
-                      path="filter/year/:start_year/:end_year"
-                      element={<FilteredPublications />}
-                    />
+                    {/* publication route */}
+                    <Route path="/publications" element={<PublicationsHome />}>
+                      <Route index element={<Publications />} />
+                      <Route
+                        path="filter/year/:start_year/:end_year"
+                        element={<FilteredPublications />}
+                      />
+                    </Route>
                   </Route>
-                </Route>
-                <Route path="/register" element={<SignUp />} />
-                <Route path="/login" element={<SignIn />} />
-                <Route path="/logout" element={<Logout />} />
-              </Routes>
-              <Footer />
+                  <Route path="/register" element={<SignUp />} />
+                  <Route path="/login" element={<SignIn />} />
+                  <Route path="/logout" element={<Logout />} />
+                </Routes>
+                <Footer />
+              </AlertProvider>
             </AuthProvider>
           </Router>
         </LocalizationProvider>

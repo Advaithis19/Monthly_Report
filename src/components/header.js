@@ -1,4 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
+import Alert from "../utils/alerts";
 
 // mui
 import AppBar from "@mui/material/AppBar";
@@ -12,7 +15,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 
 import AuthContext from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+// import AlertContext from "../context/AlertContext";
+
 import { AiOutlineClose } from "react-icons/ai";
 
 import tables from "../constants/tables";
@@ -49,6 +53,10 @@ const Navbar = () => {
   //context api consumption - declaration
   let { user } = useContext(AuthContext);
 
+  // let { showAlert, alertProps } = useContext(AlertContext);
+
+  // let [showMyAlert, setShowMyAlert] = useState(false);
+
   const navigate = useNavigate();
 
   const isMenuOpen = Boolean(anchorEl);
@@ -72,7 +80,9 @@ const Navbar = () => {
     navigate("/logout");
   };
 
-  useEffect(() => {}, [user]);
+  useEffect(() => {
+    // setShowMyAlert(showAlert);
+  }, [user]);
 
   const menuId = "primary-search-account-menu";
   const renderMenu = (
@@ -99,6 +109,14 @@ const Navbar = () => {
 
   return (
     <div>
+      {/* {showMyAlert && (
+        <Alert
+          type={alertProps.type}
+          title={alertProps.title}
+          message={alertProps.message}
+          action={alertProps.action}
+        />
+      )} */}
       <div>
         <header className="headerWarp" role="banner" style={{ width: "100%" }}>
           <div className="brandInner" style={{ width: "100%" }}>

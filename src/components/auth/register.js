@@ -156,7 +156,7 @@ const SignUp = () => {
   return (
     <Container
       maxWidth="sm"
-      className="border-solid border-1 border-[#27447e] my-5 shadow-md"
+      className="border-solid border-1 border-[#27447e] my-5 shadow-xl shadow-blue-500/50"
     >
       <Box mt={3} mb={3}>
         <Typography
@@ -176,6 +176,7 @@ const SignUp = () => {
                 value={type}
                 label="Role"
                 onChange={handleRoleSelect}
+                inputProps={{ MenuProps: { disableScrollLock: true } }}
               >
                 {roles.map((role) => {
                   return (
@@ -202,7 +203,9 @@ const SignUp = () => {
               //to override onChange
               onChange={handleChange}
             />
-            {errors.email?.message}
+            <small className="text-danger">
+              {errors.email ? errors.email.message : <span></span>}
+            </small>
           </Form.Group>
 
           <Grid container spacing={2}>
@@ -222,7 +225,9 @@ const SignUp = () => {
                   //to override onChange
                   onChange={handleChange}
                 />
-                {errors.password?.message}
+                <small className="text-danger">
+                  {errors.password ? errors.password.message : <span></span>}
+                </small>
               </Form.Group>
             </Grid>
             <Grid item xs={12} md={6}>
@@ -241,7 +246,9 @@ const SignUp = () => {
                   //to override onChange
                   onChange={handleChange}
                 />
-                {errors.password2?.message}
+                <small className="text-danger">
+                  {errors.password2 ? errors.password2.message : <span></span>}
+                </small>
               </Form.Group>
             </Grid>
           </Grid>
@@ -263,7 +270,9 @@ const SignUp = () => {
                   //to override onChange
                   onChange={handleChange}
                 />
-                {errors.username?.message}
+                <small className="text-danger">
+                  {errors.username ? errors.username.message : <span></span>}
+                </small>
               </Form.Group>
             </Grid>
             <Grid item xs={12} md={4}>
@@ -282,7 +291,13 @@ const SignUp = () => {
                   //to override onChange
                   onChange={handleChange}
                 />
-                {errors.first_name?.message}
+                <small className="text-danger">
+                  {errors.first_name ? (
+                    errors.first_name.message
+                  ) : (
+                    <span></span>
+                  )}
+                </small>
               </Form.Group>
             </Grid>
             <Grid item xs={12} md={4}>
@@ -301,7 +316,9 @@ const SignUp = () => {
                   //to override onChange
                   onChange={handleChange}
                 />
-                {errors.last_name?.message}
+                <small className="text-danger">
+                  {errors.last_name ? errors.last_name.message : <span></span>}
+                </small>
               </Form.Group>
             </Grid>
           </Grid>
@@ -315,6 +332,7 @@ const SignUp = () => {
                   value={department}
                   label="Department"
                   onChange={handleDepartmentSelect}
+                  inputProps={{ MenuProps: { disableScrollLock: true } }}
                 >
                   {departments.map((department) => {
                     return (

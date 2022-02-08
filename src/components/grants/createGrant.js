@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import useAxios from "../../utils/axios";
 import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { years } from "../../constants/years";
 
 // Bootstrap UI
@@ -19,9 +19,6 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 
-// styling
-// import { makeStyles } from "@mui/material/styles";
-
 import { getUsers } from "../../services/users";
 import { trackPromise } from "react-promise-tracker";
 
@@ -35,11 +32,13 @@ const CreateGrant = () => {
     title: Yup.string().required("Title is required"),
     agency: Yup.string().required("Agency is required"),
     sanc_amt: Yup.string().required("Amount is required"),
+    PI: Yup.string().required("PI is required"),
+    CO_PI: Yup.string().required("CO_PI is required"),
   });
   const formOptions = { resolver: yupResolver(validationSchema) };
 
   // get functions to build form with useForm() hook
-  const { register, handleSubmit, formState } = useForm(formOptions);
+  const { register, handleSubmit, formState, control } = useForm(formOptions);
   const { errors } = formState;
 
   let api = useAxios();
@@ -81,6 +80,11 @@ const CreateGrant = () => {
   const [formData, updateFormData] = useState(initialFormData);
   const [users, setUsers] = useState([]);
 
+  const [formErrors, setFormErrors] = useState({
+    PI: false,
+    CO_PI: false,
+  });
+
   useEffect(() => {
     let mounted = true;
     trackPromise(
@@ -111,7 +115,7 @@ const CreateGrant = () => {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [formErrors]);
 
   const handleChange = (e) => {
     if ([e.target.name] == "title") {
@@ -149,7 +153,7 @@ const CreateGrant = () => {
     });
   };
 
-  const onSubmit = async (e) => {
+  const onSubmit = async () => {
     let postData = new FormData();
     postData.append("title", formData.title);
     postData.append("agency", formData.agency);
@@ -159,6 +163,7 @@ const CreateGrant = () => {
     postData.append("slug", formData.slug);
     postData.append("PI", formData.PI);
     postData.append("CO_PI", formData.CO_PI);
+
     api
       .post(`grants/create/`, postData)
       .then(() => {
@@ -199,7 +204,9 @@ const CreateGrant = () => {
               //to override onChange
               onChange={handleChange}
             />
-            {errors.title?.message}
+            <small className="text-danger">
+              {errors.title ? errors.title.message : <span></span>}
+            </small>
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicAgency">
@@ -218,7 +225,9 @@ const CreateGrant = () => {
               //to override onChange
               onChange={handleChange}
             />
-            {errors.agency?.message}
+            <small className="text-danger">
+              {errors.agency ? errors.agency.message : <span></span>}
+            </small>
           </Form.Group>
 
           <Grid container spacing={2}>
@@ -238,7 +247,9 @@ const CreateGrant = () => {
                   //to override onChange
                   onChange={handleChange}
                 />
-                {errors.sanc_amt?.message}
+                <small className="text-danger">
+                  {errors.sanc_amt ? errors.sanc_amt.message : <span></span>}
+                </small>
               </Form.Group>
             </Grid>
             <Grid item sm={12} md={4}>
@@ -253,6 +264,7 @@ const CreateGrant = () => {
                     // mui
                     labelId="year-select-label"
                     label="Select Year"
+                    inputProps={{ MenuProps: { disableScrollLock: true } }}
                   >
                     {years.map((year) => {
                       return (
@@ -280,7 +292,6 @@ const CreateGrant = () => {
               rows={4}
               onChange={handleChange}
             />
-            {errors.remarks?.message}
           </Form.Group>
 
           <Grid container spacing={2}>
@@ -297,6 +308,8 @@ const CreateGrant = () => {
                     // basic
                     name="PI"
                     value={formData.PI}
+                    {...register("PI")}
+                    //overriding onChange
                     onChange={handlePISelect}
                     // mui
                     labelId="pi-select-label"
@@ -311,6 +324,9 @@ const CreateGrant = () => {
                     })}
                   </Select>
                 </FormControl>
+                <small className="text-danger">
+                  {errors.PI ? errors.PI.message : <span></span>}
+                </small>
               </Form.Group>
             </Grid>
             <Grid item xs={12} md={6}>
@@ -326,6 +342,8 @@ const CreateGrant = () => {
                     // basic
                     name="CO_PI"
                     value={formData.CO_PI}
+                    {...register("CO_PI")}
+                    //overriding onChange
                     onChange={handleCO_PISelect}
                     // mui
                     labelId="co_pi-select-label"
@@ -340,6 +358,9 @@ const CreateGrant = () => {
                     })}
                   </Select>
                 </FormControl>
+                <small className="text-danger">
+                  {errors.CO_PI ? errors.CO_PI.message : <span></span>}
+                </small>
               </Form.Group>
             </Grid>
           </Grid>

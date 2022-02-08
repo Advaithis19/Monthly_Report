@@ -2,10 +2,9 @@ import React, { useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { useForm } from "react-hook-form";
-import AuthContext from "../../context/AuthContext";
 
-// import Alert from "../alert";
-// import { render } from "@testing-library/react";
+import AuthContext from "../../context/AuthContext";
+import AlertContext from "../../context/AlertContext";
 
 // Bootstrap UI
 import { Form } from "react-bootstrap";
@@ -26,6 +25,8 @@ const SignIn = () => {
   //context api consumption - declaration
   let { setAuthTokens } = useContext(AuthContext);
 
+  let { setShowAlert, setAlertProps } = useContext(AlertContext);
+
   // form validation rules
   const validationSchema = Yup.object().shape({
     email: Yup.string()
@@ -44,7 +45,6 @@ const SignIn = () => {
   const { register, handleSubmit, formState } = useForm(formOptions);
   const { errors } = formState;
 
-  const navigate = useNavigate();
   const initialFormData = Object.freeze({
     email: "",
     password: "",
@@ -54,15 +54,13 @@ const SignIn = () => {
 
   const HOST_SERVER_URL = "http://127.0.0.1:8000/";
 
+  const navigate = useNavigate();
+
   const handleChange = (e) => {
     updateFormData({
       ...formData,
       [e.target.name]: e.target.value.trim(),
     });
-  };
-
-  let goToRegister = () => {
-    navigate("/register");
   };
 
   const onSubmit = async (e) => {
@@ -75,6 +73,13 @@ const SignIn = () => {
       .then((response) => {
         localStorage.setItem("authTokens", JSON.stringify(response.data));
         setAuthTokens(response.data);
+        // setAlertProps({
+        //   type: "success",
+        //   title: "Login successful!",
+        //   message: "",
+        //   action: "",
+        // });
+        // setShowAlert(true);
         navigate("/grants");
       })
       .catch((error) => {
@@ -91,7 +96,7 @@ const SignIn = () => {
   return (
     <Container
       maxWidth="sm"
-      className="border-solid border-1 border-[#27447e] my-5 shadow-md"
+      className="border-solid border-1 border-[#27447e] my-5 shadow-xl shadow-blue-500/50"
       color="default"
     >
       <Box mt={3} mb={3}>
@@ -118,7 +123,9 @@ const SignIn = () => {
               //to override onChange
               onChange={handleChange}
             />
-            {errors.email?.message}
+            <small className="text-danger">
+              {errors.email ? errors.email.message : <span></span>}
+            </small>
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -136,7 +143,9 @@ const SignIn = () => {
               //to override onChange
               onChange={handleChange}
             />
-            {errors.password?.message}
+            <small className="text-danger">
+              {errors.password ? errors.password.message : <span></span>}
+            </small>
           </Form.Group>
 
           <Button variant="contained" color="primary" type="submit" fullWidth>

@@ -28,6 +28,19 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 
 const EditGrant = () => {
+  const initialFormData = Object.freeze({
+    title: "",
+    agency: "",
+    sanc_amt: "",
+    year: 2022,
+    remarks: "",
+    slug: "",
+    PI: "",
+    CO_PI: "",
+  });
+
+  const [formData, updateFormData] = useState(initialFormData);
+
   // form validation rules
   const validationSchema = Yup.object().shape({
     title: Yup.string().test(
@@ -49,7 +62,14 @@ const EditGrant = () => {
   const formOptions = { resolver: yupResolver(validationSchema) };
 
   // get functions to build form with useForm() hook
-  const { register, handleSubmit, formState } = useForm(formOptions);
+  const { register, handleSubmit, formState } = useForm({
+    defaultValues: {
+      title: formData.title,
+      agency: formData.agency,
+      sanc_amt: formData.sanc_amt,
+    },
+    formOptions,
+  });
   const { errors } = formState;
 
   let api = useAxios();
@@ -77,18 +97,6 @@ const EditGrant = () => {
 
   const navigate = useNavigate();
   const { id } = useParams();
-  const initialFormData = Object.freeze({
-    title: "",
-    agency: "",
-    sanc_amt: "",
-    year: 2022,
-    remarks: "",
-    slug: "",
-    PI: "",
-    CO_PI: "",
-  });
-
-  const [formData, updateFormData] = useState(initialFormData);
   const [users, setUsers] = useState([]);
   const usersRef = useRef();
 
@@ -250,7 +258,9 @@ const EditGrant = () => {
               //to override onChange
               onChange={handleChange}
             />
-            {errors.title?.message}
+            <small className="text-danger">
+              {errors.title ? errors.title.message : <span></span>}
+            </small>
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicAgency">
@@ -269,7 +279,9 @@ const EditGrant = () => {
               //to override onChange
               onChange={handleChange}
             />
-            {errors.agency?.message}
+            <small className="text-danger">
+              {errors.agency ? errors.agency.message : <span></span>}
+            </small>
           </Form.Group>
 
           <Grid container spacing={2}>
@@ -289,7 +301,9 @@ const EditGrant = () => {
                   //to override onChange
                   onChange={handleChange}
                 />
-                {errors.sanc_amt?.message}
+                <small className="text-danger">
+                  {errors.sanc_amt ? errors.sanc_amt.message : <span></span>}
+                </small>
               </Form.Group>
             </Grid>
             <Grid item sm={12} md={4}>
@@ -304,6 +318,7 @@ const EditGrant = () => {
                     // mui
                     labelId="year-select-label"
                     label="Select Year"
+                    inputProps={{ MenuProps: { disableScrollLock: true } }}
                   >
                     {years.map((year) => {
                       return (
@@ -331,7 +346,6 @@ const EditGrant = () => {
               rows={8}
               onChange={handleChange}
             />
-            {errors.remarks?.message}
           </Form.Group>
 
           <Grid container spacing={2}>
@@ -352,6 +366,7 @@ const EditGrant = () => {
                     // mui
                     labelId="pi-select-label"
                     label="Principal Investigator"
+                    inputProps={{ MenuProps: { disableScrollLock: true } }}
                   >
                     {users.map((user) => {
                       return (
@@ -381,6 +396,7 @@ const EditGrant = () => {
                     // mui
                     labelId="co_pi-select-label"
                     label="Co-Principal Investigator"
+                    inputProps={{ MenuProps: { disableScrollLock: true } }}
                   >
                     {users.map((user) => {
                       return (
