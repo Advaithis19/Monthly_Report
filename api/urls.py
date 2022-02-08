@@ -1,4 +1,4 @@
-from .views import CreateGrant, DeleteGrant, EditGrant, GrantList, GrantDetail, GrantListDateFilter, UserList
+from .views import CreateGrant, DeleteGrant, EditGrant, GrantList, GrantDetail, GrantListDateFilter, UserDetail, UserList
 from django.urls import path, re_path
 from .views import MyTokenObtainPairView
 from rest_framework_simplejwt.views import TokenRefreshView
@@ -18,5 +18,6 @@ urlpatterns = [
     re_path(r'grants/filter/date/(?P<start_date>\d{4}-\d{2}-\d{2})/(?P<end_date>\d{4}-\d{2}-\d{2})/',
             GrantListDateFilter.as_view(), name='filtergrant'),
 
-    path('users/', UserList.as_view(), name='listuser')
+    path('users/', UserList.as_view(), name='listuser'),
+    path('users/<int:pk>/', UserDetail.as_view(), name='detailuser')
 ]

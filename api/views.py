@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from api.utils import format_to_combined
 from grants.models import Grant
-from users.serializers import UserSelectSerializer
+from users.serializers import UserSelectSerializer, UserSerializer
 from .serializers import GrantSerializer
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
@@ -145,3 +145,26 @@ class UserList(generics.ListAPIView):
 
     def get_queryset(self):
         return User.objects.filter(is_teacher=True)
+
+
+class UserDetail(generics.RetrieveAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+
+    def get_object(self):
+        obj = get_object_or_404(self.get_queryset(), id=self.kwargs["pk"])
+        self.check_object_permissions(self.request, obj)
+        return obj
+
+
+class GrantDetail(generics.RetrieveAPIView):
+
+    permission_classes = [GrantUserWritePermission]
+    serializer_class = GrantSerializer
+    queryset = Grant.objects.all()
+
+    def get_object(self):
+        obj = get_object_or_404(self.get_queryset(), id=self.kwargs["pk"])
+        self.check_object_permissions(self.request, obj)
+        return obj

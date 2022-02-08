@@ -1,3 +1,5 @@
+from dataclasses import fields
+from pyexpat import model
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
@@ -59,3 +61,9 @@ class UserSelectSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'email', 'first_name', 'last_name')
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'
