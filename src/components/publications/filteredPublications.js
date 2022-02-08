@@ -40,7 +40,9 @@ const FilteredPublications = () => {
   }, [start_year, end_year]);
 
   if (!publications || publications.length === 0)
-    return <p>Can not find any publications, sorry</p>;
+    return (
+      <p className="text-xl text-bold">Can not find any publications, sorry</p>
+    );
 
   return (
     <Container maxWidth="md" component="main">

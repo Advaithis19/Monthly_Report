@@ -42,7 +42,11 @@ const Profile = () => {
   }, [setProfile]);
 
   if (!profile || profile.length === 0)
-    return <p>Could not find the profile you asked for, sorry</p>;
+    return (
+      <p className="text-xl text-bold">
+        Could not find the profile you asked for, sorry
+      </p>
+    );
   return (
     <Container
       maxWidth="md"

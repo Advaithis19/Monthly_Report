@@ -58,7 +58,7 @@ const FilteredGrants = () => {
   };
 
   if (!grants || grants.length === 0)
-    return <p>Can not find any grants, sorry</p>;
+    return <p className="text-xl text-bold">Can not find any grants, sorry</p>;
 
   return (
     <Container maxWidth="md" component="main">

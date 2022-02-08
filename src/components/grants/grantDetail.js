@@ -67,7 +67,9 @@ const GrantDetail = () => {
   };
 
   if (!grant || grant.length === 0)
-    return <p>Can not find required grant, sorry</p>;
+    return (
+      <p className="text-xl text-bold">Can not find required grant, sorry</p>
+    );
   return (
     <Container
       maxWidth="md"
