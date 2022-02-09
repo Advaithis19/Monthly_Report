@@ -6,7 +6,6 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('api.urls', namespace='api')),
-    path('api/users/', include('users.urls', namespace='users')),
 
     # path for Browsable Api login/logout interface
     path('api-auth/', include('rest_framework.urls')),

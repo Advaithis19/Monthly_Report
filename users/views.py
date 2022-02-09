@@ -22,6 +22,10 @@ from django.contrib.auth.tokens import default_token_generator
 from django.db.models.query_utils import Q
 from django import template
 from django.core.mail import EmailMultiAlternatives
+from django.shortcuts import get_object_or_404
+from users.serializers import UserSelectSerializer, UserSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 
@@ -66,24 +70,23 @@ class CustomUserCreate(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class UserList(generics.ListCreateAPIView):
-    permission_classes = [permissions.AllowAny]
-    serializer_class = CustomUserSerializer
+class UserList(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = UserSelectSerializer
+
+    def get_queryset(self):
+        return User.objects.filter(is_teacher=True)
+
+
+class UserDetail(generics.RetrieveAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = UserSerializer
     queryset = User.objects.all()
 
-
-class BlacklistTokenUpdateView(APIView):
-    permission_classes = [AllowAny]
-    authentication_classes = ()
-
-    def post(self, request):
-        try:
-            refresh_token = request.data["refresh_token"]
-            token = RefreshToken(refresh_token)
-            token.blacklist()
-            return Response(status=status.HTTP_205_RESET_CONTENT)
-        except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+    def get_object(self):
+        obj = get_object_or_404(self.get_queryset(), id=self.kwargs["pk"])
+        self.check_object_permissions(self.request, obj)
+        return obj
 
 
 # activation confirmation view
@@ -173,3 +176,34 @@ def password_reset_request(request):
 # 			messages.error(request, 'An invalid email has been entered.')
 # 	password_reset_form = PasswordResetForm()
 # 	return render(request=request, template_name="main/password/password_reset.html", context={"password_reset_form": password_reset_form})
+
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        # Add custom claims
+        token['username'] = user.username
+        token['is_teacher'] = user.is_teacher
+        # ...
+
+        return token
+
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
+
+
+class BlacklistTokenUpdateView(APIView):
+    permission_classes = [AllowAny]
+    authentication_classes = ()
+
+    def post(self, request):
+        try:
+            refresh_token = request.data["refresh_token"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
