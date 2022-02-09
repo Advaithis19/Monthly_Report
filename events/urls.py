@@ -1,14 +1,14 @@
 from django.urls import path, re_path
-from .views import EventList
+from .views import EventList, EventDetail, CreateEvent, EditEvent, DeleteEvent, EventListDateFilter
 
 app_name = 'events'
 
 urlpatterns = [
     path('', EventList.as_view(), name='listevent'),
-    # path('<int:pk>/', GrantDetail.as_view(), name='detailgrant'),
-    # path('create/', CreateGrant.as_view(), name='creategrant'),
-    # path('edit/<int:pk>/', EditGrant.as_view(), name='editgrant'),
-    # path('delete/<int:pk>/', DeleteGrant.as_view(), name='deletegrant'),
-    # re_path(r'filter/date/(?P<start_date>\d{4}-\d{2}-\d{2})/(?P<end_date>\d{4}-\d{2}-\d{2})/',
-    #         GrantListDateFilter.as_view(), name='filtergrant'),
+    path('<int:pk>/', EventDetail.as_view(), name='detailevent'),
+    path('create/', CreateEvent.as_view(), name='createevent'),
+    path('edit/<int:pk>/', EditEvent.as_view(), name='editevent'),
+    path('delete/<int:pk>/', DeleteEvent.as_view(), name='deleteevent'),
+    re_path(r'filter/date/(?P<start_date>\d{4}-\d{2}-\d{2})/(?P<end_date>\d{4}-\d{2}-\d{2})/',
+            EventListDateFilter.as_view(), name='filterevent'),
 ]

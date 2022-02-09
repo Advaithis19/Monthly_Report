@@ -17,7 +17,7 @@ class Event(models.Model):
     date_added = models.DateField("recorded date", default=timezone.now())
 
     u_id = models.ManyToManyField(
-        User, verbose_name="faculty involved", related_name='faculty_involved', through='Event_User')
+        User, verbose_name="faculty involved", related_name='faculty_involved')
 
     class Meta:
         ordering = ('-date_added',)
@@ -28,13 +28,3 @@ class Event(models.Model):
 
     def __str__(self):
         return self.title
-
-
-class Event_User(models.Model):
-    event = models.ForeignKey(
-        Event, verbose_name="event", on_delete=models.CASCADE)
-    user = models.ForeignKey(
-        User, verbose_name="faculty", on_delete=models.CASCADE)
-
-    class Meta:
-        db_table = 'event_user'
