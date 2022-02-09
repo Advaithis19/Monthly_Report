@@ -14,4 +14,7 @@ urlpatterns = [
 
     # grants
     path('grants/', include('grants.urls', namespace='grants')),
+
+    # events
+    path('events/', include('events.urls', namespace='events')),
 ]
