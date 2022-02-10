@@ -9,7 +9,7 @@ import Container from "@mui/material/Container";
 import DatePicker from "@mui/lab/DatePicker";
 import TextField from "@mui/material/TextField";
 
-const GrantsHome = () => {
+const EventsHome = () => {
   const navigate = useNavigate();
   const [dateobj, setDate] = useState({
     startDate: new Date(),
@@ -79,7 +79,7 @@ const GrantsHome = () => {
 
         <Grid item xs={12}>
           <div className="text-3xl font-semibold mb-3">
-            <h1>Grants</h1>
+            <h1>Events</h1>
           </div>
           <Outlet />
         </Grid>
@@ -87,9 +87,9 @@ const GrantsHome = () => {
         <div className="w-[60%] h-[0.25px] bg-gray-400 mx-auto my-5" />
 
         <Grid item xs={12} className="">
-          <Link to={"/grants"}>
+          <Link to={"/events"}>
             <button className="w-[30%] border-1 border-[#27447e] rounded-2xl py-2 px-1 text-lg text-bold bg-[#b6def2] hover:bg-[#27447e] hover:text-white hover:bg-[#] transition duration-300">
-              All grants
+              All events
             </button>
           </Link>
         </Grid>
@@ -98,4 +98,4 @@ const GrantsHome = () => {
   );
 };
 
-export default GrantsHome;
+export default EventsHome;

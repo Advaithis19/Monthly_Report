@@ -24,7 +24,6 @@ import Box from "@mui/material/Box";
 //yup
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { useEffect } from "react";
 
 const SignUp = () => {
   // form validation rules

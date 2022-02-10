@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import useAxios from "../../utils/axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { years } from "../../constants/years";
 
 // Bootstrap UI
 import { Form } from "react-bootstrap";
@@ -18,28 +17,32 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
+import Checkbox from "@mui/material/Checkbox";
+import ListItemText from "@mui/material/ListItemText";
+import DatePicker from "@mui/lab/DatePicker";
 
-import { getGrantInstance } from "../../services/grants";
+import { getEventInstance } from "../../services/events";
 import { getUsers } from "../../services/users";
 import { trackPromise } from "react-promise-tracker";
 
 //yup
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
+import dayjs from "dayjs";
 
-const EditGrant = () => {
+const EditEvent = () => {
   const initialFormData = Object.freeze({
     title: "",
-    agency: "",
-    sanc_amt: "",
-    year: 2022,
-    remarks: "",
+    venue: "",
+    n_stud: "",
+    n_fac: "",
+    n_ind: "",
     slug: "",
-    PI: "",
-    CO_PI: "",
   });
 
   const [formData, updateFormData] = useState(initialFormData);
+  const [date, setDate] = useState(new Date());
+  const [facultySelected, setFacultySelected] = useState([]);
 
   // form validation rules
   const validationSchema = Yup.object().shape({
@@ -48,16 +51,14 @@ const EditGrant = () => {
       "Title is required",
       (val) => val.length > 0
     ),
-    agency: Yup.string().test(
+    venue: Yup.string().test(
       "len",
-      "Agency is required",
+      "Venue is required",
       (val) => val.length > 0
     ),
-    sanc_amt: Yup.string().test(
-      "len",
-      "Amount is required",
-      (val) => val.length > 0
-    ),
+    u_id: Yup.array()
+      .test("len", "Faculty field cannot be empty", (val) => val.length > 0)
+      .nullable(),
   });
   const formOptions = { resolver: yupResolver(validationSchema) };
 
@@ -101,8 +102,8 @@ const EditGrant = () => {
           if (mounted) {
             usersRef.current = response.data.map((user) => {
               return {
-                label: user.first_name + " " + user.last_name,
-                value: user.id,
+                name: user.first_name + " " + user.last_name,
+                id: user.id,
               };
             });
             setUsers(usersRef.current);
@@ -120,20 +121,22 @@ const EditGrant = () => {
         })
     );
     trackPromise(
-      getGrantInstance(api, id)
+      getEventInstance(api, id)
         .then((res) => {
           if (mounted) {
             updateFormData({
               ...formData,
               ["title"]: res.data.title,
-              ["agency"]: res.data.agency,
-              ["sanc_amt"]: res.data.sanc_amt,
-              ["year"]: res.data.year,
-              ["remarks"]: res.data.remarks,
+              ["venue"]: res.data.venue,
+              ["n_stud"]: res.data.n_stud,
+              ["n_fac"]: res.data.n_fac,
+              ["n_ind"]: res.data.n_ind,
               ["slug"]: res.data.slug,
-              ["PI"]: findMatchingUser(res.data.PI, usersRef.current),
-              ["CO_PI"]: findMatchingUser(res.data.CO_PI, usersRef.current),
             });
+            setDate(dayjs(res.data.date));
+            setFacultySelected(
+              findMatchingUsers(res.data.u_id, usersRef.current)
+            );
           }
         })
         .catch((error) => {
@@ -151,12 +154,18 @@ const EditGrant = () => {
     return () => {
       mounted = false;
     };
-  }, [setUsers, updateFormData]);
+  }, [setUsers, updateFormData, setDate, setFacultySelected]);
 
-  const findMatchingUser = (userInstance, userResponseArray) => {
-    return userResponseArray.filter((userResponseInstance) => {
-      return userInstance === userResponseInstance.label;
-    })[0].value;
+  const findMatchingUsers = (facultyList, userResponseArray) => {
+    console.log("facultyList", facultyList);
+    console.log("userResponseArray", userResponseArray);
+    let faculty_selected = [];
+    facultyList.forEach((name) => {
+      faculty_selected.push(
+        userResponseArray.filter((userObj) => userObj.name === name)[0]
+      );
+    });
+    return faculty_selected;
   };
 
   const handleChange = (e) => {
@@ -174,44 +183,31 @@ const EditGrant = () => {
     }
   };
 
-  const handlePISelect = (e) => {
-    updateFormData({
-      ...formData,
-      ["PI"]: e.target.value,
-    });
+  const handleDateChange = (e) => {
+    setDate(e);
   };
 
-  const handleCO_PISelect = (e) => {
-    updateFormData({
-      ...formData,
-      ["CO_PI"]: e.target.value,
-    });
+  const handleFacultySelect = (e) => {
+    const {
+      target: { value },
+    } = e;
+    setFacultySelected(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value.split(",") : value
+    );
   };
 
-  const handleYearSelect = (e) => {
-    updateFormData({
+  const onSubmit = async () => {
+    let postData = {
       ...formData,
-      ["year"]: e.target.value,
-    });
-  };
-
-  const onSubmit = async (e) => {
-    // console.log(formData);
-    let postData = new FormData();
-    postData.append("title", formData.title);
-    postData.append("agency", formData.agency);
-    postData.append("sanc_amt", formData.sanc_amt);
-    postData.append("year", formData.year);
-    postData.append("remarks", formData.remarks);
-    postData.append("slug", formData.slug);
-    postData.append("PI", formData.PI);
-    postData.append("CO_PI", formData.CO_PI);
+      date: dayjs(date).format("YYYY-MM-DD"),
+      u_id: facultySelected.map((selectedObj) => selectedObj.id),
+    };
 
     api
-      .put(`grants/edit/` + id + "/", postData)
+      .put(`events/edit/` + id + "/", postData)
       .then(() => {
-        navigate("/grants/" + id);
-        // window.location.reload();
+        navigate("/events/" + id);
       })
       .catch((error) => {
         if (error.response.status === 401) {
@@ -219,7 +215,7 @@ const EditGrant = () => {
           navigate("/logout");
         } else if (error.response.status === 403) {
           alert("You do not have permission to perform this action!");
-          navigate("/grants/" + id);
+          navigate("/events/" + id);
         } else {
           alert("Error! Please check the values entered for any mistakes....");
         }
@@ -238,7 +234,7 @@ const EditGrant = () => {
           gutterBottom
           className="text-3xl font-semibold mb-3 text-center"
         >
-          Edit Grant
+          Create Event
         </Typography>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <Form.Group className="mb-3" controlId="formBasicTitle">
@@ -248,7 +244,7 @@ const EditGrant = () => {
               name="title"
               value={formData.title}
               //mui
-              label="Grant Title"
+              label="Event Title"
               variant="outlined"
               fullWidth
               //hook form
@@ -261,150 +257,127 @@ const EditGrant = () => {
             </small>
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicAgency">
+          <Form.Group className="mb-3" controlId="formBasicVenue">
             <TextField
               // basic
               type="text"
-              name="agency"
-              value={formData.agency}
+              name="venue"
+              value={formData.venue}
               //mui
-              label="Agency"
+              label="Venue"
               variant="outlined"
               fullWidth
               multiline
               //hook form
-              {...register("agency")}
+              {...register("venue")}
               //to override onChange
               onChange={handleChange}
             />
             <small className="text-danger">
-              {errors.agency ? errors.agency.message : <span></span>}
+              {errors.venue ? errors.venue.message : <span></span>}
             </small>
           </Form.Group>
 
           <Grid container spacing={2}>
-            <Grid item sm={12} md={8}>
-              <Form.Group className="mb-3" controlId="formBasicAmount">
+            <Grid item sm={12} md={4}>
+              <Form.Group className="mb-3" controlId="formBasicStudents">
                 <TextField
                   // basic
                   type="text"
-                  name="sanc_amt"
-                  value={formData.sanc_amt}
+                  name="n_stud"
+                  value={formData.n_stud}
                   //mui
-                  label="Sanctioned Amount"
+                  label="No. of Students"
                   variant="outlined"
                   fullWidth
-                  //hook form
-                  {...register("sanc_amt")}
-                  //to override onChange
                   onChange={handleChange}
                 />
-                <small className="text-danger">
-                  {errors.sanc_amt ? errors.sanc_amt.message : <span></span>}
-                </small>
               </Form.Group>
             </Grid>
             <Grid item sm={12} md={4}>
-              <Form.Group className="mb-3" controlId="formBasicYear">
-                <FormControl fullWidth>
-                  <InputLabel id="year-select-label">Select Year</InputLabel>
-                  <Select
-                    // basic
-                    name="year"
-                    value={formData.year}
-                    onChange={handleYearSelect}
-                    // mui
-                    labelId="year-select-label"
-                    label="Select Year"
-                    inputProps={{ MenuProps: { disableScrollLock: true } }}
-                  >
-                    {years.map((year) => {
-                      return (
-                        <MenuItem key={year} value={year}>
-                          {year}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </FormControl>
+              <Form.Group className="mb-3" controlId="formBasicFaculty">
+                <TextField
+                  // basic
+                  type="text"
+                  name="n_fac"
+                  value={formData.n_fac}
+                  //mui
+                  label="No. of Faculty"
+                  variant="outlined"
+                  fullWidth
+                  onChange={handleChange}
+                />
+              </Form.Group>
+            </Grid>
+
+            <Grid item sm={12} md={4}>
+              <Form.Group className="mb-3" controlId="formBasicIndustry">
+                <TextField
+                  // basic
+                  type="text"
+                  name="n_ind"
+                  value={formData.n_ind}
+                  //mui
+                  label="No. from Industry"
+                  variant="outlined"
+                  fullWidth
+                  onChange={handleChange}
+                />
               </Form.Group>
             </Grid>
           </Grid>
 
-          <Form.Group className="mb-3" controlId="formBasicRemarks">
-            <TextField
-              // basic
-              type="text"
-              name="remarks"
-              //mui
-              label="Remarks"
-              variant="outlined"
-              fullWidth
-              multiline
-              rows={8}
-              onChange={handleChange}
-            />
-          </Form.Group>
-
           <Grid container spacing={2}>
-            <Grid item xs={12} md={6}>
-              <Form.Group
-                className="mb-3"
-                controlId="formBasicPrincipleInvestigator"
-              >
-                <FormControl fullWidth>
-                  <InputLabel id="pi-select-label">
-                    Principal Investigator
-                  </InputLabel>
-                  <Select
-                    // basic
-                    name="PI"
-                    value={formData.PI}
-                    onChange={handlePISelect}
-                    // mui
-                    labelId="pi-select-label"
-                    label="Principal Investigator"
-                    inputProps={{ MenuProps: { disableScrollLock: true } }}
-                  >
-                    {users.map((user) => {
-                      return (
-                        <MenuItem key={user.value} value={user.value}>
-                          {user.label}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </FormControl>
-              </Form.Group>
+            <Grid item xs={4}>
+              <FormControl>
+                <DatePicker
+                  label="Date of Event"
+                  value={date}
+                  onChange={handleDateChange}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </FormControl>
             </Grid>
-            <Grid item xs={12} md={6}>
-              <Form.Group
-                className="mb-3"
-                controlId="formBasicCoPrincipleInvestigator"
-              >
+            <Grid item xs={8}>
+              <Form.Group className="mb-3" controlId="formBasicFacultyInvolved">
                 <FormControl fullWidth>
-                  <InputLabel id="co_pi-select-label">
-                    Co-Principal Investigator
+                  <InputLabel id="u_id-select-label">
+                    Faculty Involved
                   </InputLabel>
                   <Select
                     // basic
-                    name="CO_PI"
-                    value={formData.CO_PI}
-                    onChange={handleCO_PISelect}
+                    name="u_id"
+                    value={facultySelected}
+                    {...register("u_id")}
+                    //overriding onChange
+                    onChange={handleFacultySelect}
                     // mui
-                    labelId="co_pi-select-label"
-                    label="Co-Principal Investigator"
+                    multiple
+                    labelId="u_id-select-label"
+                    label="Faculty Involved"
+                    renderValue={(selected) => {
+                      let selectedItems = selected.map(
+                        (selectedObj) => selectedObj.name
+                      );
+                      return selectedItems.join(", ");
+                    }}
                     inputProps={{ MenuProps: { disableScrollLock: true } }}
                   >
                     {users.map((user) => {
                       return (
-                        <MenuItem key={user.value} value={user.value}>
-                          {user.label}
+                        <MenuItem key={user.id} value={user}>
+                          <Checkbox
+                            checked={facultySelected.indexOf(user) > -1}
+                          />
+                          <ListItemText primary={user.name} />
                         </MenuItem>
                       );
                     })}
                   </Select>
                 </FormControl>
+                <small className="text-danger">
+                  {errors.u_id ? errors.u_id.message : <span></span>}
+                </small>
               </Form.Group>
             </Grid>
           </Grid>
@@ -418,4 +391,4 @@ const EditGrant = () => {
   );
 };
 
-export default EditGrant;
+export default EditEvent;

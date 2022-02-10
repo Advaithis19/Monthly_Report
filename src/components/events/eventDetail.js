@@ -12,26 +12,26 @@ import Box from "@mui/material/Box";
 
 import ConfirmDialog from "../../utils/confirmDialog";
 
-const GrantDetail = () => {
+const EventDetail = () => {
   let navigate = useNavigate();
 
   let api = useAxios();
   api.defaults.xsrfCookieName = "csrftoken";
   api.defaults.xsrfHeaderName = "X-CSRFToken";
 
-  let [grant, setGrant] = useState(null);
+  let [event, setEvent] = useState(null);
   const { id } = useParams();
   const [confirmOpen, setConfirmOpen] = useState(false);
 
   let goToEdit = () => {
-    navigate("/grants/edit/" + id);
+    navigate("/events/edit/" + id);
   };
 
-  let getGrant = async () => {
+  let getEvent = async () => {
     api
-      .get("grants/" + id)
+      .get("events/" + id)
       .then((response) => {
-        setGrant(response.data);
+        setEvent(response.data);
       })
       .catch((error) => {
         if (error.response.status === 401) {
@@ -44,14 +44,14 @@ const GrantDetail = () => {
   };
 
   useEffect(() => {
-    getGrant();
-  }, [setGrant]);
+    getEvent();
+  }, [setEvent]);
 
-  const deleteGrant = () => {
+  const deleteEvent = () => {
     api
-      .delete("grants/delete/" + id)
+      .delete("events/delete/" + id)
       .then(function () {
-        navigate("/grants");
+        navigate("/events");
       })
       .catch((error) => {
         if (error.response.status === 401) {
@@ -59,16 +59,16 @@ const GrantDetail = () => {
           navigate("/logout");
         } else if (error.response.status === 403) {
           alert("You do not have permission to perform this action!");
-          navigate("/grants");
+          navigate("/events");
         } else {
           alert("Something went wrong! Please logout and try again");
         }
       });
   };
 
-  if (!grant || grant.length === 0)
+  if (!event || event.length === 0)
     return (
-      <p className="text-xl text-bold">Can not find required grant, sorry</p>
+      <p className="text-xl text-bold">Can not find required event, sorry</p>
     );
   return (
     <Container
@@ -82,33 +82,39 @@ const GrantDetail = () => {
             <table className="border-solid border-1 border-black mx-auto font-sans text-md overflow-auto w-[75%] mb-3">
               <thead className="">
                 <tr className="text-center">
-                  <th colSpan={2}>{grant.title}</th>
+                  <th colSpan={2}>{event.title}</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>Agency</td>
-                  <td>{grant.agency}</td>
+                  <td>Venue</td>
+                  <td>{event.venue}</td>
                 </tr>
                 <tr>
-                  <td>Sanctioned amount</td>
-                  <td>{grant.sanc_amt}</td>
+                  <td>No. of Students</td>
+                  <td>{event.n_stud}</td>
                 </tr>
                 <tr>
-                  <td>Year</td>
-                  <td>{grant.year}</td>
+                  <td>No. of Faculty</td>
+                  <td>{event.n_fac}</td>
                 </tr>
                 <tr>
-                  <td>Remarks</td>
-                  <td>{grant.remarks}</td>
+                  <td>No. from Industry</td>
+                  <td>{event.n_ind}</td>
                 </tr>
                 <tr>
-                  <td>Principal Investigator</td>
-                  <td>{grant.PI}</td>
+                  <td>Date of Event</td>
+                  <td>{event.date}</td>
                 </tr>
                 <tr>
-                  <td>Co-Principal Investigator</td>
-                  <td>{grant.CO_PI}</td>
+                  <td>Faculty involved</td>
+                  <td>
+                    <div>
+                      {event.u_id.map((faculty, index) => {
+                        return <div key={index}>{faculty}</div>;
+                      })}
+                    </div>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -138,12 +144,12 @@ const GrantDetail = () => {
               Delete
             </Button>
             <ConfirmDialog
-              title="Delete Grant?"
+              title="Delete Event?"
               open={confirmOpen}
               setOpen={setConfirmOpen}
-              onConfirm={deleteGrant}
+              onConfirm={deleteEvent}
             >
-              Are you sure you want to delete this grant?
+              Are you sure you want to delete this event?
             </ConfirmDialog>
           </Grid>
         </Grid>
@@ -152,4 +158,4 @@ const GrantDetail = () => {
   );
 };
 
-export default GrantDetail;
+export default EventDetail;

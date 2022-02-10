@@ -85,14 +85,14 @@ const FilteredPublications = () => {
 
         <Grid item sm={12} className="my-3">
           <Typography>
-            <p className="font-semibold text-lg">
+            <div className="font-semibold text-lg">
               To create/delete publications or to access more detailed
               information about specific publications of your interest, please
               visit{" "}
               <a href={publicationURL} style={{ color: "#436ef0" }}>
                 {publicationURL}
               </a>
-            </p>
+            </div>
           </Typography>
         </Grid>
       </Grid>

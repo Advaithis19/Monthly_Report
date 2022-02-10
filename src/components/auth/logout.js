@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import AuthContext from "../../context/AuthContext";
 
+//mui
+import Container from "@mui/material/Container";
+
 const Logout = () => {
   //context api consumption - declaration
   let { setAuthTokens } = useContext(AuthContext);
@@ -20,14 +23,25 @@ const Logout = () => {
         navigate("/login");
       })
       .catch(() => {
+        localStorage.removeItem("authTokens");
+        setAuthTokens(null);
         alert("Something went wrong!");
+        navigate("/login");
       });
   };
 
   useEffect(() => {
     logout();
   });
-  return <div>Logout</div>;
+  return (
+    <Container
+      maxWidth="md"
+      component="main"
+      className="border-solid border-1 border-[#27447e] my-5 shadow-xl shadow-blue-500/50"
+    >
+      <p className="text-xl text-bold">Unable to Logout...</p>
+    </Container>
+  );
 };
 
 export default Logout;

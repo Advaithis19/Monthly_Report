@@ -4,7 +4,7 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 
 import AuthContext from "../../context/AuthContext";
-import AlertContext from "../../context/AlertContext";
+// import AlertContext from "../../context/AlertContext";
 
 // Bootstrap UI
 import { Form } from "react-bootstrap";
@@ -25,7 +25,7 @@ const SignIn = () => {
   //context api consumption - declaration
   let { setAuthTokens } = useContext(AuthContext);
 
-  let { setShowAlert, setAlertProps } = useContext(AlertContext);
+  // let { setShowAlert, setAlertProps } = useContext(AlertContext);
 
   // form validation rules
   const validationSchema = Yup.object().shape({
