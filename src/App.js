@@ -38,6 +38,14 @@ import ProposalDetail from "./components/proposals/proposalDetail";
 import EditProposal from "./components/proposals/editProposal";
 import CreateProposal from "./components/proposals/createProposal";
 
+// consultancies
+import FilteredConsultancies from "./components/consultancies/filteredConsultancies";
+import ConsultanciesHome from "./components/consultancies/consultanciesHome";
+import Consultancies from "./components/consultancies/consultancies";
+import ConsultancyDetail from "./components/consultancies/consultancyDetail";
+import EditConsultancy from "./components/consultancies/editConsultancy";
+import CreateConsultancy from "./components/consultancies/createConsultancy";
+
 import { AuthProvider } from "./context/AuthContext";
 import { AlertProvider } from "./context/AlertContext";
 
@@ -97,6 +105,27 @@ function App() {
                   <Route
                     path="/proposals/edit/:id"
                     element={<EditProposal />}
+                  />
+
+                  {/* consultancy routes */}
+                  <Route path="/consultancies" element={<ConsultanciesHome />}>
+                    <Route index element={<Consultancies />} />
+                    <Route
+                      path="filter/date/:start_date/:end_date"
+                      element={<FilteredConsultancies />}
+                    />
+                  </Route>
+                  <Route
+                    path="/consultancies/:id"
+                    element={<ConsultancyDetail />}
+                  />
+                  <Route
+                    path="/consultancies/create"
+                    element={<CreateConsultancy />}
+                  />
+                  <Route
+                    path="/consultancies/edit/:id"
+                    element={<EditConsultancy />}
                   />
 
                   {/* publication route */}
