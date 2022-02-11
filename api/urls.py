@@ -17,4 +17,7 @@ urlpatterns = [
 
     # events
     path('events/', include('events.urls', namespace='events')),
+
+    # proposals
+    path('proposals/', include('proposals.urls', namespace='proposals')),
 ]
