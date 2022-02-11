@@ -7,23 +7,24 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-class Consultancy(models.Model):
+class Lecture(models.Model):
 
-    title = models.CharField("title", max_length=50)
-    fund_agency = models.CharField(
-        "agency funding consultancy", max_length=50)
-    rec_amt = models.DecimalField(
-        "sanctioned amount", max_digits=15, decimal_places=2)
+    topic = models.CharField("topic", max_length=50)
+    res_person = models.CharField("resource person", max_length=50)
+    organisation = models.CharField("organisation", max_length=50)
+    n_stud = models.IntegerField("no. of students", null=True)
+    n_fac = models.IntegerField("no. of faculty", null=True)
+    n_ind = models.IntegerField("no. from industry", null=True)
     slug = models.SlugField(max_length=250)
     date_added = models.DateField("recorded date", default=timezone.now())
 
     f_id = models.ForeignKey(User, on_delete=CASCADE,
                              verbose_name="faculty involved")
-    UniqueConstraint(fields=['title', 'f_id'], name='unique_consultancy')
+    UniqueConstraint(fields=['topic', 'f_id'], name='unique_lecture')
 
     class Meta:
         ordering = ('-date_added',)
-        db_table = 'consultancy'
+        db_table = 'lecture'
 
     def __str__(self):
-        return self.title
+        return self.topic

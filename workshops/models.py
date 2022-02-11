@@ -24,4 +24,4 @@ class Workshop(models.Model):
         return ",".join([str(p) for p in self.u_id.all()])
 
     def __str__(self):
-        return self.title
+        return self.event_name
