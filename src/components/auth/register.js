@@ -333,9 +333,9 @@ const SignUp = () => {
                   onChange={handleDepartmentSelect}
                   inputProps={{ MenuProps: { disableScrollLock: true } }}
                 >
-                  {departments.map((department) => {
+                  {departments.map((department, index) => {
                     return (
-                      <MenuItem key={department.short} value={department.short}>
+                      <MenuItem key={index} value={department.short}>
                         {department.full}
                       </MenuItem>
                     );

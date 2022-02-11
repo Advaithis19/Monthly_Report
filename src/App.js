@@ -30,6 +30,14 @@ import EventDetail from "./components/events/eventDetail";
 import EditEvent from "./components/events/editEvent";
 import CreateEvent from "./components/events/createEvent";
 
+// proposals
+import FilteredProposals from "./components/proposals/filteredProposals";
+import ProposalsHome from "./components/proposals/proposalsHome";
+import Proposals from "./components/proposals/proposals";
+import ProposalDetail from "./components/proposals/proposalDetail";
+import EditProposal from "./components/proposals/editProposal";
+import CreateProposal from "./components/proposals/createProposal";
+
 import { AuthProvider } from "./context/AuthContext";
 import { AlertProvider } from "./context/AlertContext";
 
@@ -72,6 +80,24 @@ function App() {
                   <Route path="/events/:id" element={<EventDetail />} />
                   <Route path="/events/create" element={<CreateEvent />} />
                   <Route path="/events/edit/:id" element={<EditEvent />} />
+
+                  {/* proposal routes */}
+                  <Route path="/proposals" element={<ProposalsHome />}>
+                    <Route index element={<Proposals />} />
+                    <Route
+                      path="filter/date/:start_date/:end_date"
+                      element={<FilteredProposals />}
+                    />
+                  </Route>
+                  <Route path="/proposals/:id" element={<ProposalDetail />} />
+                  <Route
+                    path="/proposals/create"
+                    element={<CreateProposal />}
+                  />
+                  <Route
+                    path="/proposals/edit/:id"
+                    element={<EditProposal />}
+                  />
 
                   {/* publication route */}
                   <Route path="/publications" element={<PublicationsHome />}>
