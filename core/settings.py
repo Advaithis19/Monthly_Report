@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'grants',
     'events',
     'proposals',
+    'consultancies',
     'corsheaders',
     'rest_framework_simplejwt.token_blacklist',
     'crispy_forms',

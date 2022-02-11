@@ -20,4 +20,7 @@ urlpatterns = [
 
     # proposals
     path('proposals/', include('proposals.urls', namespace='proposals')),
+
+    # consultancies
+    path('consultancies/', include('consultancies.urls', namespace='consultancies')),
 ]
