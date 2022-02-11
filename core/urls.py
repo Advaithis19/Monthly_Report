@@ -4,7 +4,10 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
+    # path for admin site
     path('admin/', admin.site.urls),
+
+    # path for api
     path('api/', include('api.urls', namespace='api')),
 
     # path for Browsable Api login/logout interface
