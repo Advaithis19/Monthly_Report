@@ -23,4 +23,7 @@ urlpatterns = [
 
     # consultancies
     path('consultancies/', include('consultancies.urls', namespace='consultancies')),
+
+    # workshops
+    path('workshops/', include('workshops.urls', namespace='workshops')),
 ]
