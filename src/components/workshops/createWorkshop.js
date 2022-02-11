@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import useAxios from "../../utils/axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import dayjs from "dayjs";
 
 // Bootstrap UI
 import { Form } from "react-bootstrap";
@@ -21,44 +22,19 @@ import Checkbox from "@mui/material/Checkbox";
 import ListItemText from "@mui/material/ListItemText";
 import DatePicker from "@mui/lab/DatePicker";
 
-import { getEventInstance } from "../../services/events";
 import { getUsers } from "../../services/users";
 import { trackPromise } from "react-promise-tracker";
 
 //yup
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import dayjs from "dayjs";
 
-const EditEvent = () => {
-  const initialFormData = Object.freeze({
-    title: "",
-    venue: "",
-    n_stud: "",
-    n_fac: "",
-    n_ind: "",
-    slug: "",
-  });
-
-  const [formData, updateFormData] = useState(initialFormData);
-  const [date, setDate] = useState(new Date());
-  const [facultySelected, setFacultySelected] = useState([]);
-
+const CreateWorkshop = () => {
   // form validation rules
   const validationSchema = Yup.object().shape({
-    title: Yup.string().test(
-      "len",
-      "Title is required",
-      (val) => val.length > 0
-    ),
-    venue: Yup.string().test(
-      "len",
-      "Venue is required",
-      (val) => val.length > 0
-    ),
-    // u_id: Yup.array()
-    //   .test("len", "Faculty field cannot be empty", (val) => val.length > 0)
-    //   .nullable(),
+    event_name: Yup.string().required("Name of Event is required"),
+    venue: Yup.string().required("Venue is required"),
+    u_id: Yup.array().required("Faculty field cannot be empty").nullable(),
   });
   const formOptions = { resolver: yupResolver(validationSchema) };
 
@@ -70,6 +46,7 @@ const EditEvent = () => {
   api.defaults.xsrfCookieName = "csrftoken";
   api.defaults.xsrfHeaderName = "X-CSRFToken";
 
+  //https://gist.github.com/hagemann/382adfc57adbd5af078dc93feef01fe1
   function slugify(string) {
     const a =
       "àáâäæãåāăąçćčđďèéêëēėęěğǵḧîïíīįìłḿñńǹňôöòóœøōõőṕŕřßśšşșťțûüùúūǘůűųẃẍÿýžźż·/_,:;";
@@ -90,9 +67,17 @@ const EditEvent = () => {
   }
 
   const navigate = useNavigate();
-  const { id } = useParams();
+  const initialFormData = Object.freeze({
+    event_name: "",
+    venue: "",
+    slug: "",
+  });
+
+  const [formData, updateFormData] = useState(initialFormData);
+  const [date, setDate] = useState(new Date());
+  const [facultySelected, setFacultySelected] = useState([]);
+
   const [users, setUsers] = useState([]);
-  const usersRef = useRef();
 
   useEffect(() => {
     let mounted = true;
@@ -100,42 +85,13 @@ const EditEvent = () => {
       getUsers(api)
         .then((response) => {
           if (mounted) {
-            usersRef.current = response.data.map((user) => {
-              return {
-                name: user.first_name + " " + user.last_name,
-                id: user.id,
-              };
-            });
-            setUsers(usersRef.current);
-          }
-        })
-        .catch((error) => {
-          if (mounted) {
-            if (error.response.status === 401) {
-              alert("Authentication has expired! Please re-login");
-              navigate("/logout");
-            } else {
-              alert("Something went wrong! Please logout and try again");
-            }
-          }
-        })
-    );
-    trackPromise(
-      getEventInstance(api, id)
-        .then((res) => {
-          if (mounted) {
-            updateFormData({
-              ...formData,
-              ["title"]: res.data.title,
-              ["venue"]: res.data.venue,
-              ["n_stud"]: res.data.n_stud,
-              ["n_fac"]: res.data.n_fac,
-              ["n_ind"]: res.data.n_ind,
-              ["slug"]: res.data.slug,
-            });
-            setDate(dayjs(res.data.date));
-            setFacultySelected(
-              findMatchingUsers(res.data.u_id, usersRef.current)
+            setUsers(
+              response.data.map((user) => {
+                return {
+                  name: user.first_name + " " + user.last_name,
+                  id: user.id,
+                };
+              })
             );
           }
         })
@@ -150,26 +106,13 @@ const EditEvent = () => {
           }
         })
     );
-
     return () => {
       mounted = false;
     };
-  }, [setUsers, updateFormData, setDate, setFacultySelected]);
-
-  const findMatchingUsers = (facultyList, userResponseArray) => {
-    console.log("facultyList", facultyList);
-    console.log("userResponseArray", userResponseArray);
-    let faculty_selected = [];
-    facultyList.forEach((name) => {
-      faculty_selected.push(
-        userResponseArray.filter((userObj) => userObj.name === name)[0]
-      );
-    });
-    return faculty_selected;
-  };
+  }, []);
 
   const handleChange = (e) => {
-    if ([e.target.name] == "title") {
+    if ([e.target.name] == "event_name") {
       updateFormData({
         ...formData,
         [e.target.name]: e.target.value,
@@ -205,17 +148,14 @@ const EditEvent = () => {
     };
 
     api
-      .put(`events/edit/` + id + "/", postData)
+      .post(`workshops/create/`, postData)
       .then(() => {
-        navigate("/events/" + id);
+        navigate("/workshops/");
       })
       .catch((error) => {
         if (error.response.status === 401) {
           alert("Authentication has expired! Please re-login");
           navigate("/logout");
-        } else if (error.response.status === 403) {
-          alert("You do not have permission to perform this action!");
-          navigate("/events/" + id);
         } else {
           alert("Error! Please check the values entered for any mistakes....");
         }
@@ -234,26 +174,26 @@ const EditEvent = () => {
           gutterBottom
           className="text-3xl font-semibold mb-3 text-center"
         >
-          Create Event
+          Create Workshop
         </Typography>
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <Form.Group className="mb-3" controlId="formBasicTitle">
+          <Form.Group className="mb-3" controlId="formBasicEventName">
             <TextField
               // basic
               type="text"
-              name="title"
-              value={formData.title}
+              name="event_name"
+              value={formData.event_name}
               //mui
-              label="Event Title"
+              label="Event Name"
               variant="outlined"
               fullWidth
               //hook form
-              {...register("title")}
+              {...register("event_name")}
               //to override onChange
               onChange={handleChange}
             />
             <small className="text-danger">
-              {errors.title ? errors.title.message : <span></span>}
+              {errors.event_name ? errors.event_name.message : <span></span>}
             </small>
           </Form.Group>
 
@@ -279,59 +219,10 @@ const EditEvent = () => {
           </Form.Group>
 
           <Grid container spacing={2}>
-            <Grid item sm={12} md={4}>
-              <Form.Group className="mb-3" controlId="formBasicStudents">
-                <TextField
-                  // basic
-                  type="text"
-                  name="n_stud"
-                  value={formData.n_stud}
-                  //mui
-                  label="No. of Students"
-                  variant="outlined"
-                  fullWidth
-                  onChange={handleChange}
-                />
-              </Form.Group>
-            </Grid>
-            <Grid item sm={12} md={4}>
-              <Form.Group className="mb-3" controlId="formBasicFaculty">
-                <TextField
-                  // basic
-                  type="text"
-                  name="n_fac"
-                  value={formData.n_fac}
-                  //mui
-                  label="No. of Faculty"
-                  variant="outlined"
-                  fullWidth
-                  onChange={handleChange}
-                />
-              </Form.Group>
-            </Grid>
-
-            <Grid item sm={12} md={4}>
-              <Form.Group className="mb-3" controlId="formBasicIndustry">
-                <TextField
-                  // basic
-                  type="text"
-                  name="n_ind"
-                  value={formData.n_ind}
-                  //mui
-                  label="No. from Industry"
-                  variant="outlined"
-                  fullWidth
-                  onChange={handleChange}
-                />
-              </Form.Group>
-            </Grid>
-          </Grid>
-
-          <Grid container spacing={2}>
             <Grid item xs={4}>
               <FormControl>
                 <DatePicker
-                  label="Date of Event"
+                  label="Date of Workshop"
                   value={date}
                   onChange={handleDateChange}
                   renderInput={(params) => <TextField {...params} />}
@@ -348,7 +239,7 @@ const EditEvent = () => {
                     // basic
                     name="u_id"
                     value={facultySelected}
-                    // {...register("u_id")}
+                    {...register("u_id")}
                     //overriding onChange
                     onChange={handleFacultySelect}
                     // mui
@@ -383,7 +274,7 @@ const EditEvent = () => {
           </Grid>
 
           <Button variant="contained" color="primary" type="submit" fullWidth>
-            Edit
+            Create
           </Button>
         </Form>
       </Box>
@@ -391,4 +282,4 @@ const EditEvent = () => {
   );
 };
 
-export default EditEvent;
+export default CreateWorkshop;

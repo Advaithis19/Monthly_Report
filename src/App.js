@@ -46,6 +46,14 @@ import ConsultancyDetail from "./components/consultancies/consultancyDetail";
 import EditConsultancy from "./components/consultancies/editConsultancy";
 import CreateConsultancy from "./components/consultancies/createConsultancy";
 
+// workshops
+import FilteredWorkshops from "./components/workshops/filteredWorkshops";
+import WorkshopsHome from "./components/workshops/workshopsHome";
+import Workshops from "./components/workshops/workshops";
+import WorkshopDetail from "./components/workshops/workshopDetail";
+import EditWorkshop from "./components/workshops/editWorkshop";
+import CreateWorkshop from "./components/workshops/createWorkshop";
+
 import { AuthProvider } from "./context/AuthContext";
 import { AlertProvider } from "./context/AlertContext";
 
@@ -126,6 +134,24 @@ function App() {
                   <Route
                     path="/consultancies/edit/:id"
                     element={<EditConsultancy />}
+                  />
+
+                  {/* workshop routes */}
+                  <Route path="/workshops" element={<WorkshopsHome />}>
+                    <Route index element={<Workshops />} />
+                    <Route
+                      path="filter/date/:start_date/:end_date"
+                      element={<FilteredWorkshops />}
+                    />
+                  </Route>
+                  <Route path="/workshops/:id" element={<WorkshopDetail />} />
+                  <Route
+                    path="/workshops/create"
+                    element={<CreateWorkshop />}
+                  />
+                  <Route
+                    path="/workshops/edit/:id"
+                    element={<EditWorkshop />}
                   />
 
                   {/* publication route */}

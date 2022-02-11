@@ -21,7 +21,7 @@ import Checkbox from "@mui/material/Checkbox";
 import ListItemText from "@mui/material/ListItemText";
 import DatePicker from "@mui/lab/DatePicker";
 
-import { getEventInstance } from "../../services/events";
+import { getWorkshopInstance } from "../../services/workshops";
 import { getUsers } from "../../services/users";
 import { trackPromise } from "react-promise-tracker";
 
@@ -30,13 +30,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import dayjs from "dayjs";
 
-const EditEvent = () => {
+const EditWorkshop = () => {
   const initialFormData = Object.freeze({
-    title: "",
+    event_name: "",
     venue: "",
-    n_stud: "",
-    n_fac: "",
-    n_ind: "",
     slug: "",
   });
 
@@ -46,9 +43,9 @@ const EditEvent = () => {
 
   // form validation rules
   const validationSchema = Yup.object().shape({
-    title: Yup.string().test(
+    event_name: Yup.string().test(
       "len",
-      "Title is required",
+      "Event Name is required",
       (val) => val.length > 0
     ),
     venue: Yup.string().test(
@@ -56,9 +53,11 @@ const EditEvent = () => {
       "Venue is required",
       (val) => val.length > 0
     ),
-    // u_id: Yup.array()
-    //   .test("len", "Faculty field cannot be empty", (val) => val.length > 0)
-    //   .nullable(),
+    // u_id: Yup.array().test(
+    //   "len",
+    //   "Faculty field cannot be empty",
+    //   (val) => val.length > 0
+    // ),
   });
   const formOptions = { resolver: yupResolver(validationSchema) };
 
@@ -121,16 +120,13 @@ const EditEvent = () => {
         })
     );
     trackPromise(
-      getEventInstance(api, id)
+      getWorkshopInstance(api, id)
         .then((res) => {
           if (mounted) {
             updateFormData({
               ...formData,
-              ["title"]: res.data.title,
+              ["event_name"]: res.data.event_name,
               ["venue"]: res.data.venue,
-              ["n_stud"]: res.data.n_stud,
-              ["n_fac"]: res.data.n_fac,
-              ["n_ind"]: res.data.n_ind,
               ["slug"]: res.data.slug,
             });
             setDate(dayjs(res.data.date));
@@ -205,9 +201,9 @@ const EditEvent = () => {
     };
 
     api
-      .put(`events/edit/` + id + "/", postData)
+      .put(`workshops/edit/` + id + "/", postData)
       .then(() => {
-        navigate("/events/" + id);
+        navigate("/workshops/" + id);
       })
       .catch((error) => {
         if (error.response.status === 401) {
@@ -215,7 +211,7 @@ const EditEvent = () => {
           navigate("/logout");
         } else if (error.response.status === 403) {
           alert("You do not have permission to perform this action!");
-          navigate("/events/" + id);
+          navigate("/workshops/" + id);
         } else {
           alert("Error! Please check the values entered for any mistakes....");
         }
@@ -234,26 +230,26 @@ const EditEvent = () => {
           gutterBottom
           className="text-3xl font-semibold mb-3 text-center"
         >
-          Create Event
+          Edit Workshop
         </Typography>
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <Form.Group className="mb-3" controlId="formBasicTitle">
+          <Form.Group className="mb-3" controlId="formBasicEventName">
             <TextField
               // basic
               type="text"
-              name="title"
-              value={formData.title}
+              name="event_name"
+              value={formData.event_name}
               //mui
-              label="Event Title"
+              label="Event Name"
               variant="outlined"
               fullWidth
               //hook form
-              {...register("title")}
+              {...register("event_name")}
               //to override onChange
               onChange={handleChange}
             />
             <small className="text-danger">
-              {errors.title ? errors.title.message : <span></span>}
+              {errors.event_name ? errors.event_name.message : <span></span>}
             </small>
           </Form.Group>
 
@@ -279,59 +275,10 @@ const EditEvent = () => {
           </Form.Group>
 
           <Grid container spacing={2}>
-            <Grid item sm={12} md={4}>
-              <Form.Group className="mb-3" controlId="formBasicStudents">
-                <TextField
-                  // basic
-                  type="text"
-                  name="n_stud"
-                  value={formData.n_stud}
-                  //mui
-                  label="No. of Students"
-                  variant="outlined"
-                  fullWidth
-                  onChange={handleChange}
-                />
-              </Form.Group>
-            </Grid>
-            <Grid item sm={12} md={4}>
-              <Form.Group className="mb-3" controlId="formBasicFaculty">
-                <TextField
-                  // basic
-                  type="text"
-                  name="n_fac"
-                  value={formData.n_fac}
-                  //mui
-                  label="No. of Faculty"
-                  variant="outlined"
-                  fullWidth
-                  onChange={handleChange}
-                />
-              </Form.Group>
-            </Grid>
-
-            <Grid item sm={12} md={4}>
-              <Form.Group className="mb-3" controlId="formBasicIndustry">
-                <TextField
-                  // basic
-                  type="text"
-                  name="n_ind"
-                  value={formData.n_ind}
-                  //mui
-                  label="No. from Industry"
-                  variant="outlined"
-                  fullWidth
-                  onChange={handleChange}
-                />
-              </Form.Group>
-            </Grid>
-          </Grid>
-
-          <Grid container spacing={2}>
             <Grid item xs={4}>
               <FormControl>
                 <DatePicker
-                  label="Date of Event"
+                  label="Date of Workshop"
                   value={date}
                   onChange={handleDateChange}
                   renderInput={(params) => <TextField {...params} />}
@@ -391,4 +338,4 @@ const EditEvent = () => {
   );
 };
 
-export default EditEvent;
+export default EditWorkshop;
