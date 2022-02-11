@@ -101,7 +101,7 @@ const FilteredGrants = () => {
         {jwt_decode(JSON.parse(localStorage.getItem("authTokens")).access)
           .is_teacher && (
           <Grid item sm={6} className="bottomButton">
-            <Link to={"create"}>
+            <Link to={"/grants/create"}>
               <Button
                 variant="contained"
                 style={{ height: 40 }}

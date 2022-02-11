@@ -9,31 +9,31 @@ import Button from "@mui/material/Button";
 
 import exportFromJSON from "export-from-json";
 import jwt_decode from "jwt-decode";
-import { getFilteredEvents } from "../../services/events";
+import { getFilteredLectures } from "../../services/lectures";
 import { trackPromise } from "react-promise-tracker";
 
 let data = [{ foo: "foo" }, { bar: "bar" }];
 const fileName = "report";
 const exportType = "csv";
 
-const FilteredEvents = () => {
+const FilteredLectures = () => {
   const { start_date, end_date } = useParams();
   let navigate = useNavigate();
   let api = useAxios();
 
-  let [events, setEvents] = useState([]);
+  let [lectures, setLectures] = useState([]);
 
   const goToDetail = (id) => {
-    navigate("/events/" + id);
+    navigate("/lectures/" + id);
   };
 
   useEffect(() => {
     let mounted = true;
     trackPromise(
-      getFilteredEvents(api, start_date, end_date)
+      getFilteredLectures(api, start_date, end_date)
         .then((response) => {
           if (mounted) {
-            setEvents(response.data);
+            setLectures(response.data);
             data = response.data;
           }
         })
@@ -57,8 +57,10 @@ const FilteredEvents = () => {
     exportFromJSON({ data, fileName, exportType });
   };
 
-  if (!events || events.length === 0)
-    return <p className="text-xl text-bold">Can not find any events, sorry</p>;
+  if (!lectures || lectures.length === 0)
+    return (
+      <p className="text-xl text-bold">Can not find any lectures, sorry</p>
+    );
 
   return (
     <Container maxWidth="md" component="main">
@@ -67,22 +69,22 @@ const FilteredEvents = () => {
           <table className="border-solid border-1 border-black mx-auto font-sans text-md overflow-auto w-[75%] mb-3">
             <thead>
               <tr>
-                <th>Title</th>
-                <th>Venue</th>
-                <th>Date of Event</th>
+                <th>Topic</th>
+                <th>Resource Person</th>
+                <th>Organisation</th>
               </tr>
             </thead>
             <tbody>
-              {events.map((event) => {
+              {lectures.map((lecture) => {
                 return (
                   <tr
-                    key={event.id}
+                    key={lecture.id}
                     className="hover:bg-[#27447e] hover:text-white cursor-pointer"
-                    onClick={() => goToDetail(event.id)}
+                    onClick={() => goToDetail(lecture.id)}
                   >
-                    <td>{event.title}</td>
-                    <td>{event.venue}</td>
-                    <td>{event.date}</td>
+                    <td>{lecture.topic}</td>
+                    <td>{lecture.res_person}</td>
+                    <td>{lecture.organisation}</td>
                   </tr>
                 );
               })}
@@ -101,13 +103,13 @@ const FilteredEvents = () => {
         {jwt_decode(JSON.parse(localStorage.getItem("authTokens")).access)
           .is_teacher && (
           <Grid item sm={6} className="bottomButton">
-            <Link to={"/events/create"}>
+            <Link to={"/lectures/create"}>
               <Button
                 variant="contained"
                 style={{ height: 40 }}
                 color="primary"
               >
-                New Event
+                New Lecture
               </Button>
             </Link>
           </Grid>
@@ -117,4 +119,4 @@ const FilteredEvents = () => {
   );
 };
 
-export default FilteredEvents;
+export default FilteredLectures;

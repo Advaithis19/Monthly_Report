@@ -39,7 +39,7 @@ const Logout = () => {
       component="main"
       className="border-solid border-1 border-[#27447e] my-5 shadow-xl shadow-blue-500/50"
     >
-      <p className="text-xl text-bold">Unable to Logout...</p>
+      <p className="text-xl text-bold p-5">Unable to Logout...</p>
     </Container>
   );
 };

@@ -1,39 +1,42 @@
 import React, { useState, useEffect } from "react";
 import useAxios from "../../utils/axios";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import jwt_decode from "jwt-decode";
 
-//MUI
-import Grid from "@mui/material/Grid";
+// mui
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
 
 import exportFromJSON from "export-from-json";
-import jwt_decode from "jwt-decode";
-import { getFilteredEvents } from "../../services/events";
+import { getLectures } from "../../services/lectures";
 import { trackPromise } from "react-promise-tracker";
 
 let data = [{ foo: "foo" }, { bar: "bar" }];
 const fileName = "report";
 const exportType = "csv";
 
-const FilteredEvents = () => {
-  const { start_date, end_date } = useParams();
+const Lectures = () => {
   let navigate = useNavigate();
   let api = useAxios();
 
-  let [events, setEvents] = useState([]);
+  let [lectures, setLectures] = useState([]);
+
+  let goToCreate = () => {
+    navigate("create");
+  };
 
   const goToDetail = (id) => {
-    navigate("/events/" + id);
+    navigate("" + id);
   };
 
   useEffect(() => {
     let mounted = true;
     trackPromise(
-      getFilteredEvents(api, start_date, end_date)
+      getLectures(api)
         .then((response) => {
           if (mounted) {
-            setEvents(response.data);
+            setLectures(response.data);
             data = response.data;
           }
         })
@@ -51,45 +54,49 @@ const FilteredEvents = () => {
     return () => {
       mounted = false;
     };
-  }, [start_date, end_date]);
+  }, []);
 
   let ExportToExcel = () => {
     exportFromJSON({ data, fileName, exportType });
   };
 
-  if (!events || events.length === 0)
-    return <p className="text-xl text-bold">Can not find any events, sorry</p>;
+  if (!lectures || lectures.length === 0)
+    return (
+      <div>
+        <p className="text-xl text-bold">Can not find any lectures, sorry</p>
+      </div>
+    );
 
   return (
     <Container maxWidth="md" component="main">
       <Grid container rowSpacing={2}>
-        <Grid item xs={12}>
+        <Grid item xs={12} className="">
           <table className="border-solid border-1 border-black mx-auto font-sans text-md overflow-auto w-[75%] mb-3">
             <thead>
               <tr>
-                <th>Title</th>
-                <th>Venue</th>
-                <th>Date of Event</th>
+                <th>Topic</th>
+                <th>Resource Person</th>
+                <th>Organisation</th>
               </tr>
             </thead>
             <tbody>
-              {events.map((event) => {
+              {lectures.map((lecture) => {
                 return (
                   <tr
-                    key={event.id}
+                    key={lecture.id}
                     className="hover:bg-[#27447e] hover:text-white cursor-pointer"
-                    onClick={() => goToDetail(event.id)}
+                    onClick={() => goToDetail(lecture.id)}
                   >
-                    <td>{event.title}</td>
-                    <td>{event.venue}</td>
-                    <td>{event.date}</td>
+                    <td>{lecture.topic}</td>
+                    <td>{lecture.res_person}</td>
+                    <td>{lecture.organisation}</td>
                   </tr>
                 );
               })}
             </tbody>
           </table>
         </Grid>
-        <Grid item sm={6} className="bottomButton">
+        <Grid item sm={6} className="">
           <Button
             variant="contained"
             style={{ height: 40 }}
@@ -100,16 +107,15 @@ const FilteredEvents = () => {
         </Grid>
         {jwt_decode(JSON.parse(localStorage.getItem("authTokens")).access)
           .is_teacher && (
-          <Grid item sm={6} className="bottomButton">
-            <Link to={"/events/create"}>
-              <Button
-                variant="contained"
-                style={{ height: 40 }}
-                color="primary"
-              >
-                New Event
-              </Button>
-            </Link>
+          <Grid item sm={6} className="">
+            <Button
+              variant="contained"
+              style={{ height: 40 }}
+              color="primary"
+              onClick={goToCreate}
+            >
+              New Lecture
+            </Button>
           </Grid>
         )}
       </Grid>
@@ -117,4 +123,4 @@ const FilteredEvents = () => {
   );
 };
 
-export default FilteredEvents;
+export default Lectures;

@@ -103,7 +103,7 @@ const FilteredWorkshops = () => {
         {jwt_decode(JSON.parse(localStorage.getItem("authTokens")).access)
           .is_teacher && (
           <Grid item sm={6} className="bottomButton">
-            <Link to={"create"}>
+            <Link to={"/workshops/create"}>
               <Button
                 variant="contained"
                 style={{ height: 40 }}

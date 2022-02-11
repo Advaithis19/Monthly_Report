@@ -54,6 +54,14 @@ import WorkshopDetail from "./components/workshops/workshopDetail";
 import EditWorkshop from "./components/workshops/editWorkshop";
 import CreateWorkshop from "./components/workshops/createWorkshop";
 
+// lectures
+import FilteredLectures from "./components/lectures/filteredLectures";
+import LecturesHome from "./components/lectures/lecturesHome";
+import Lectures from "./components/lectures/lectures";
+import LectureDetail from "./components/lectures/lectureDetail";
+import EditLecture from "./components/lectures/editLecture";
+import CreateLecture from "./components/lectures/createLecture";
+
 import { AuthProvider } from "./context/AuthContext";
 import { AlertProvider } from "./context/AlertContext";
 
@@ -153,6 +161,18 @@ function App() {
                     path="/workshops/edit/:id"
                     element={<EditWorkshop />}
                   />
+
+                  {/* lecture routes */}
+                  <Route path="/lectures" element={<LecturesHome />}>
+                    <Route index element={<Lectures />} />
+                    <Route
+                      path="filter/date/:start_date/:end_date"
+                      element={<FilteredLectures />}
+                    />
+                  </Route>
+                  <Route path="/lectures/:id" element={<LectureDetail />} />
+                  <Route path="/lectures/create" element={<CreateLecture />} />
+                  <Route path="/lectures/edit/:id" element={<EditLecture />} />
 
                   {/* publication route */}
                   <Route path="/publications" element={<PublicationsHome />}>
