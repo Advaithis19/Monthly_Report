@@ -9,7 +9,7 @@ import Container from "@mui/material/Container";
 import DatePicker from "@mui/lab/DatePicker";
 import TextField from "@mui/material/TextField";
 
-const ProposalsHome = () => {
+const Home = () => {
   const navigate = useNavigate();
   const [dateobj, setDate] = useState({
     startDate: new Date(),
@@ -33,8 +33,18 @@ const ProposalsHome = () => {
   const submitChangedDates = () => {
     let iso_startDate = dayjs(dateobj.startDate).format("YYYY-MM-DD");
     let iso_endDate = dayjs(dateobj.endDate).format("YYYY-MM-DD");
-    navigate("filter/date/" + iso_startDate + "/" + iso_endDate);
+    navigate(
+      "/reports/" +
+        pathList[1] +
+        "/filter/date/" +
+        iso_startDate +
+        "/" +
+        iso_endDate
+    );
   };
+
+  const pathList = window.location.pathname.split("/").slice(1);
+  if (pathList[1] === "") return <Outlet />;
 
   return (
     <Container
@@ -79,7 +89,7 @@ const ProposalsHome = () => {
 
         <Grid item xs={12}>
           <div className="text-3xl font-semibold mb-3">
-            <h1>Proposals</h1>
+            <h1>{pathList[1][0].toUpperCase() + pathList[1].slice(1)}</h1>
           </div>
           <Outlet />
         </Grid>
@@ -87,9 +97,9 @@ const ProposalsHome = () => {
         <div className="w-[60%] h-[0.25px] bg-gray-400 mx-auto my-5" />
 
         <Grid item xs={12} className="">
-          <Link to={"/proposals"}>
+          <Link to={"/" + pathList[1]}>
             <button className="w-[30%] border-1 border-[#27447e] rounded-2xl py-2 px-1 text-lg text-bold bg-[#b6def2] hover:bg-[#27447e] hover:text-white hover:bg-[#] transition duration-300">
-              All Proposals
+              All {pathList[1][0].toUpperCase() + pathList[1].slice(1)}
             </button>
           </Link>
         </Grid>
@@ -98,4 +108,4 @@ const ProposalsHome = () => {
   );
 };
 
-export default ProposalsHome;
+export default Home;

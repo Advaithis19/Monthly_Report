@@ -6,18 +6,16 @@ const tables = [
   "Consultancies",
   "Events",
   "Grants",
-  "Industrial",
+  "Industrial Visits",
   "Lectures",
   "Memberships",
   "MOUs",
-  "Other",
+  "Other Activities",
   "Patents",
   "Proposals",
   "Publications",
   "Talks",
   "Workshops",
-  "Activities",
-  "Visits",
 ];
 
 export default tables;

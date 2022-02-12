@@ -1,34 +1,15 @@
 import React, { useState, useEffect } from "react";
 import useAxios from "../../utils/axios";
 import { useNavigate } from "react-router-dom";
-import jwt_decode from "jwt-decode";
-
-// mui
-import Container from "@mui/material/Container";
-import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid";
-
-import exportFromJSON from "export-from-json";
+import Table from "./listTable";
 import { getGrants } from "../../services/grants";
 import { trackPromise } from "react-promise-tracker";
-
-let data = [{ foo: "foo" }, { bar: "bar" }];
-const fileName = "report";
-const exportType = "csv";
 
 const Grants = () => {
   let navigate = useNavigate();
   let api = useAxios();
 
   let [grants, setGrants] = useState([]);
-
-  let goToCreate = () => {
-    navigate("create");
-  };
-
-  const goToDetail = (id) => {
-    navigate("" + id);
-  };
 
   useEffect(() => {
     let mounted = true;
@@ -37,7 +18,6 @@ const Grants = () => {
         .then((response) => {
           if (mounted) {
             setGrants(response.data);
-            data = response.data;
           }
         })
         .catch((error) => {
@@ -56,10 +36,6 @@ const Grants = () => {
     };
   }, []);
 
-  let ExportToExcel = () => {
-    exportFromJSON({ data, fileName, exportType });
-  };
-
   if (!grants || grants.length === 0)
     return (
       <div>
@@ -67,60 +43,7 @@ const Grants = () => {
       </div>
     );
 
-  return (
-    <Container maxWidth="md" component="main">
-      <Grid container rowSpacing={2}>
-        <Grid item xs={12} className="">
-          <table className="border-solid border-1 border-black mx-auto font-sans text-md overflow-auto w-[75%] mb-3">
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Agency</th>
-                <th>Year</th>
-              </tr>
-            </thead>
-            <tbody>
-              {grants.map((grant) => {
-                return (
-                  <tr
-                    key={grant.id}
-                    className="hover:bg-[#27447e] hover:text-white cursor-pointer"
-                    onClick={() => goToDetail(grant.id)}
-                  >
-                    <td>{grant.title}</td>
-                    <td>{grant.agency}</td>
-                    <td>{grant.year}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </Grid>
-        <Grid item sm={6} className="">
-          <Button
-            variant="contained"
-            style={{ height: 40 }}
-            onClick={ExportToExcel}
-          >
-            Export To Excel
-          </Button>
-        </Grid>
-        {jwt_decode(JSON.parse(localStorage.getItem("authTokens")).access)
-          .is_teacher && (
-          <Grid item sm={6} className="">
-            <Button
-              variant="contained"
-              style={{ height: 40 }}
-              color="primary"
-              onClick={goToCreate}
-            >
-              New Grant
-            </Button>
-          </Grid>
-        )}
-      </Grid>
-    </Container>
-  );
+  return <Table grants={grants} />;
 };
 
 export default Grants;

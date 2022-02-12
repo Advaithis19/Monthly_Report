@@ -27,7 +27,7 @@ const NavbarItem = ({ title, nav_link, handleToggle, classprops }) => {
   const [active, setActive] = useState(false);
 
   const handleNavSelect = () => {
-    navigate(nav_link);
+    navigate("/reports" + nav_link);
     handleToggle(false);
   };
 

@@ -80,7 +80,7 @@ const SignIn = () => {
         //   action: "",
         // });
         // setShowAlert(true);
-        navigate("/grants");
+        navigate("/reports/grants");
       })
       .catch((error) => {
         if (error.response.status === 401) {
