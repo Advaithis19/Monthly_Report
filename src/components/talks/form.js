@@ -19,13 +19,21 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
+import DatePicker from "@mui/lab/DatePicker";
 
-const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
+const CustomForm = ({
+  formData,
+  updateFormData,
+  date,
+  setDate,
+  users,
+  onSubmit,
+  type,
+}) => {
   // form validation rules
   const validationSchema = Yup.object().shape({
     topic: Yup.string().required("Topic is required"),
-    res_person: Yup.string().required("Resource Person is required"),
-    organisation: Yup.string().required("Organisation is required"),
+    venue: Yup.string().required("Resource Person is required"),
   });
   const formOptions = { resolver: yupResolver(validationSchema) };
 
@@ -75,6 +83,10 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
     });
   };
 
+  const handleDateChange = (e) => {
+    setDate(e);
+  };
+
   return (
     <Container
       maxWidth="sm"
@@ -87,7 +99,7 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
           gutterBottom
           className="text-3xl font-semibold mb-3 text-center"
         >
-          {type} Lecture
+          {type} Talk
         </Typography>
         <Form.Group className="mb-3" controlId="formBasicTopic">
           <TextField
@@ -96,7 +108,7 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
             name="topic"
             value={formData.topic}
             //mui
-            label="Lecture Topic"
+            label="Talk Topic"
             variant="outlined"
             fullWidth
             //hook form
@@ -110,50 +122,35 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
         </Form.Group>
         <Grid container spacing={2}>
           <Grid item sm={12} md={6}>
-            <Form.Group className="mb-3" controlId="formBasicResourcePerson">
+            <Form.Group className="mb-3" controlId="formBasicVenue">
               <TextField
                 // basic
                 type="text"
-                name="res_person"
-                value={formData.res_person}
+                name="venue"
+                value={formData.venue}
                 //mui
-                label="Resource Person"
+                label="Venue"
                 variant="outlined"
                 fullWidth
                 //hook form
-                {...register("res_person")}
+                {...register("venue")}
                 //to override onChange
                 onChange={handleChange}
               />
               <small className="text-danger">
-                {errors.res_person ? errors.res_person.message : <span></span>}
+                {errors.venue ? errors.venue.message : <span></span>}
               </small>
             </Form.Group>
           </Grid>
-          <Grid item sm={12} md={6}>
-            <Form.Group className="mb-3" controlId="formBasicOrganisation">
-              <TextField
-                // basic
-                type="text"
-                name="organisation"
-                value={formData.organisation}
-                //mui
-                label="Organisation"
-                variant="outlined"
-                fullWidth
-                //hook form
-                {...register("organisation")}
-                //to override onChange
-                onChange={handleChange}
+          <Grid item xs={4}>
+            <FormControl>
+              <DatePicker
+                label="Date of Event"
+                value={date}
+                onChange={handleDateChange}
+                renderInput={(params) => <TextField {...params} />}
               />
-              <small className="text-danger">
-                {errors.organisation ? (
-                  errors.organisation.message
-                ) : (
-                  <span></span>
-                )}
-              </small>
-            </Form.Group>
+            </FormControl>
           </Grid>
         </Grid>
         <Form onSubmit={handleSubmit(onSubmit)}>

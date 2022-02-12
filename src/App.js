@@ -62,6 +62,13 @@ import LectureDetail from "./components/lectures/lectureDetail";
 import EditLecture from "./components/lectures/editLecture";
 import CreateLecture from "./components/lectures/createLecture";
 
+// talks
+import FilteredTalks from "./components/talks/filteredTalks";
+import Talks from "./components/talks/talks";
+import TalkDetail from "./components/talks/talkDetail";
+import EditTalk from "./components/talks/editTalk";
+import CreateTalk from "./components/talks/createTalk";
+
 import { AuthProvider } from "./context/AuthContext";
 import { AlertProvider } from "./context/AlertContext";
 
@@ -137,6 +144,15 @@ function App() {
                       />
                     </Route>
 
+                    {/* talks */}
+                    <Route path="talks/" element={<Outlet />}>
+                      <Route index element={<Talks />} />
+                      <Route
+                        path="filter/date/:start_date/:end_date"
+                        element={<FilteredTalks />}
+                      />
+                    </Route>
+
                     {/* publications */}
                     <Route path="publications/" element={<Outlet />}>
                       <Route index element={<Publications />} />
@@ -197,6 +213,11 @@ function App() {
                   <Route path="/lectures/:id" element={<LectureDetail />} />
                   <Route path="/lectures/create" element={<CreateLecture />} />
                   <Route path="/lectures/edit/:id" element={<EditLecture />} />
+
+                  {/* talk crud routes */}
+                  <Route path="/talks/:id" element={<TalkDetail />} />
+                  <Route path="/talks/create" element={<CreateTalk />} />
+                  <Route path="/talks/edit/:id" element={<EditTalk />} />
                 </Route>
                 <Route path="/profile/:id" element={<Profile />} />
                 <Route path="/register" element={<SignUp />} />
