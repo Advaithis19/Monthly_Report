@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'consultancies',
     'workshops',
     'lectures',
+    'talks',
     'corsheaders',
     'rest_framework_simplejwt.token_blacklist',
     'crispy_forms',

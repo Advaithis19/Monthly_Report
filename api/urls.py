@@ -29,4 +29,7 @@ urlpatterns = [
 
     # lectures
     path('lectures/', include('lectures.urls', namespace='lectures')),
+
+    # talks
+    path('talks/', include('talks.urls', namespace='talks')),
 ]
