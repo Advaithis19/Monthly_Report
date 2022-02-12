@@ -89,76 +89,78 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
         >
           {type} Lecture
         </Typography>
-        <Form.Group className="mb-3" controlId="formBasicTopic">
-          <TextField
-            // basic
-            type="text"
-            name="topic"
-            value={formData.topic}
-            //mui
-            label="Lecture Topic"
-            variant="outlined"
-            fullWidth
-            //hook form
-            {...register("topic")}
-            //to override onChange
-            onChange={handleChange}
-          />
-          <small className="text-danger">
-            {errors.topic ? errors.topic.message : <span></span>}
-          </small>
-        </Form.Group>
-        <Grid container spacing={2}>
-          <Grid item sm={12} md={6}>
-            <Form.Group className="mb-3" controlId="formBasicResourcePerson">
-              <TextField
-                // basic
-                type="text"
-                name="res_person"
-                value={formData.res_person}
-                //mui
-                label="Resource Person"
-                variant="outlined"
-                fullWidth
-                //hook form
-                {...register("res_person")}
-                //to override onChange
-                onChange={handleChange}
-              />
-              <small className="text-danger">
-                {errors.res_person ? errors.res_person.message : <span></span>}
-              </small>
-            </Form.Group>
-          </Grid>
-          <Grid item sm={12} md={6}>
-            <Form.Group className="mb-3" controlId="formBasicOrganisation">
-              <TextField
-                // basic
-                type="text"
-                name="organisation"
-                value={formData.organisation}
-                //mui
-                label="Organisation"
-                variant="outlined"
-                fullWidth
-                //hook form
-                {...register("organisation")}
-                //to override onChange
-                onChange={handleChange}
-              />
-              <small className="text-danger">
-                {errors.organisation ? (
-                  errors.organisation.message
-                ) : (
-                  <span></span>
-                )}
-              </small>
-            </Form.Group>
-          </Grid>
-        </Grid>
         <Form onSubmit={handleSubmit(onSubmit)}>
+          <Form.Group className="mb-3" controlId="formBasicTopic">
+            <TextField
+              // basic
+              type="text"
+              name="topic"
+              value={formData.topic}
+              //mui
+              label="Lecture Topic"
+              variant="outlined"
+              fullWidth
+              //hook form
+              {...register("topic")}
+              //to override onChange
+              onChange={handleChange}
+            />
+            <small className="text-danger">
+              {errors.topic ? errors.topic.message : <span></span>}
+            </small>
+          </Form.Group>
           <Grid container spacing={2}>
-            <Grid item sm={12} md={4}>
+            <Grid item xs={12} md={6}>
+              <Form.Group className="mb-3" controlId="formBasicResourcePerson">
+                <TextField
+                  // basic
+                  type="text"
+                  name="res_person"
+                  value={formData.res_person}
+                  //mui
+                  label="Resource Person"
+                  variant="outlined"
+                  fullWidth
+                  //hook form
+                  {...register("res_person")}
+                  //to override onChange
+                  onChange={handleChange}
+                />
+                <small className="text-danger">
+                  {errors.res_person ? (
+                    errors.res_person.message
+                  ) : (
+                    <span></span>
+                  )}
+                </small>
+              </Form.Group>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Form.Group className="mb-3" controlId="formBasicOrganisation">
+                <TextField
+                  // basic
+                  type="text"
+                  name="organisation"
+                  value={formData.organisation}
+                  //mui
+                  label="Organisation"
+                  variant="outlined"
+                  fullWidth
+                  //hook form
+                  {...register("organisation")}
+                  //to override onChange
+                  onChange={handleChange}
+                />
+                <small className="text-danger">
+                  {errors.organisation ? (
+                    errors.organisation.message
+                  ) : (
+                    <span></span>
+                  )}
+                </small>
+              </Form.Group>
+            </Grid>
+            <Grid item xs={12} md={4}>
               <Form.Group className="mb-3" controlId="formBasicStudents">
                 <TextField
                   // basic
@@ -179,7 +181,7 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
                 </small>
               </Form.Group>
             </Grid>
-            <Grid item sm={12} md={4}>
+            <Grid item xs={12} md={4}>
               <Form.Group className="mb-3" controlId="formBasicFaculty">
                 <TextField
                   // basic
@@ -200,7 +202,7 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
                 </small>
               </Form.Group>
             </Grid>
-            <Grid item sm={12} md={4}>
+            <Grid item xs={12} md={4}>
               <Form.Group className="mb-3" controlId="formBasicIndustry">
                 <TextField
                   // basic

@@ -24,8 +24,7 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
   // form validation rules
   const validationSchema = Yup.object().shape({
     title: Yup.string().required("Title is required"),
-    fund_agency: Yup.string().required("Funding Agency is required"),
-    rec_amt: Yup.string().required("Amount is required"),
+    organisation: Yup.string().required("Organisation is required"),
   });
   const formOptions = { resolver: yupResolver(validationSchema) };
 
@@ -87,7 +86,7 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
           gutterBottom
           className="text-3xl font-semibold mb-3 text-center"
         >
-          {type} Consultancy
+          {type} Achievement
         </Typography>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <Form.Group className="mb-3" controlId="formBasicTitle">
@@ -97,7 +96,7 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
               name="title"
               value={formData.title}
               //mui
-              label="Consultancy Title"
+              label="Title"
               variant="outlined"
               fullWidth
               //hook form
@@ -109,28 +108,26 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
               {errors.title ? errors.title.message : <span></span>}
             </small>
           </Form.Group>
-
           <Grid container spacing={2}>
-            <Grid item xs={12} md={6}>
-              <Form.Group className="mb-3" controlId="formBasicFundingAgency">
+            <Grid item sm={12} md={6}>
+              <Form.Group className="mb-3" controlId="formBasicOrganisation">
                 <TextField
                   // basic
                   type="text"
-                  name="fund_agency"
-                  value={formData.fund_agency}
+                  name="organisation"
+                  value={formData.organisation}
                   //mui
-                  label="Funding Agency"
+                  label="Associated Organisation"
                   variant="outlined"
                   fullWidth
-                  multiline
                   //hook form
-                  {...register("fund_agency")}
+                  {...register("organisation")}
                   //to override onChange
                   onChange={handleChange}
                 />
                 <small className="text-danger">
-                  {errors.fund_agency ? (
-                    errors.fund_agency.message
+                  {errors.organisation ? (
+                    errors.organisation.message
                   ) : (
                     <span></span>
                   )}
@@ -138,56 +135,38 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
               </Form.Group>
             </Grid>
             <Grid item xs={12} md={6}>
-              <Form.Group className="mb-3" controlId="formBasicAmount">
-                <TextField
-                  // basic
-                  type="text"
-                  name="rec_amt"
-                  value={formData.rec_amt}
-                  //mui
-                  label="Received Amount"
-                  variant="outlined"
-                  fullWidth
-                  //hook form
-                  {...register("rec_amt")}
-                  //to override onChange
-                  onChange={handleChange}
-                />
+              <Form.Group className="mb-3" controlId="formBasicFacultyInvolved">
+                <FormControl fullWidth>
+                  <InputLabel id="f_id-select-label">
+                    Faculty Involved
+                  </InputLabel>
+                  <Select
+                    // basic
+                    name="f_id"
+                    value={formData.f_id}
+                    {...register("f_id")}
+                    //overriding onChange
+                    onChange={handleFacultySelect}
+                    // mui
+                    labelId="f_id-select-label"
+                    label="Faculty Involved"
+                    inputProps={{ MenuProps: { disableScrollLock: true } }}
+                  >
+                    {users.map((user) => {
+                      return (
+                        <MenuItem key={user.value} value={user.value}>
+                          {user.label}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
                 <small className="text-danger">
-                  {errors.rec_amt ? errors.rec_amt.message : <span></span>}
+                  {errors.f_id ? errors.f_id.message : <span></span>}
                 </small>
               </Form.Group>
             </Grid>
           </Grid>
-
-          <Form.Group className="mb-3" controlId="formBasicFacultyInvolved">
-            <FormControl fullWidth>
-              <InputLabel id="f_id-select-label">Faculty Involved</InputLabel>
-              <Select
-                // basic
-                name="f_id"
-                value={formData.f_id}
-                {...register("f_id")}
-                //overriding onChange
-                onChange={handleFacultySelect}
-                // mui
-                labelId="f_id-select-label"
-                label="Faculty Involved"
-                inputProps={{ MenuProps: { disableScrollLock: true } }}
-              >
-                {users.map((user) => {
-                  return (
-                    <MenuItem key={user.value} value={user.value}>
-                      {user.label}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </FormControl>
-            <small className="text-danger">
-              {errors.f_id ? errors.f_id.message : <span></span>}
-            </small>
-          </Form.Group>
 
           <Button variant="contained" color="primary" type="submit" fullWidth>
             {type}

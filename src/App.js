@@ -69,6 +69,13 @@ import TalkDetail from "./components/talks/talkDetail";
 import EditTalk from "./components/talks/editTalk";
 import CreateTalk from "./components/talks/createTalk";
 
+// achievements
+import FilteredAchievements from "./components/achievements/filteredAchievements";
+import Achievements from "./components/achievements/achievements";
+import AchievementDetail from "./components/achievements/achievementDetail";
+import EditAchievement from "./components/achievements/editAchievement";
+import CreateAchievement from "./components/achievements/createAchievement";
+
 import { AuthProvider } from "./context/AuthContext";
 import { AlertProvider } from "./context/AlertContext";
 
@@ -153,6 +160,15 @@ function App() {
                       />
                     </Route>
 
+                    {/* achievements */}
+                    <Route path="achievements/" element={<Outlet />}>
+                      <Route index element={<Achievements />} />
+                      <Route
+                        path="filter/date/:start_date/:end_date"
+                        element={<FilteredAchievements />}
+                      />
+                    </Route>
+
                     {/* publications */}
                     <Route path="publications/" element={<Outlet />}>
                       <Route index element={<Publications />} />
@@ -218,6 +234,20 @@ function App() {
                   <Route path="/talks/:id" element={<TalkDetail />} />
                   <Route path="/talks/create" element={<CreateTalk />} />
                   <Route path="/talks/edit/:id" element={<EditTalk />} />
+
+                  {/* achievement crud routes */}
+                  <Route
+                    path="/achievements/:id"
+                    element={<AchievementDetail />}
+                  />
+                  <Route
+                    path="/achievements/create"
+                    element={<CreateAchievement />}
+                  />
+                  <Route
+                    path="/achievements/edit/:id"
+                    element={<EditAchievement />}
+                  />
                 </Route>
                 <Route path="/profile/:id" element={<Profile />} />
                 <Route path="/register" element={<SignUp />} />

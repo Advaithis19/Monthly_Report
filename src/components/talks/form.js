@@ -101,60 +101,61 @@ const CustomForm = ({
         >
           {type} Talk
         </Typography>
-        <Form.Group className="mb-3" controlId="formBasicTopic">
-          <TextField
-            // basic
-            type="text"
-            name="topic"
-            value={formData.topic}
-            //mui
-            label="Talk Topic"
-            variant="outlined"
-            fullWidth
-            //hook form
-            {...register("topic")}
-            //to override onChange
-            onChange={handleChange}
-          />
-          <small className="text-danger">
-            {errors.topic ? errors.topic.message : <span></span>}
-          </small>
-        </Form.Group>
-        <Grid container spacing={2}>
-          <Grid item sm={12} md={6}>
-            <Form.Group className="mb-3" controlId="formBasicVenue">
-              <TextField
-                // basic
-                type="text"
-                name="venue"
-                value={formData.venue}
-                //mui
-                label="Venue"
-                variant="outlined"
-                fullWidth
-                //hook form
-                {...register("venue")}
-                //to override onChange
-                onChange={handleChange}
-              />
-              <small className="text-danger">
-                {errors.venue ? errors.venue.message : <span></span>}
-              </small>
-            </Form.Group>
-          </Grid>
-          <Grid item xs={4}>
-            <FormControl>
-              <DatePicker
-                label="Date of Event"
-                value={date}
-                onChange={handleDateChange}
-                renderInput={(params) => <TextField {...params} />}
-              />
-            </FormControl>
-          </Grid>
-        </Grid>
+
         <Form onSubmit={handleSubmit(onSubmit)}>
+          <Form.Group className="mb-3" controlId="formBasicTopic">
+            <TextField
+              // basic
+              type="text"
+              name="topic"
+              value={formData.topic}
+              //mui
+              label="Talk Topic"
+              variant="outlined"
+              fullWidth
+              //hook form
+              {...register("topic")}
+              //to override onChange
+              onChange={handleChange}
+            />
+            <small className="text-danger">
+              {errors.topic ? errors.topic.message : <span></span>}
+            </small>
+          </Form.Group>
           <Grid container spacing={2}>
+            <Grid item xs={12} md={6}>
+              <FormControl>
+                <DatePicker
+                  fullWidth
+                  label="Date of Event"
+                  value={date}
+                  onChange={handleDateChange}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </FormControl>
+            </Grid>
+            <Grid item sm={12} md={6}>
+              <Form.Group className="mb-3" controlId="formBasicVenue">
+                <TextField
+                  // basic
+                  type="text"
+                  name="venue"
+                  value={formData.venue}
+                  //mui
+                  label="Venue"
+                  variant="outlined"
+                  fullWidth
+                  //hook form
+                  {...register("venue")}
+                  //to override onChange
+                  onChange={handleChange}
+                />
+                <small className="text-danger">
+                  {errors.venue ? errors.venue.message : <span></span>}
+                </small>
+              </Form.Group>
+            </Grid>
+
             <Grid item sm={12} md={4}>
               <Form.Group className="mb-3" controlId="formBasicStudents">
                 <TextField
