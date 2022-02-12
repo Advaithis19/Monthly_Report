@@ -32,4 +32,7 @@ urlpatterns = [
 
     # talks
     path('talks/', include('talks.urls', namespace='talks')),
+
+    # achievements
+    path('achievements/', include('achievements.urls', namespace='achievements')),
 ]
