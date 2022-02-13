@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { findStatusLabel } from "../../constants/statusOptions";
+import { findNatIntLabel } from "../../constants/nat_int";
 
 //MUI
 import Grid from "@mui/material/Grid";
@@ -14,13 +14,13 @@ let data = [{ foo: "foo" }, { bar: "bar" }];
 const fileName = "report";
 const exportType = "csv";
 
-const Table = ({ proposals }) => {
+const Table = ({ conferences }) => {
   const navigate = useNavigate();
   const goToDetail = (id) => {
-    navigate("/proposals/" + id);
+    navigate("/conferences/" + id);
   };
 
-  data = proposals;
+  data = conferences;
 
   let ExportToExcel = () => {
     exportFromJSON({ data, fileName, exportType });
@@ -33,22 +33,22 @@ const Table = ({ proposals }) => {
           <table className="border-solid border-1 border-black mx-auto font-sans text-md overflow-auto w-[75%] mb-3">
             <thead>
               <tr>
-                <th>Title</th>
-                <th>Submitted to</th>
-                <th>Status</th>
+                <th>Title of Publication</th>
+                <th>Conference</th>
+                <th>National/International</th>
               </tr>
             </thead>
             <tbody>
-              {proposals.map((proposal) => {
+              {conferences.map((conference) => {
                 return (
                   <tr
-                    key={proposal.id}
+                    key={conference.id}
                     className="hover:bg-[#27447e] hover:text-white cursor-pointer"
-                    onClick={() => goToDetail(proposal.id)}
+                    onClick={() => goToDetail(conference.id)}
                   >
-                    <td>{proposal.title}</td>
-                    <td>{proposal.submitted_to}</td>
-                    <td>{findStatusLabel(proposal.status)}</td>
+                    <td>{conference.title}</td>
+                    <td>{conference.conference}</td>
+                    <td>{findNatIntLabel(conference.nat_int)}</td>
                   </tr>
                 );
               })}
@@ -67,13 +67,13 @@ const Table = ({ proposals }) => {
         {jwt_decode(JSON.parse(localStorage.getItem("authTokens")).access)
           .is_teacher && (
           <Grid item sm={6} className="bottomButton">
-            <Link to={"/proposals/create"}>
+            <Link to={"/conferences/create"}>
               <Button
                 variant="contained"
                 style={{ height: 40 }}
                 color="primary"
               >
-                New Proposal
+                New Conference
               </Button>
             </Link>
           </Grid>

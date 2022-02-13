@@ -76,6 +76,13 @@ import AchievementDetail from "./components/achievements/achievementDetail";
 import EditAchievement from "./components/achievements/editAchievement";
 import CreateAchievement from "./components/achievements/createAchievement";
 
+// conferences
+import FilteredConferences from "./components/conferences/filteredConferences";
+import Conferences from "./components/conferences/conferences";
+import ConferenceDetail from "./components/conferences/conferenceDetail";
+import EditConference from "./components/conferences/editConference";
+import CreateConference from "./components/conferences/createConference";
+
 import { AuthProvider } from "./context/AuthContext";
 import { AlertProvider } from "./context/AlertContext";
 
@@ -169,6 +176,15 @@ function App() {
                       />
                     </Route>
 
+                    {/* conferences */}
+                    <Route path="conferences/" element={<Outlet />}>
+                      <Route index element={<Conferences />} />
+                      <Route
+                        path="filter/date/:start_date/:end_date"
+                        element={<FilteredConferences />}
+                      />
+                    </Route>
+
                     {/* publications */}
                     <Route path="publications/" element={<Outlet />}>
                       <Route index element={<Publications />} />
@@ -247,6 +263,20 @@ function App() {
                   <Route
                     path="/achievements/edit/:id"
                     element={<EditAchievement />}
+                  />
+
+                  {/* conference crud routes */}
+                  <Route
+                    path="/conferences/:id"
+                    element={<ConferenceDetail />}
+                  />
+                  <Route
+                    path="/conferences/create"
+                    element={<CreateConference />}
+                  />
+                  <Route
+                    path="/conferences/edit/:id"
+                    element={<EditConference />}
                   />
                 </Route>
                 <Route path="/profile/:id" element={<Profile />} />

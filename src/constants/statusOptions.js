@@ -13,4 +13,10 @@ const statusOptions = [
   },
 ];
 
+export const findStatusLabel = (value) => {
+  return statusOptions.filter((option) => {
+    return option.short === value;
+  })[0].full;
+};
+
 export default statusOptions;

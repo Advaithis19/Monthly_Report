@@ -63,7 +63,7 @@ const CreateAchievement = () => {
     api
       .post(`achievements/create/`, postData)
       .then(() => {
-        navigate("/achievements/");
+        navigate("/reports/achievements/");
       })
       .catch((error) => {
         if (error.response.status === 401) {

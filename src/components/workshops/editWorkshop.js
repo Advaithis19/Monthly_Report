@@ -108,7 +108,7 @@ const EditWorkshop = () => {
     api
       .put(`workshops/edit/` + id + "/", postData)
       .then(() => {
-        navigate("/workshops/" + id);
+        navigate("/reports/workshops/" + id);
       })
       .catch((error) => {
         if (error.response.status === 401) {
@@ -116,7 +116,7 @@ const EditWorkshop = () => {
           navigate("/logout");
         } else if (error.response.status === 403) {
           alert("You do not have permission to perform this action!");
-          navigate("/workshops/" + id);
+          navigate("/reports/workshops/" + id);
         } else {
           alert("Error! Please check the values entered for any mistakes....");
         }

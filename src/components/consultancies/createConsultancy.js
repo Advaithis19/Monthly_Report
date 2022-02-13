@@ -65,7 +65,7 @@ const CreateConsultancy = () => {
     api
       .post(`consultancies/create/`, postData)
       .then(() => {
-        navigate("/consultancies/");
+        navigate("/reports/consultancies/");
       })
       .catch((error) => {
         if (error.response.status === 401) {

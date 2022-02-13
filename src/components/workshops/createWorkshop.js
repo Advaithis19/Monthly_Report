@@ -67,7 +67,7 @@ const CreateWorkshop = () => {
     api
       .post(`workshops/create/`, postData)
       .then(() => {
-        navigate("/workshops/");
+        navigate("/reports/workshops/");
       })
       .catch((error) => {
         if (error.response.status === 401) {

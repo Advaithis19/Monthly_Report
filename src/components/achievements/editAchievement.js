@@ -98,7 +98,7 @@ const EditAchievement = () => {
     api
       .put(`achievements/edit/` + id + "/", postData)
       .then(() => {
-        navigate("/achievements/" + id);
+        navigate("/reports/achievements/" + id);
         // window.location.reload();
       })
       .catch((error) => {
@@ -107,7 +107,7 @@ const EditAchievement = () => {
           navigate("/logout");
         } else if (error.response.status === 403) {
           alert("You do not have permission to perform this action!");
-          navigate("/achievements/" + id);
+          navigate("/reports/achievements/" + id);
         } else {
           alert("Error! Please check the values entered for any mistakes....");
         }

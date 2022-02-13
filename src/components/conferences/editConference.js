@@ -2,19 +2,17 @@ import React, { useState, useEffect, useRef } from "react";
 import useAxios from "../../utils/axios";
 import Form from "./form";
 import { useNavigate, useParams } from "react-router-dom";
-
-import { getLectureInstance } from "../../services/lectures";
+import { getConferenceInstance } from "../../services/conferences";
 import { getUsers } from "../../services/users";
 import { trackPromise } from "react-promise-tracker";
 
-const EditLecture = () => {
+const EditConference = () => {
   const initialFormData = Object.freeze({
-    topic: "",
-    res_person: "",
-    organisation: "",
-    n_stud: "",
-    n_fac: "",
-    n_ind: "",
+    title: "",
+    conference: "",
+    volume: "",
+    issue: "",
+    n_page: "",
     slug: "",
     f_id: "",
   });
@@ -57,17 +55,16 @@ const EditLecture = () => {
         })
     );
     trackPromise(
-      getLectureInstance(api, id)
+      getConferenceInstance(api, id)
         .then((res) => {
           if (mounted) {
             updateFormData({
               ...formData,
-              ["topic"]: res.data.topic,
-              ["res_person"]: res.data.res_person,
-              ["organisation"]: res.data.organisation,
-              ["n_stud"]: res.data.n_stud,
-              ["n_fac"]: res.data.n_fac,
-              ["n_ind"]: res.data.n_ind,
+              ["title"]: res.data.title,
+              ["conference"]: res.data.conference,
+              ["volume"]: res.data.volume,
+              ["issue"]: res.data.issue,
+              ["n_page"]: res.data.n_page,
               ["slug"]: res.data.slug,
               ["f_id"]: findMatchingUser(res.data.f_id, usersRef.current),
             });
@@ -98,19 +95,18 @@ const EditLecture = () => {
 
   const onSubmit = async (e) => {
     let postData = new FormData();
-    postData.append("topic", formData.topic);
-    postData.append("res_person", formData.res_person);
-    postData.append("organisation", formData.organisation);
-    postData.append("n_stud", formData.n_stud);
-    postData.append("n_fac", formData.n_fac);
-    postData.append("n_ind", formData.n_ind);
+    postData.append("title", formData.title);
+    postData.append("conference", formData.conference);
+    postData.append("volume", formData.volume);
+    postData.append("issue", formData.issue);
+    postData.append("n_page", formData.n_page);
     postData.append("slug", formData.slug);
     postData.append("f_id", formData.f_id);
 
     api
-      .put(`lectures/edit/` + id + "/", postData)
+      .put(`conferences/edit/` + id + "/", postData)
       .then(() => {
-        navigate("/reports/lectures/" + id);
+        navigate("/reports/conferences/" + id);
         // window.location.reload();
       })
       .catch((error) => {
@@ -119,7 +115,7 @@ const EditLecture = () => {
           navigate("/logout");
         } else if (error.response.status === 403) {
           alert("You do not have permission to perform this action!");
-          navigate("/reports/lectures/" + id);
+          navigate("/reports/conferences/" + id);
         } else {
           alert("Error! Please check the values entered for any mistakes....");
         }
@@ -137,4 +133,4 @@ const EditLecture = () => {
   );
 };
 
-export default EditLecture;
+export default EditConference;

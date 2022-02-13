@@ -71,7 +71,7 @@ const CreateLecture = () => {
     api
       .post(`lectures/create/`, postData)
       .then(() => {
-        navigate("/lectures/");
+        navigate("/reports/lectures/");
       })
       .catch((error) => {
         if (error.response.status === 401) {

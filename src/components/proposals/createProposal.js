@@ -69,7 +69,7 @@ const CreateProposal = () => {
     api
       .post(`proposals/create/`, postData)
       .then(() => {
-        navigate("/proposals/");
+        navigate("/reports/proposals/");
       })
       .catch((error) => {
         if (error.response.status === 401) {

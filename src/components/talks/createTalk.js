@@ -72,7 +72,7 @@ const CreateTalk = () => {
     api
       .post(`talks/create/`, postData)
       .then(() => {
-        navigate("/talks/");
+        navigate("/reports/talks/");
       })
       .catch((error) => {
         if (error.response.status === 401) {

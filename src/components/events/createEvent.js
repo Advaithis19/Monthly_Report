@@ -69,7 +69,7 @@ const CreateEvent = () => {
     api
       .post(`events/create/`, postData)
       .then(() => {
-        navigate("/events/");
+        navigate("/reports/events/");
       })
       .catch((error) => {
         if (error.response.status === 401) {

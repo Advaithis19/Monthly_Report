@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import useAxios from "../../utils/axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { findStatusLabel } from "../../constants/statusOptions";
+import { findNatIntLabel } from "../../constants/nat_int";
 
 //MUI
 import Container from "@mui/material/Container";
@@ -13,26 +13,26 @@ import Box from "@mui/material/Box";
 
 import ConfirmDialog from "../../utils/confirmDialog";
 
-const ProposalDetail = () => {
+const ConferenceDetail = () => {
   let navigate = useNavigate();
 
   let api = useAxios();
   api.defaults.xsrfCookieName = "csrftoken";
   api.defaults.xsrfHeaderName = "X-CSRFToken";
 
-  let [proposal, setProposal] = useState(null);
+  let [conference, setConference] = useState(null);
   const { id } = useParams();
   const [confirmOpen, setConfirmOpen] = useState(false);
 
   let goToEdit = () => {
-    navigate("/proposals/edit/" + id);
+    navigate("/conferences/edit/" + id);
   };
 
-  let getProposal = async () => {
+  let getConference = async () => {
     api
-      .get("proposals/" + id)
+      .get("conferences/" + id)
       .then((response) => {
-        setProposal(response.data);
+        setConference(response.data);
       })
       .catch((error) => {
         if (error.response.status === 401) {
@@ -45,14 +45,14 @@ const ProposalDetail = () => {
   };
 
   useEffect(() => {
-    getProposal();
-  }, [setProposal]);
+    getConference();
+  }, [setConference]);
 
-  const deleteProposal = () => {
+  const deleteConference = () => {
     api
-      .delete("proposals/delete/" + id)
+      .delete("conferences/delete/" + id)
       .then(function () {
-        navigate("/proposals");
+        navigate("/conferences");
       })
       .catch((error) => {
         if (error.response.status === 401) {
@@ -60,16 +60,18 @@ const ProposalDetail = () => {
           navigate("/logout");
         } else if (error.response.status === 403) {
           alert("You do not have permission to perform this action!");
-          navigate("/proposals");
+          navigate("/conferences");
         } else {
           alert("Something went wrong! Please logout and try again");
         }
       });
   };
 
-  if (!proposal || proposal.length === 0)
+  if (!conference || conference.length === 0)
     return (
-      <p className="text-xl text-bold">Can not find required proposal, sorry</p>
+      <p className="text-xl text-bold">
+        Can not find required conference, sorry
+      </p>
     );
   return (
     <Container
@@ -83,29 +85,33 @@ const ProposalDetail = () => {
             <table className="border-solid border-1 border-black mx-auto font-sans text-md overflow-auto w-[75%] mb-3">
               <thead className="">
                 <tr className="text-center">
-                  <th colSpan={2}>{proposal.title}</th>
+                  <th colSpan={2}>{conference.title}</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>Submitted to</td>
-                  <td>{proposal.submitted_to}</td>
+                  <td>Venue</td>
+                  <td>{conference.conference}</td>
                 </tr>
                 <tr>
-                  <td>Budgetted amount</td>
-                  <td>{proposal.budg_amt}</td>
+                  <td>Volume #</td>
+                  <td>{conference.volume}</td>
                 </tr>
                 <tr>
-                  <td>Status</td>
-                  <td>{findStatusLabel(proposal.status)}</td>
+                  <td>Issue #</td>
+                  <td>{conference.issue}</td>
                 </tr>
                 <tr>
-                  <td>Principal Investigator</td>
-                  <td>{proposal.PI}</td>
+                  <td>Page #</td>
+                  <td>{conference.n_page}</td>
                 </tr>
                 <tr>
-                  <td>Co-Principal Investigator</td>
-                  <td>{proposal.CO_PI}</td>
+                  <td>National/International</td>
+                  <td>{findNatIntLabel(conference.nat_int)}</td>
+                </tr>
+                <tr>
+                  <td>Faculty Involved</td>
+                  <td>{conference.f_id}</td>
                 </tr>
               </tbody>
             </table>
@@ -135,12 +141,12 @@ const ProposalDetail = () => {
               Delete
             </Button>
             <ConfirmDialog
-              title="Delete Proposal?"
+              title="Delete Conference?"
               open={confirmOpen}
               setOpen={setConfirmOpen}
-              onConfirm={deleteProposal}
+              onConfirm={deleteConference}
             >
-              Are you sure you want to delete this proposal?
+              Are you sure you want to delete this conference?
             </ConfirmDialog>
           </Grid>
         </Grid>
@@ -149,4 +155,4 @@ const ProposalDetail = () => {
   );
 };
 
-export default ProposalDetail;
+export default ConferenceDetail;

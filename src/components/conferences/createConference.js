@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { getUsers } from "../../services/users";
 import { trackPromise } from "react-promise-tracker";
 
-const CreateGrant = () => {
+const CreateConference = () => {
   let api = useAxios();
   api.defaults.xsrfCookieName = "csrftoken";
   api.defaults.xsrfHeaderName = "X-CSRFToken";
@@ -13,13 +13,13 @@ const CreateGrant = () => {
   const navigate = useNavigate();
   const initialFormData = Object.freeze({
     title: "",
-    agency: "",
-    sanc_amt: "",
-    year: 2022,
-    remarks: "",
+    conference: "",
+    volume: "",
+    issue: "",
+    n_page: "",
+    nat_int: "NAT",
     slug: "",
-    PI: "",
-    CO_PI: "",
+    f_id: "",
   });
 
   const [formData, updateFormData] = useState(initialFormData);
@@ -60,18 +60,18 @@ const CreateGrant = () => {
   const onSubmit = async () => {
     let postData = new FormData();
     postData.append("title", formData.title);
-    postData.append("agency", formData.agency);
-    postData.append("sanc_amt", formData.sanc_amt);
-    postData.append("year", formData.year);
-    postData.append("remarks", formData.remarks);
+    postData.append("conference", formData.conference);
+    postData.append("volume", formData.volume);
+    postData.append("issue", formData.issue);
+    postData.append("n_page", formData.n_page);
+    postData.append("nat_int", formData.nat_int);
     postData.append("slug", formData.slug);
-    postData.append("PI", formData.PI);
-    postData.append("CO_PI", formData.CO_PI);
+    postData.append("f_id", formData.f_id);
 
     api
-      .post(`grants/create/`, postData)
+      .post(`conferences/create/`, postData)
       .then(() => {
-        navigate("/reports/grants/");
+        navigate("/reports/conferences/");
       })
       .catch((error) => {
         if (error.response.status === 401) {
@@ -94,4 +94,4 @@ const CreateGrant = () => {
   );
 };
 
-export default CreateGrant;
+export default CreateConference;
