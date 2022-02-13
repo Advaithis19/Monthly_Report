@@ -118,6 +118,13 @@ import MouDetail from "./components/mous/mouDetail";
 import EditMou from "./components/mous/editMou";
 import CreateMou from "./components/mous/createMou";
 
+// memberships
+import FilteredMemberships from "./components/memberships/filteredMemberships";
+import Memberships from "./components/memberships/memberships";
+import MembershipDetail from "./components/memberships/membershipDetail";
+import EditMembership from "./components/memberships/editMembership";
+import CreateMembership from "./components/memberships/createMembership";
+
 import { AuthProvider } from "./context/AuthContext";
 import { AlertProvider } from "./context/AlertContext";
 
@@ -265,6 +272,15 @@ function App() {
                       />
                     </Route>
 
+                    {/* memberships */}
+                    <Route path="memberships/" element={<Outlet />}>
+                      <Route index element={<Memberships />} />
+                      <Route
+                        path="filter/date/:start_date/:end_date"
+                        element={<FilteredMemberships />}
+                      />
+                    </Route>
+
                     {/* publications */}
                     <Route path="publications/" element={<Outlet />}>
                       <Route index element={<Publications />} />
@@ -398,6 +414,20 @@ function App() {
                   <Route path="/mous/:id" element={<MouDetail />} />
                   <Route path="/mous/create" element={<CreateMou />} />
                   <Route path="/mous/edit/:id" element={<EditMou />} />
+
+                  {/* membership crud routes */}
+                  <Route
+                    path="/memberships/:id"
+                    element={<MembershipDetail />}
+                  />
+                  <Route
+                    path="/memberships/create"
+                    element={<CreateMembership />}
+                  />
+                  <Route
+                    path="/memberships/edit/:id"
+                    element={<EditMembership />}
+                  />
                 </Route>
                 <Route path="/profile/:id" element={<Profile />} />
                 <Route path="/register" element={<SignUp />} />
