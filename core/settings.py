@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'lectures',
     'talks',
     'achievements',
+    'conferences',
     'corsheaders',
     'rest_framework_simplejwt.token_blacklist',
     'crispy_forms',

@@ -24,6 +24,7 @@ class Consultancy(models.Model):
     class Meta:
         ordering = ('-date_added',)
         db_table = 'consultancy'
+        verbose_name_plural = 'consultancies'
 
     def __str__(self):
         return self.title

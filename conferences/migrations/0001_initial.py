@@ -14,20 +14,20 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Talk',
+            name='Conference',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('topic', models.CharField(max_length=50, verbose_name='topic')),
-                ('venue', models.CharField(max_length=100, verbose_name='venue')),
-                ('n_stud', models.IntegerField(blank=True, null=True, verbose_name='no. of students')),
-                ('n_fac', models.IntegerField(blank=True, null=True, verbose_name='no. of faculty')),
-                ('n_ind', models.IntegerField(blank=True, null=True, verbose_name='no. from industry')),
-                ('date', models.DateField(verbose_name='date of talk')),
+                ('title', models.CharField(max_length=50, verbose_name='title of publication')),
+                ('conference', models.CharField(max_length=100, verbose_name='conference')),
+                ('volume', models.IntegerField(verbose_name='volume #')),
+                ('issue', models.IntegerField(verbose_name='issue #')),
+                ('n_page', models.IntegerField(verbose_name='page #')),
+                ('nat_int', models.CharField(blank=True, choices=[('NAT', 'National'), ('INT', 'International')], max_length=3, null=True, verbose_name='national/international')),
                 ('slug', models.SlugField(max_length=250)),
                 ('date_added', models.DateField(default=datetime.datetime(2022, 2, 13, 3, 47, 11, 574684, tzinfo=utc), verbose_name='recorded date')),
             ],
             options={
-                'db_table': 'talk',
+                'db_table': 'conference',
                 'ordering': ('-date_added',),
             },
         ),

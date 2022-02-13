@@ -35,4 +35,7 @@ urlpatterns = [
 
     # achievements
     path('achievements/', include('achievements.urls', namespace='achievements')),
+
+    # conferences
+    path('conferences/', include('conferences.urls', namespace='conferences')),
 ]
