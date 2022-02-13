@@ -38,4 +38,7 @@ urlpatterns = [
 
     # conferences
     path('conferences/', include('conferences.urls', namespace='conferences')),
+
+    # patents
+    path('patents/', include('patents.urls', namespace='patents')),
 ]

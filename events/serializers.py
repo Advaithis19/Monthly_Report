@@ -28,7 +28,7 @@ class EventSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         if not user.is_authenticated:
             raise serializers.ValidationError(
-                "You must be logged in to create a grant!")
+                "You must be logged in to create a event!")
 
         if user.is_authenticated and not user.is_active:
             raise serializers.ValidationError(

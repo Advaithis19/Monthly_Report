@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Workshop
+from .models import Patent
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -13,14 +13,13 @@ class UserField(serializers.RelatedField):
         return User.objects.get(id=data)
 
 
-class WorkshopSerializer(serializers.ModelSerializer):
+class PatentSerializer(serializers.ModelSerializer):
 
-    u_id = UserField(queryset=User.objects.all(), many=True)
+    f_id = UserField(queryset=User.objects.all(), many=True)
 
     class Meta:
-        model = Workshop
-        fields = ('id', 'event_name', 'venue', 'slug',
-                  'date', 'u_id')
+        model = Patent
+        fields = ('id', 'title', 'topic', 'status', 'slug', 'f_id')
         # extra_kwargs = {'id': {'read_only': True}}
 
     def validate(self, attrs):
@@ -28,7 +27,7 @@ class WorkshopSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         if not user.is_authenticated:
             raise serializers.ValidationError(
-                "You must be logged in to create a workshop!")
+                "You must be logged in to create a patent!")
 
         if user.is_authenticated and not user.is_active:
             raise serializers.ValidationError(
