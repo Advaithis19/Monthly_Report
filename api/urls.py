@@ -49,4 +49,8 @@ urlpatterns = [
     # books
     path('books/', include('books.urls',
                            namespace='books')),
+
+    # industrial_visits
+    path('industrial_visits/', include('industrial_visits.urls',
+                                       namespace='industrial_visits')),
 ]

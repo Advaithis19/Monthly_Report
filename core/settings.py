@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'patents',
     'activities',
     'books',
+    'industrial_visits',
     'corsheaders',
     'rest_framework_simplejwt.token_blacklist',
     'crispy_forms',
