@@ -10,6 +10,7 @@ import * as Yup from "yup";
 import { Form } from "react-bootstrap";
 
 // MUI
+import Grid from "@mui/material/Grid";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
@@ -101,49 +102,54 @@ const CustomForm = ({
             </small>
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicTopic">
-            <TextField
-              // basic
-              type="text"
-              name="topic"
-              value={formData.topic}
-              //mui
-              label="Topic"
-              variant="outlined"
-              fullWidth
-              //hook form
-              {...register("topic")}
-              //to override onChange
-              onChange={handleChange}
-            />
-            <small className="text-danger">
-              {errors.topic ? errors.topic.message : <span></span>}
-            </small>
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formBasicStatus">
-            <FormControl fullWidth>
-              <InputLabel id="status-select-label">Status</InputLabel>
-              <Select
-                // basic
-                name="status"
-                value={formData.status}
-                onChange={handleStatusSelect}
-                // mui
-                labelId="status-select-label"
-                label="Status"
-                inputProps={{ MenuProps: { disableScrollLock: true } }}
-              >
-                {status_options.map((status, index) => {
-                  return (
-                    <MenuItem key={index} value={status.short}>
-                      {status.full}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </FormControl>
-          </Form.Group>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={6}>
+              <Form.Group className="mb-3" controlId="formBasicTopic">
+                <TextField
+                  // basic
+                  type="text"
+                  name="topic"
+                  value={formData.topic}
+                  //mui
+                  label="Topic"
+                  variant="outlined"
+                  fullWidth
+                  //hook form
+                  {...register("topic")}
+                  //to override onChange
+                  onChange={handleChange}
+                />
+                <small className="text-danger">
+                  {errors.topic ? errors.topic.message : <span></span>}
+                </small>
+              </Form.Group>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Form.Group className="mb-3" controlId="formBasicStatus">
+                <FormControl fullWidth>
+                  <InputLabel id="status-select-label">Status</InputLabel>
+                  <Select
+                    // basic
+                    name="status"
+                    value={formData.status}
+                    onChange={handleStatusSelect}
+                    // mui
+                    labelId="status-select-label"
+                    label="Status"
+                    inputProps={{ MenuProps: { disableScrollLock: true } }}
+                  >
+                    {status_options.map((status, index) => {
+                      return (
+                        <MenuItem key={index} value={status.short}>
+                          {status.full}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
+              </Form.Group>
+            </Grid>
+          </Grid>
 
           <Form.Group className="mb-3" controlId="formBasicFacultyInvolved">
             <FormControl fullWidth>

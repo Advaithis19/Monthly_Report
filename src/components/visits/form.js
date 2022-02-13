@@ -10,6 +10,7 @@ import * as Yup from "yup";
 import { Form } from "react-bootstrap";
 
 // MUI
+import Grid from "@mui/material/Grid";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
@@ -121,29 +122,54 @@ const CustomForm = ({
             </small>
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicSemester">
-            <FormControl fullWidth>
-              <InputLabel id="semester-select-label">Semester</InputLabel>
-              <Select
-                // basic
-                name="semester"
-                value={formData.semester}
-                onChange={handleSemesterSelect}
-                // mui
-                labelId="semester-select-label"
-                label="Semester"
-                inputProps={{ MenuProps: { disableScrollLock: true } }}
-              >
-                {semester_options.map((semester, index) => {
-                  return (
-                    <MenuItem key={index} value={semester.short}>
-                      {semester.full}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </FormControl>
-          </Form.Group>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={6}>
+              <Form.Group className="mb-3" controlId="formBasicSemester">
+                <FormControl fullWidth>
+                  <InputLabel id="semester-select-label">Semester</InputLabel>
+                  <Select
+                    // basic
+                    name="semester"
+                    value={formData.semester}
+                    onChange={handleSemesterSelect}
+                    // mui
+                    labelId="semester-select-label"
+                    label="Semester"
+                    inputProps={{ MenuProps: { disableScrollLock: true } }}
+                  >
+                    {semester_options.map((semester, index) => {
+                      return (
+                        <MenuItem key={index} value={semester.short}>
+                          {semester.full}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
+              </Form.Group>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Form.Group className="mb-3" controlId="formBasicStudents">
+                <TextField
+                  // basic
+                  type="text"
+                  name="n_stud"
+                  value={formData.n_stud}
+                  //mui
+                  label="No. of Students"
+                  variant="outlined"
+                  fullWidth
+                  //hook form
+                  {...register("n_stud")}
+                  //to override onChange
+                  onChange={handleChange}
+                />
+                <small className="text-danger">
+                  {errors.n_stud ? errors.n_stud.message : <span></span>}
+                </small>
+              </Form.Group>
+            </Grid>
+          </Grid>
 
           <Form.Group className="mb-3" controlId="formBasicFacultyInvolved">
             <FormControl fullWidth>

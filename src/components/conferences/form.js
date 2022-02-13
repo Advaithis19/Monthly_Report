@@ -1,5 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import nat_int_options from "../../constants/nat_int";
 
 //yup
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -39,6 +40,13 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
     updateFormData({
       ...formData,
       [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleNatIntSelect = (e) => {
+    updateFormData({
+      ...formData,
+      ["nat_int"]: e.target.value,
     });
   };
 
@@ -85,25 +93,61 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
             </small>
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicConference">
-            <TextField
-              // basic
-              type="text"
-              name="conference"
-              value={formData.conference}
-              //mui
-              label="Conference"
-              variant="outlined"
-              fullWidth
-              //hook form
-              {...register("conference")}
-              //to override onChange
-              onChange={handleChange}
-            />
-            <small className="text-danger">
-              {errors.conference ? errors.conference.message : <span></span>}
-            </small>
-          </Form.Group>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={6}>
+              <Form.Group className="mb-3" controlId="formBasicConference">
+                <TextField
+                  // basic
+                  type="text"
+                  name="conference"
+                  value={formData.conference}
+                  //mui
+                  label="Conference"
+                  variant="outlined"
+                  fullWidth
+                  //hook form
+                  {...register("conference")}
+                  //to override onChange
+                  onChange={handleChange}
+                />
+                <small className="text-danger">
+                  {errors.conference ? (
+                    errors.conference.message
+                  ) : (
+                    <span></span>
+                  )}
+                </small>
+              </Form.Group>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Form.Group className="mb-3" controlId="formBasicNatInt">
+                <FormControl fullWidth>
+                  <InputLabel id="nat_int-select-label">
+                    National/International
+                  </InputLabel>
+                  <Select
+                    // basic
+                    name="nat_int"
+                    value={formData.nat_int}
+                    onChange={handleNatIntSelect}
+                    // mui
+                    labelId="nat_int-select-label"
+                    label="National/International"
+                    inputProps={{ MenuProps: { disableScrollLock: true } }}
+                  >
+                    {nat_int_options.map((nat_int, index) => {
+                      return (
+                        <MenuItem key={index} value={nat_int.short}>
+                          {nat_int.full}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
+              </Form.Group>
+            </Grid>
+          </Grid>
+
           <Grid container spacing={2}>
             <Grid item sm={12} md={4}>
               <Form.Group className="mb-3" controlId="formBasicVolume">

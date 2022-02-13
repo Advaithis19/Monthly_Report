@@ -98,7 +98,7 @@ const WorkshopDetail = () => {
                   <td>Faculty involved</td>
                   <td>
                     <div>
-                      {workshop.u_id.map((faculty, index) => {
+                      {workshop.f_id.map((faculty, index) => {
                         return <div key={index}>{faculty}</div>;
                       })}
                     </div>

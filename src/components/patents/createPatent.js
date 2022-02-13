@@ -14,7 +14,7 @@ const CreatePatent = () => {
   const initialFormData = Object.freeze({
     title: "",
     topic: "",
-    status: "",
+    status: "ON",
   });
 
   const [formData, updateFormData] = useState(initialFormData);

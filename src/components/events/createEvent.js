@@ -62,7 +62,7 @@ const CreateEvent = () => {
     let postData = {
       ...formData,
       date: dayjs(date).format("YYYY-MM-DD"),
-      u_id: facultySelected.map((selectedObj) => selectedObj.id),
+      f_id: facultySelected.map((selectedObj) => selectedObj.id),
     };
 
     api

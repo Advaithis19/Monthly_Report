@@ -102,7 +102,7 @@ const MouDetail = () => {
                   <td>Faculty involved</td>
                   <td>
                     <div>
-                      {mou.u_id.map((faculty, index) => {
+                      {mou.f_id.map((faculty, index) => {
                         return <div key={index}>{faculty}</div>;
                       })}
                     </div>

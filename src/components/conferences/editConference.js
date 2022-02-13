@@ -13,6 +13,7 @@ const EditConference = () => {
     volume: "",
     issue: "",
     n_page: "",
+    nat_int: "",
     f_id: "",
   });
 
@@ -63,6 +64,7 @@ const EditConference = () => {
               ["conference"]: res.data.conference,
               ["volume"]: res.data.volume,
               ["issue"]: res.data.issue,
+              ["nat_int"]: res.data.nat_int,
               ["n_page"]: res.data.n_page,
               ["f_id"]: findMatchingUser(res.data.f_id, usersRef.current),
             });
@@ -97,6 +99,7 @@ const EditConference = () => {
     postData.append("conference", formData.conference);
     postData.append("volume", formData.volume);
     postData.append("issue", formData.issue);
+    postData.append("nat_int", formData.nat_int);
     postData.append("n_page", formData.n_page);
     postData.append("f_id", formData.f_id);
 

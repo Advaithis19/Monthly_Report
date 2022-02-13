@@ -63,7 +63,7 @@ const EditWorkshop = () => {
             });
             setDate(dayjs(res.data.date));
             setFacultySelected(
-              findMatchingUsers(res.data.u_id, usersRef.current)
+              findMatchingUsers(res.data.f_id, usersRef.current)
             );
           }
         })
@@ -100,7 +100,7 @@ const EditWorkshop = () => {
     let postData = {
       ...formData,
       date: dayjs(date).format("YYYY-MM-DD"),
-      u_id: facultySelected.map((selectedObj) => selectedObj.id),
+      f_id: facultySelected.map((selectedObj) => selectedObj.id),
     };
 
     api

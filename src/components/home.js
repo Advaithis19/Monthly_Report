@@ -102,7 +102,7 @@ const Home = () => {
       <div className="w-[60%] h-[0.25px] bg-gray-400 mx-auto my-5" />
 
       {jwt_decode(JSON.parse(localStorage.getItem("authTokens")).access)
-        .is_teacher ? (
+        .is_teacher && !(pathList[1] === "publications") ? (
         <Grid container spacing={2}>
           <Grid item xs={12} md={6} className="text-right">
             <Link to={"/reports/" + pathList[1]}>

@@ -11,7 +11,7 @@ const EditProposal = () => {
     title: "",
     submitted_to: "",
     budg_amt: "",
-    status: "ON",
+    status: "",
     PI: "",
     CO_PI: "",
   });

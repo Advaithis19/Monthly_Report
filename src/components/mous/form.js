@@ -162,17 +162,17 @@ const CustomForm = ({
 
           <Form.Group className="mb-3" controlId="formBasicFacultyInvolved">
             <FormControl fullWidth>
-              <InputLabel id="u_id-select-label">Faculty Involved</InputLabel>
+              <InputLabel id="f_id-select-label">Faculty Involved</InputLabel>
               <Select
                 // basic
-                name="u_id"
+                name="f_id"
                 value={facultySelected}
-                {...register("u_id")}
+                {...register("f_id")}
                 //overriding onChange
                 onChange={handleFacultySelect}
                 // mui
                 multiple
-                labelId="u_id-select-label"
+                labelId="f_id-select-label"
                 label="Faculty Involved"
                 renderValue={(selected) => {
                   let selectedItems = selected.map(
@@ -193,7 +193,7 @@ const CustomForm = ({
               </Select>
             </FormControl>
             <small className="text-danger">
-              {errors.u_id ? errors.u_id.message : <span></span>}
+              {errors.f_id ? errors.f_id.message : <span></span>}
             </small>
           </Form.Group>
 

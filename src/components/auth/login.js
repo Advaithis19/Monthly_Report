@@ -4,7 +4,6 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 
 import AuthContext from "../../context/AuthContext";
-// import AlertContext from "../../context/AlertContext";
 
 // Bootstrap UI
 import { Form } from "react-bootstrap";
@@ -24,8 +23,6 @@ import * as Yup from "yup";
 const SignIn = () => {
   //context api consumption - declaration
   let { setAuthTokens } = useContext(AuthContext);
-
-  // let { setShowAlert, setAlertProps } = useContext(AlertContext);
 
   // form validation rules
   const validationSchema = Yup.object().shape({
@@ -73,13 +70,6 @@ const SignIn = () => {
       .then((response) => {
         localStorage.setItem("authTokens", JSON.stringify(response.data));
         setAuthTokens(response.data);
-        // setAlertProps({
-        //   type: "success",
-        //   title: "Login successful!",
-        //   message: "",
-        //   action: "",
-        // });
-        // setShowAlert(true);
         navigate("/reports/grants");
       })
       .catch((error) => {

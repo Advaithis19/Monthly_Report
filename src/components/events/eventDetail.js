@@ -110,7 +110,7 @@ const EventDetail = () => {
                   <td>Faculty involved</td>
                   <td>
                     <div>
-                      {event.u_id.map((faculty, index) => {
+                      {event.f_id.map((faculty, index) => {
                         return <div key={index}>{faculty}</div>;
                       })}
                     </div>
