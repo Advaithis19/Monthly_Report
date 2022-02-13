@@ -11,11 +11,10 @@ class Talk(models.Model):
 
     topic = models.CharField("topic", max_length=50)
     venue = models.CharField("venue", max_length=100)
-    n_stud = models.IntegerField("no. of students", null=True, blank=True)
-    n_fac = models.IntegerField("no. of faculty", null=True, blank=True)
-    n_ind = models.IntegerField("no. from industry", null=True, blank=True)
+    n_stud = models.IntegerField("no. of students", null=True)
+    n_fac = models.IntegerField("no. of faculty", null=True)
+    n_ind = models.IntegerField("no. from industry", null=True)
     date = models.DateField("date of talk")
-    slug = models.SlugField(max_length=250)
     date_added = models.DateField("recorded date", default=timezone.now())
 
     f_id = models.ForeignKey(User, on_delete=CASCADE,

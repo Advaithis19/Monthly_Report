@@ -26,8 +26,8 @@ class ProposalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Proposal
-        fields = ('id', 'title', 'submitted_to', 'budg_amt', 'status', 'slug',
-                  'PI', 'CO_PI')
+        fields = ('id', 'title', 'submitted_to',
+                  'budg_amt', 'status', 'PI', 'CO_PI')
         # extra_kwargs = {'id': {'read_only': True}}
 
     def validate(self, attrs):

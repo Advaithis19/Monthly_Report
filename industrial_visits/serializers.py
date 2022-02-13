@@ -20,7 +20,7 @@ class Industrial_visitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Industrial_visit
         fields = ('id', 'purpose', 'industry',
-                  'semester', 'n_stud', 'slug', 'f_id')
+                  'semester', 'n_stud', 'f_id')
         # extra_kwargs = {'id': {'read_only': True}}
 
     def validate(self, attrs):

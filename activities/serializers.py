@@ -19,8 +19,7 @@ class ActivitySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Activity
-        fields = ('id', 'activity', 'date', 'slug',
-                  'f_id')
+        fields = ('id', 'activity', 'date', 'f_id')
         # extra_kwargs = {'id': {'read_only': True}}
 
     def validate(self, attrs):

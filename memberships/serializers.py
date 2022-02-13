@@ -20,7 +20,7 @@ class MembershipSerializer(serializers.ModelSerializer):
     class Meta:
         model = Membership
         fields = ('id', 'membership', 'association',
-                  'term', 'slug', 'f_id')
+                  'term', 'f_id')
         # extra_kwargs = {'id': {'read_only': True}}
 
     def validate(self, attrs):

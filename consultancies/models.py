@@ -14,7 +14,6 @@ class Consultancy(models.Model):
         "agency funding consultancy", max_length=50)
     rec_amt = models.DecimalField(
         "sanctioned amount", max_digits=15, decimal_places=2)
-    slug = models.SlugField(max_length=250)
     date_added = models.DateField("recorded date", default=timezone.now())
 
     f_id = models.ForeignKey(User, on_delete=CASCADE,

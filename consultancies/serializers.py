@@ -19,8 +19,7 @@ class ConsultancySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Consultancy
-        fields = ('id', 'title', 'fund_agency', 'rec_amt', 'slug',
-                  'f_id')
+        fields = ('id', 'title', 'fund_agency', 'rec_amt', 'f_id')
         # extra_kwargs = {'id': {'read_only': True}}
 
     def validate(self, attrs):

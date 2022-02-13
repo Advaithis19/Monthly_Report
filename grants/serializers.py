@@ -26,8 +26,8 @@ class GrantSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Grant
-        fields = ('id', 'title', 'agency', 'sanc_amt', 'year', 'remarks', 'slug',
-                  'PI', 'CO_PI')
+        fields = ('id', 'title', 'agency', 'sanc_amt',
+                  'year', 'remarks', 'PI', 'CO_PI')
         # extra_kwargs = {'id': {'read_only': True}}
 
     def validate(self, attrs):

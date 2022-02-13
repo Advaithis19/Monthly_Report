@@ -19,7 +19,7 @@ class BookSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Book
-        fields = ('id', 'n_isbn', 'name', 'publisher', 'slug', 'f_id')
+        fields = ('id', 'n_isbn', 'name', 'publisher', 'f_id')
         # extra_kwargs = {'id': {'read_only': True}}
 
     def validate(self, attrs):

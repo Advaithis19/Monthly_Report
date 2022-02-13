@@ -18,7 +18,7 @@ class MouUserWritePermission(BasePermission):
         if request.method in SAFE_METHODS:
             return True
         print(request.user)
-        return request.user in obj.u_id.all()
+        return request.user in obj.f_id.all()
 
 
 class MouList(generics.ListAPIView):
@@ -32,7 +32,7 @@ class MouList(generics.ListAPIView):
             department = user.department
 
             if user.is_teacher:
-                mou_list = [{'mou_id': e.id, 'faculty_involved': [f for f in e.u_id.all()]}
+                mou_list = [{'mou_id': e.id, 'faculty_involved': [f for f in e.f_id.all()]}
                             for e in Mou.objects.all()]
                 res_qs = Mou.objects.none()
 
@@ -44,7 +44,7 @@ class MouList(generics.ListAPIView):
 
             if user.is_admin:
                 users_in_dept = User.objects.filter(department=department)
-                mou_list = [{'mou_id': e.id, 'faculty_involved': [f for f in e.u_id.all()]}
+                mou_list = [{'mou_id': e.id, 'faculty_involved': [f for f in e.f_id.all()]}
                             for e in Mou.objects.all()]
                 res_qs = Mou.objects.none()
 
@@ -121,7 +121,7 @@ class MouListDateFilter(generics.ListAPIView):
             end_date_range = self.kwargs['end_date']
 
             if user.is_teacher:
-                mou_list = [{'mou_id': e.id, 'faculty_involved': [f for f in e.u_id.all()]}
+                mou_list = [{'mou_id': e.id, 'faculty_involved': [f for f in e.f_id.all()]}
                             for e in Mou.objects.all()]
                 res_qs = Mou.objects.none()
 
@@ -133,7 +133,7 @@ class MouListDateFilter(generics.ListAPIView):
 
             if user.is_admin:
                 users_in_dept = User.objects.filter(department=department)
-                mou_list = [{'mou_id': e.id, 'faculty_involved': [f for f in e.u_id.all()]}
+                mou_list = [{'mou_id': e.id, 'faculty_involved': [f for f in e.f_id.all()]}
                             for e in Mou.objects.all()]
                 res_qs = Mou.objects.none()
 

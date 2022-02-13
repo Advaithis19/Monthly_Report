@@ -6,4 +6,3 @@ from . import models
 class GrantAdmin(admin.ModelAdmin):
     list_display = ('title', 'agency', 'sanc_amt',
                     'year', 'PI', 'CO_PI', 'date_added')
-    prepopulated_fields = {'slug': ('title',), }

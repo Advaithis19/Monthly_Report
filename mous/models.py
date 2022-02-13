@@ -11,19 +11,18 @@ class Mou(models.Model):
     mod_col = models.CharField("mode of collaboration", max_length=25)
     validity = models.IntegerField("validity")
     date = models.DateField("date of mou")
-    slug = models.SlugField(max_length=250)
     date_added = models.DateField("recorded date", default=timezone.now())
 
-    u_id = models.ManyToManyField(
+    f_id = models.ManyToManyField(
         User, verbose_name="faculty involved", related_name='mou_faculty_involved')
 
     class Meta:
         ordering = ('-date_added',)
-        db_table = 'mous'
+        db_table = 'mou'
         verbose_name_plural = 'MoUs'
 
     def get_faculty(self):
-        return ",".join([str(p) for p in self.u_id.all()])
+        return ",".join([str(p) for p in self.f_id.all()])
 
     def __str__(self):
         return self.organisation

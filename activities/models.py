@@ -11,7 +11,6 @@ class Activity(models.Model):
 
     activity = models.CharField("activity", max_length=100)
     date = models.DateField("date of activity")
-    slug = models.SlugField(max_length=250)
     date_added = models.DateField("recorded date", default=timezone.now())
 
     f_id = models.ForeignKey(User, on_delete=CASCADE,

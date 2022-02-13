@@ -10,7 +10,6 @@ class Book(models.Model):
     n_isbn = models.IntegerField("ISBN #", unique=True)
     name = models.CharField("name", max_length=50)
     publisher = models.CharField("publisher", max_length=50)
-    slug = models.SlugField(max_length=250)
     date_added = models.DateField("recorded date", default=timezone.now())
 
     f_id = models.ManyToManyField(

@@ -17,8 +17,7 @@ class Industrial_visit(models.Model):
                                        MinValueValidator(1)
                                    ]
                                    )
-    n_stud = models.IntegerField("no. of students", null=True, blank=True)
-    slug = models.SlugField(max_length=250)
+    n_stud = models.IntegerField("no. of students", null=True)
     date_added = models.DateField("recorded date", default=timezone.now())
 
     f_id = models.ManyToManyField(

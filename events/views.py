@@ -18,7 +18,7 @@ class EventUserWritePermission(BasePermission):
         if request.method in SAFE_METHODS:
             return True
         print(request.user)
-        return request.user in obj.u_id.all()
+        return request.user in obj.f_id.all()
 
 
 class EventList(generics.ListAPIView):
@@ -32,7 +32,7 @@ class EventList(generics.ListAPIView):
             department = user.department
 
             if user.is_teacher:
-                event_list = [{'event_id': e.id, 'faculty_involved': [f for f in e.u_id.all()]}
+                event_list = [{'event_id': e.id, 'faculty_involved': [f for f in e.f_id.all()]}
                               for e in Event.objects.all()]
                 res_qs = Event.objects.none()
 
@@ -44,7 +44,7 @@ class EventList(generics.ListAPIView):
 
             if user.is_admin:
                 users_in_dept = User.objects.filter(department=department)
-                event_list = [{'event_id': e.id, 'faculty_involved': [f for f in e.u_id.all()]}
+                event_list = [{'event_id': e.id, 'faculty_involved': [f for f in e.f_id.all()]}
                               for e in Event.objects.all()]
                 res_qs = Event.objects.none()
 
@@ -121,7 +121,7 @@ class EventListDateFilter(generics.ListAPIView):
             end_date_range = self.kwargs['end_date']
 
             if user.is_teacher:
-                event_list = [{'event_id': e.id, 'faculty_involved': [f for f in e.u_id.all()]}
+                event_list = [{'event_id': e.id, 'faculty_involved': [f for f in e.f_id.all()]}
                               for e in Event.objects.all()]
                 res_qs = Event.objects.none()
 
@@ -133,7 +133,7 @@ class EventListDateFilter(generics.ListAPIView):
 
             if user.is_admin:
                 users_in_dept = User.objects.filter(department=department)
-                event_list = [{'event_id': e.id, 'faculty_involved': [f for f in e.u_id.all()]}
+                event_list = [{'event_id': e.id, 'faculty_involved': [f for f in e.f_id.all()]}
                               for e in Event.objects.all()]
                 res_qs = Event.objects.none()
 

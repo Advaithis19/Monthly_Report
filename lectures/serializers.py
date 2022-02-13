@@ -19,8 +19,8 @@ class LectureSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Lecture
-        fields = ('id', 'topic', 'res_person', 'organisation', 'n_stud', 'n_fac', 'n_ind', 'slug',
-                  'f_id')
+        fields = ('id', 'topic', 'res_person', 'organisation',
+                  'n_stud', 'n_fac', 'n_ind', 'f_id')
         # extra_kwargs = {'id': {'read_only': True}}
 
     def validate(self, attrs):

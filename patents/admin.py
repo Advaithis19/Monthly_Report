@@ -5,4 +5,3 @@ from . import models
 @admin.register(models.Patent)
 class PatentAdmin(admin.ModelAdmin):
     list_display = ('title', 'topic', 'status', 'get_faculty')
-    prepopulated_fields = {'slug': ('title',), }

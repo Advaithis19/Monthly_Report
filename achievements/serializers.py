@@ -19,8 +19,7 @@ class AchievementSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Achievement
-        fields = ('id', 'title', 'organisation', 'slug',
-                  'f_id')
+        fields = ('id', 'title', 'organisation', 'f_id')
         # extra_kwargs = {'id': {'read_only': True}}
 
     def validate(self, attrs):

@@ -15,12 +15,12 @@ class UserField(serializers.RelatedField):
 
 class EventSerializer(serializers.ModelSerializer):
 
-    u_id = UserField(queryset=User.objects.all(), many=True)
+    f_id = UserField(queryset=User.objects.all(), many=True)
 
     class Meta:
         model = Event
-        fields = ('id', 'title', 'venue', 'n_stud', 'n_fac', 'n_ind', 'slug',
-                  'date', 'u_id')
+        fields = ('id', 'title', 'venue', 'n_stud',
+                  'n_fac', 'n_ind', 'date', 'f_id')
         # extra_kwargs = {'id': {'read_only': True}}
 
     def validate(self, attrs):

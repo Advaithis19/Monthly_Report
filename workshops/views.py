@@ -17,7 +17,7 @@ class WorkshopUserWritePermission(BasePermission):
         if request.method in SAFE_METHODS:
             return True
         print(request.user)
-        return request.user in obj.u_id.all()
+        return request.user in obj.f_id.all()
 
 
 class WorkshopList(generics.ListAPIView):
@@ -31,7 +31,7 @@ class WorkshopList(generics.ListAPIView):
             department = user.department
 
             if user.is_teacher:
-                workshop_list = [{'workshop_id': e.id, 'faculty_involved': [f for f in e.u_id.all()]}
+                workshop_list = [{'workshop_id': e.id, 'faculty_involved': [f for f in e.f_id.all()]}
                                  for e in Workshop.objects.all()]
                 res_qs = Workshop.objects.none()
 
@@ -43,7 +43,7 @@ class WorkshopList(generics.ListAPIView):
 
             if user.is_admin:
                 users_in_dept = User.objects.filter(department=department)
-                workshop_list = [{'workshop_id': e.id, 'faculty_involved': [f for f in e.u_id.all()]}
+                workshop_list = [{'workshop_id': e.id, 'faculty_involved': [f for f in e.f_id.all()]}
                                  for e in Workshop.objects.all()]
                 res_qs = Workshop.objects.none()
 
@@ -120,7 +120,7 @@ class WorkshopListDateFilter(generics.ListAPIView):
             end_date_range = self.kwargs['end_date']
 
             if user.is_teacher:
-                workshop_list = [{'workshop_id': e.id, 'faculty_involved': [f for f in e.u_id.all()]}
+                workshop_list = [{'workshop_id': e.id, 'faculty_involved': [f for f in e.f_id.all()]}
                                  for e in Workshop.objects.all()]
                 res_qs = Workshop.objects.none()
 
@@ -132,7 +132,7 @@ class WorkshopListDateFilter(generics.ListAPIView):
 
             if user.is_admin:
                 users_in_dept = User.objects.filter(department=department)
-                workshop_list = [{'workshop_id': e.id, 'faculty_involved': [f for f in e.u_id.all()]}
+                workshop_list = [{'workshop_id': e.id, 'faculty_involved': [f for f in e.f_id.all()]}
                                  for e in Workshop.objects.all()]
                 res_qs = Workshop.objects.none()
 

@@ -6,4 +6,3 @@ from . import models
 class ProposalAdmin(admin.ModelAdmin):
     list_display = ('title', 'submitted_to', 'budg_amt',
                     'status', 'PI', 'CO_PI', 'date_added')
-    prepopulated_fields = {'slug': ('title',), }

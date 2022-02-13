@@ -28,9 +28,7 @@ class Proposal(models.Model):
                               max_length=3,
                               choices=status_list,
                               null=True,
-                              blank=True
                               )
-    slug = models.SlugField(max_length=250)
 
     date_added = models.DateField("recorded date", default=timezone.now())
 

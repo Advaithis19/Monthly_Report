@@ -19,7 +19,6 @@ class Grant(models.Model):
         MinValueValidator(2022)
     ])
     remarks = models.CharField("additional remarks", max_length=50, null=True)
-    slug = models.SlugField(max_length=250)
     date_added = models.DateField("recorded date", default=timezone.now())
 
     PI = models.ForeignKey(User, on_delete=CASCADE,

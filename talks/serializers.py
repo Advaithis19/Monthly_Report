@@ -19,8 +19,8 @@ class TalkSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Talk
-        fields = ('id', 'topic', 'venue', 'n_stud', 'n_fac', 'n_ind', 'date', 'slug',
-                  'f_id')
+        fields = ('id', 'topic', 'venue', 'n_stud',
+                  'n_fac', 'n_ind', 'date', 'f_id')
         # extra_kwargs = {'id': {'read_only': True}}
 
     def validate(self, attrs):

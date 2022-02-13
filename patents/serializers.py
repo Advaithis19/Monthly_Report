@@ -19,7 +19,7 @@ class PatentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Patent
-        fields = ('id', 'title', 'topic', 'status', 'slug', 'f_id')
+        fields = ('id', 'title', 'topic', 'status', 'f_id')
         # extra_kwargs = {'id': {'read_only': True}}
 
     def validate(self, attrs):

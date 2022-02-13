@@ -9,14 +9,13 @@ class Event(models.Model):
 
     title = models.CharField("title", unique=True, max_length=50)
     venue = models.CharField("venue of event", max_length=100)
-    n_stud = models.IntegerField("number of students", null=True, blank=True)
-    n_fac = models.IntegerField("number of faculty", null=True, blank=True)
-    n_ind = models.IntegerField("number from industry", null=True, blank=True)
-    slug = models.SlugField(max_length=250)
+    n_stud = models.IntegerField("number of students", null=True)
+    n_fac = models.IntegerField("number of faculty", null=True)
+    n_ind = models.IntegerField("number from industry", null=True)
     date = models.DateField("date of event")
     date_added = models.DateField("recorded date", default=timezone.now())
 
-    u_id = models.ManyToManyField(
+    f_id = models.ManyToManyField(
         User, verbose_name="faculty involved", related_name='faculty_involved')
 
     class Meta:
@@ -24,7 +23,7 @@ class Event(models.Model):
         db_table = 'event'
 
     def get_faculty(self):
-        return ",".join([str(p) for p in self.u_id.all()])
+        return ",".join([str(p) for p in self.f_id.all()])
 
     def __str__(self):
         return self.title

@@ -11,7 +11,6 @@ class Achievement(models.Model):
 
     title = models.CharField("title", max_length=50)
     organisation = models.CharField("organisation", max_length=50)
-    slug = models.SlugField(max_length=250)
     date_added = models.DateField("recorded date", default=timezone.now())
 
     f_id = models.ForeignKey(User, on_delete=CASCADE,

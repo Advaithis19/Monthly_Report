@@ -26,8 +26,6 @@ class Patent(models.Model):
                               null=True,
                               blank=True
                               )
-
-    slug = models.SlugField(max_length=250)
     date_added = models.DateField("recorded date", default=timezone.now())
 
     f_id = models.ManyToManyField(

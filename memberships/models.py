@@ -9,8 +9,7 @@ class Membership(models.Model):
 
     membership = models.CharField("membership", max_length=50)
     association = models.CharField("association", max_length=50)
-    term = models.IntegerField("term of membership", null=True, blank=True)
-    slug = models.SlugField(max_length=250)
+    term = models.IntegerField("term of membership", null=True)
     date_added = models.DateField("recorded date", default=timezone.now())
 
     f_id = models.ManyToManyField(
@@ -18,7 +17,7 @@ class Membership(models.Model):
 
     class Meta:
         ordering = ('-date_added',)
-        db_table = 'memberships'
+        db_table = 'membership'
 
     def get_faculty(self):
         return ",".join([str(p) for p in self.f_id.all()])

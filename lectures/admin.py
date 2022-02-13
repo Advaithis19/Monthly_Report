@@ -6,4 +6,3 @@ from . import models
 class LectureAdmin(admin.ModelAdmin):
     list_display = ('topic', 'res_person', 'organisation',
                     'n_stud', 'n_fac', 'n_ind', 'f_id', 'date_added')
-    prepopulated_fields = {'slug': ('topic',), }

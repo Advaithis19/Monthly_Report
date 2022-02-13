@@ -19,8 +19,8 @@ class ConferenceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Conference
-        fields = ('id', 'title', 'conference', 'volume', 'issue', 'n_page', 'nat_int', 'slug',
-                  'f_id')
+        fields = ('id', 'title', 'conference', 'volume',
+                  'issue', 'n_page', 'nat_int', 'f_id')
         # extra_kwargs = {'id': {'read_only': True}}
 
     def validate(self, attrs):

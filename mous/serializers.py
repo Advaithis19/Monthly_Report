@@ -15,12 +15,12 @@ class UserField(serializers.RelatedField):
 
 class MouSerializer(serializers.ModelSerializer):
 
-    u_id = UserField(queryset=User.objects.all(), many=True)
+    f_id = UserField(queryset=User.objects.all(), many=True)
 
     class Meta:
         model = Mou
         fields = ('id', 'organisation', 'mod_col',
-                  'validity', 'date', 'slug', 'u_id')
+                  'validity', 'date', 'f_id')
         # extra_kwargs = {'id': {'read_only': True}}
 
     def validate(self, attrs):
