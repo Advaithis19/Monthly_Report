@@ -16,7 +16,6 @@ const CreateMou = () => {
     organisation: "",
     mod_col: "",
     validity: "",
-    slug: "",
   });
 
   const [formData, updateFormData] = useState(initialFormData);

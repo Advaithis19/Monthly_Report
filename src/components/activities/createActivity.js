@@ -14,7 +14,6 @@ const CreateActivity = () => {
   const navigate = useNavigate();
   const initialFormData = Object.freeze({
     activity: "",
-    slug: "",
     f_id: "",
   });
 
@@ -57,7 +56,6 @@ const CreateActivity = () => {
   const onSubmit = async () => {
     let postData = new FormData();
     postData.append("activity", formData.activity);
-    postData.append("slug", formData.slug);
     postData.append("date", dayjs(date).format("YYYY-MM-DD"));
     postData.append("f_id", formData.f_id);
 

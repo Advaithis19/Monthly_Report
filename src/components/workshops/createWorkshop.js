@@ -16,7 +16,6 @@ const CreateWorkshop = () => {
   const initialFormData = Object.freeze({
     event_name: "",
     venue: "",
-    slug: "",
   });
 
   const [formData, updateFormData] = useState(initialFormData);

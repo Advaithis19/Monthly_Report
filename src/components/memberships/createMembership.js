@@ -15,7 +15,6 @@ const CreateMembership = () => {
     membership: "",
     association: "",
     term: "",
-    slug: "",
   });
 
   const [formData, updateFormData] = useState(initialFormData);

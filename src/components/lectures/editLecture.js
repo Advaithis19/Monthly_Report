@@ -15,7 +15,6 @@ const EditLecture = () => {
     n_stud: "",
     n_fac: "",
     n_ind: "",
-    slug: "",
     f_id: "",
   });
 
@@ -68,7 +67,6 @@ const EditLecture = () => {
               ["n_stud"]: res.data.n_stud,
               ["n_fac"]: res.data.n_fac,
               ["n_ind"]: res.data.n_ind,
-              ["slug"]: res.data.slug,
               ["f_id"]: findMatchingUser(res.data.f_id, usersRef.current),
             });
           }
@@ -104,7 +102,6 @@ const EditLecture = () => {
     postData.append("n_stud", formData.n_stud);
     postData.append("n_fac", formData.n_fac);
     postData.append("n_ind", formData.n_ind);
-    postData.append("slug", formData.slug);
     postData.append("f_id", formData.f_id);
 
     api

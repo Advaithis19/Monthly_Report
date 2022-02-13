@@ -15,7 +15,6 @@ const CreateBook = () => {
     name: "",
     n_isbn: "",
     publisher: "",
-    slug: "",
   });
 
   const [formData, updateFormData] = useState(initialFormData);

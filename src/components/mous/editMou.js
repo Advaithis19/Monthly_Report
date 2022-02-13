@@ -12,7 +12,6 @@ const EditMou = () => {
     organisation: "",
     mod_col: "",
     validity: "",
-    slug: "",
   });
 
   const [formData, updateFormData] = useState(initialFormData);
@@ -63,7 +62,6 @@ const EditMou = () => {
               ["organisation"]: res.data.organisation,
               ["mod_col"]: res.data.mod_col,
               ["validity"]: res.data.validity,
-              ["slug"]: res.data.slug,
             });
             setDate(dayjs(res.data.date));
             setFacultySelected(

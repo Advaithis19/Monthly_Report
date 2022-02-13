@@ -15,7 +15,6 @@ const CreatePatent = () => {
     title: "",
     topic: "",
     status: "",
-    slug: "",
   });
 
   const [formData, updateFormData] = useState(initialFormData);

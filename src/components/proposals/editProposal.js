@@ -12,7 +12,6 @@ const EditProposal = () => {
     submitted_to: "",
     budg_amt: "",
     status: "ON",
-    slug: "",
     PI: "",
     CO_PI: "",
   });
@@ -64,7 +63,6 @@ const EditProposal = () => {
               ["submitted_to"]: res.data.submitted_to,
               ["budg_amt"]: res.data.budg_amt,
               ["status"]: res.data.status,
-              ["slug"]: res.data.slug,
               ["PI"]: findMatchingUser(res.data.PI, usersRef.current),
               ["CO_PI"]: findMatchingUser(res.data.CO_PI, usersRef.current),
             });
@@ -100,7 +98,6 @@ const EditProposal = () => {
     postData.append("submitted_to", formData.submitted_to);
     postData.append("budg_amt", formData.budg_amt);
     postData.append("status", formData.status);
-    postData.append("slug", formData.slug);
     postData.append("PI", formData.PI);
     postData.append("CO_PI", formData.CO_PI);
 

@@ -16,7 +16,6 @@ const CreateProposal = () => {
     submitted_to: "",
     budg_amt: "",
     status: "ON",
-    slug: "",
     PI: "",
     CO_PI: "",
   });
@@ -62,7 +61,6 @@ const CreateProposal = () => {
     postData.append("submitted_to", formData.submitted_to);
     postData.append("budg_amt", formData.budg_amt);
     postData.append("status", formData.status);
-    postData.append("slug", formData.slug);
     postData.append("PI", formData.PI);
     postData.append("CO_PI", formData.CO_PI);
 

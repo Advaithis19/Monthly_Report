@@ -11,7 +11,6 @@ const EditBook = () => {
     name: "",
     n_isbn: "",
     publisher: "",
-    slug: "",
   });
 
   const [formData, updateFormData] = useState(initialFormData);
@@ -61,7 +60,6 @@ const EditBook = () => {
               ["name"]: res.data.name,
               ["n_isbn"]: res.data.n_isbn,
               ["publisher"]: res.data.publisher,
-              ["slug"]: res.data.slug,
             });
             setFacultySelected(
               findMatchingUsers(res.data.f_id, usersRef.current)

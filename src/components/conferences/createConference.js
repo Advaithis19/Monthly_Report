@@ -18,7 +18,6 @@ const CreateConference = () => {
     issue: "",
     n_page: "",
     nat_int: "NAT",
-    slug: "",
     f_id: "",
   });
 
@@ -65,7 +64,6 @@ const CreateConference = () => {
     postData.append("issue", formData.issue);
     postData.append("n_page", formData.n_page);
     postData.append("nat_int", formData.nat_int);
-    postData.append("slug", formData.slug);
     postData.append("f_id", formData.f_id);
 
     api

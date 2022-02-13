@@ -11,7 +11,6 @@ const EditPatent = () => {
     title: "",
     topic: "",
     status: "",
-    slug: "",
   });
 
   const [formData, updateFormData] = useState(initialFormData);
@@ -61,7 +60,6 @@ const EditPatent = () => {
               ["title"]: res.data.title,
               ["topic"]: res.data.topic,
               ["status"]: res.data.status,
-              ["slug"]: res.data.slug,
             });
             setFacultySelected(
               findMatchingUsers(res.data.f_id, usersRef.current)

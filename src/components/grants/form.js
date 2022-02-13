@@ -30,43 +30,15 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
   });
   const formOptions = { resolver: yupResolver(validationSchema) };
 
-  //https://gist.github.com/hagemann/382adfc57adbd5af078dc93feef01fe1
-  function slugify(string) {
-    const a =
-      "àáâäæãåāăąçćčđďèéêëēėęěğǵḧîïíīįìłḿñńǹňôöòóœøōõőṕŕřßśšşșťțûüùúūǘůűųẃẍÿýžźż·/_,:;";
-    const b =
-      "aaaaaaaaaacccddeeeeeeeegghiiiiiilmnnnnoooooooooprrsssssttuuuuuuuuuwxyyzzz------";
-    const p = new RegExp(a.split("").join("|"), "g");
-
-    return string
-      .toString()
-      .toLowerCase()
-      .replace(/\s+/g, "-") // Replace spaces with -
-      .replace(p, (c) => b.charAt(a.indexOf(c))) // Replace special characters
-      .replace(/&/g, "-and-") // Replace & with 'and'
-      .replace(/[^\w\-]+/g, "") // Remove all non-word characters
-      .replace(/\-\-+/g, "-") // Replace multiple - with single -
-      .replace(/^-+/, "") // Trim - from start of text
-      .replace(/-+$/, ""); // Trim - from end of text
-  }
-
   // get functions to build form with useForm() hook
   const { register, handleSubmit, formState } = useForm(formOptions);
   const { errors } = formState;
 
   const handleChange = (e) => {
-    if ([e.target.name] == "title") {
-      updateFormData({
-        ...formData,
-        [e.target.name]: e.target.value,
-        ["slug"]: slugify(e.target.value.trim()),
-      });
-    } else {
-      updateFormData({
-        ...formData,
-        [e.target.name]: e.target.value,
-      });
-    }
+    updateFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handlePISelect = (e) => {

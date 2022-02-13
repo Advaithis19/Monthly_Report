@@ -16,7 +16,6 @@ const CreateIndustrial_visit = () => {
     industry: "",
     semester: "",
     n_stud: "",
-    slug: "",
   });
 
   const [formData, updateFormData] = useState(initialFormData);

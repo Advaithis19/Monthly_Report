@@ -11,7 +11,6 @@ const EditConsultancy = () => {
     title: "",
     fund_agency: "",
     rec_amt: "",
-    slug: "",
     f_id: "",
   });
 
@@ -61,7 +60,6 @@ const EditConsultancy = () => {
               ["title"]: res.data.title,
               ["fund_agency"]: res.data.fund_agency,
               ["rec_amt"]: res.data.rec_amt,
-              ["slug"]: res.data.slug,
               ["f_id"]: findMatchingUser(res.data.f_id, usersRef.current),
             });
           }
@@ -95,7 +93,6 @@ const EditConsultancy = () => {
     postData.append("title", formData.title);
     postData.append("fund_agency", formData.fund_agency);
     postData.append("rec_amt", formData.rec_amt);
-    postData.append("slug", formData.slug);
     postData.append("f_id", formData.f_id);
 
     api

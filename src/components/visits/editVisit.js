@@ -12,7 +12,6 @@ const EditIndustrial_visit = () => {
     industry: "",
     semester: "",
     n_stud: "",
-    slug: "",
   });
 
   const [formData, updateFormData] = useState(initialFormData);
@@ -63,7 +62,6 @@ const EditIndustrial_visit = () => {
               ["industry"]: res.data.industry,
               ["semester"]: res.data.semester,
               ["n_stud"]: res.data.n_stud,
-              ["slug"]: res.data.slug,
             });
             setFacultySelected(
               findMatchingUsers(res.data.f_id, usersRef.current)

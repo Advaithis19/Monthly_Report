@@ -14,7 +14,6 @@ const EditEvent = () => {
     n_stud: "",
     n_fac: "",
     n_ind: "",
-    slug: "",
   });
 
   const [formData, updateFormData] = useState(initialFormData);
@@ -67,7 +66,6 @@ const EditEvent = () => {
               ["n_stud"]: res.data.n_stud,
               ["n_fac"]: res.data.n_fac,
               ["n_ind"]: res.data.n_ind,
-              ["slug"]: res.data.slug,
             });
             setDate(dayjs(res.data.date));
             setFacultySelected(

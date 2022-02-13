@@ -18,7 +18,6 @@ const CreateEvent = () => {
     n_stud: "",
     n_fac: "",
     n_ind: "",
-    slug: "",
   });
 
   const [formData, updateFormData] = useState(initialFormData);

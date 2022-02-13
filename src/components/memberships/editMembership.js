@@ -11,7 +11,6 @@ const EditMembership = () => {
     membership: "",
     association: "",
     term: "",
-    slug: "",
   });
 
   const [formData, updateFormData] = useState(initialFormData);
@@ -61,7 +60,6 @@ const EditMembership = () => {
               ["membership"]: res.data.membership,
               ["association"]: res.data.association,
               ["term"]: res.data.term,
-              ["slug"]: res.data.slug,
             });
             setFacultySelected(
               findMatchingUsers(res.data.f_id, usersRef.current)

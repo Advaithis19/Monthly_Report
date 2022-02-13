@@ -11,7 +11,6 @@ const EditWorkshop = () => {
   const initialFormData = Object.freeze({
     event_name: "",
     venue: "",
-    slug: "",
   });
 
   const [formData, updateFormData] = useState(initialFormData);
@@ -61,7 +60,6 @@ const EditWorkshop = () => {
               ...formData,
               ["event_name"]: res.data.event_name,
               ["venue"]: res.data.venue,
-              ["slug"]: res.data.slug,
             });
             setDate(dayjs(res.data.date));
             setFacultySelected(

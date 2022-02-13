@@ -18,7 +18,6 @@ const CreateLecture = () => {
     n_stud: "",
     n_fac: "",
     n_ind: "",
-    slug: "",
     f_id: "",
   });
 
@@ -65,7 +64,6 @@ const CreateLecture = () => {
     postData.append("n_stud", formData.n_stud);
     postData.append("n_fac", formData.n_fac);
     postData.append("n_ind", formData.n_ind);
-    postData.append("slug", formData.slug);
     postData.append("f_id", formData.f_id);
 
     api

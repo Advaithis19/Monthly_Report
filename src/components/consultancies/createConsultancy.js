@@ -16,7 +16,6 @@ const CreateConsultancy = () => {
     title: "",
     fund_agency: "",
     rec_amt: "",
-    slug: "",
     f_id: "",
   });
 
@@ -60,7 +59,6 @@ const CreateConsultancy = () => {
     postData.append("title", formData.title);
     postData.append("fund_agency", formData.fund_agency);
     postData.append("rec_amt", formData.rec_amt);
-    postData.append("slug", formData.slug);
     postData.append("f_id", formData.f_id);
     api
       .post(`consultancies/create/`, postData)

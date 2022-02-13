@@ -14,7 +14,6 @@ const CreateAchievement = () => {
   const initialFormData = Object.freeze({
     title: "",
     organisation: "",
-    slug: "",
     f_id: "",
   });
 
@@ -57,7 +56,6 @@ const CreateAchievement = () => {
     let postData = new FormData();
     postData.append("title", formData.title);
     postData.append("organisation", formData.organisation);
-    postData.append("slug", formData.slug);
     postData.append("f_id", formData.f_id);
 
     api

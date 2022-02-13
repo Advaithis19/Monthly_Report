@@ -17,7 +17,6 @@ const CreateGrant = () => {
     sanc_amt: "",
     year: 2022,
     remarks: "",
-    slug: "",
     PI: "",
     CO_PI: "",
   });
@@ -64,7 +63,6 @@ const CreateGrant = () => {
     postData.append("sanc_amt", formData.sanc_amt);
     postData.append("year", formData.year);
     postData.append("remarks", formData.remarks);
-    postData.append("slug", formData.slug);
     postData.append("PI", formData.PI);
     postData.append("CO_PI", formData.CO_PI);
 

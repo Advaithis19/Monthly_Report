@@ -11,7 +11,6 @@ const EditAchievement = () => {
   const initialFormData = Object.freeze({
     title: "",
     organisation: "",
-    slug: "",
     f_id: "",
   });
 
@@ -60,7 +59,6 @@ const EditAchievement = () => {
               ...formData,
               ["title"]: res.data.title,
               ["organisation"]: res.data.organisation,
-              ["slug"]: res.data.slug,
               ["f_id"]: findMatchingUser(res.data.f_id, usersRef.current),
             });
           }
@@ -92,7 +90,6 @@ const EditAchievement = () => {
     let postData = new FormData();
     postData.append("title", formData.title);
     postData.append("organisation", formData.organisation);
-    postData.append("slug", formData.slug);
     postData.append("f_id", formData.f_id);
 
     api
