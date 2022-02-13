@@ -53,4 +53,8 @@ urlpatterns = [
     # industrial_visits
     path('industrial_visits/', include('industrial_visits.urls',
                                        namespace='industrial_visits')),
+
+    # mous
+    path('mous/', include('mous.urls',
+                          namespace='mous')),
 ]
