@@ -20,7 +20,7 @@ import tables from "../constants/tables";
 
 const NavbarItem = ({ title, nav_link, handleToggle, classprops }) => {
   const navigate = useNavigate();
-  const pathname = window.location.pathname;
+  const pathList = window.location.pathname.split("/").slice(1);
   const [active, setActive] = useState(false);
 
   const handleNavSelect = () => {
@@ -29,7 +29,7 @@ const NavbarItem = ({ title, nav_link, handleToggle, classprops }) => {
   };
 
   useEffect(() => {
-    if (pathname.startsWith(nav_link)) setActive(true);
+    if (pathList[1] === nav_link.slice(1)) setActive(true);
   });
 
   return (
