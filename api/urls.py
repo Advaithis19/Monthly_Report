@@ -41,4 +41,8 @@ urlpatterns = [
 
     # patents
     path('patents/', include('patents.urls', namespace='patents')),
+
+    #     activities
+    path('activities/', include('activities.urls',
+                                namespace='activities')),
 ]
