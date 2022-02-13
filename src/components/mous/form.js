@@ -36,8 +36,9 @@ const CustomForm = ({
 }) => {
   // form validation rules
   const validationSchema = Yup.object().shape({
-    title: Yup.string().required("Title is required"),
-    venue: Yup.string().required("Venue is required"),
+    organisation: Yup.string().required("Organisation is required"),
+    mod_col: Yup.string().required("Mode of Collaboration field is required"),
+    validity: Yup.string().required("Validity is required"),
   });
   const formOptions = { resolver: yupResolver(validationSchema) };
 
@@ -66,7 +67,7 @@ const CustomForm = ({
   const { errors } = formState;
 
   const handleChange = (e) => {
-    if ([e.target.name] == "title") {
+    if ([e.target.name] == "organisation") {
       updateFormData({
         ...formData,
         [e.target.name]: e.target.value,
@@ -106,152 +107,123 @@ const CustomForm = ({
           gutterBottom
           className="text-3xl font-semibold mb-3 text-center"
         >
-          {type} Event
+          {type} MoU
         </Typography>
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <Form.Group className="mb-3" controlId="formBasicTitle">
+          <Form.Group className="mb-3" controlId="formBasicorganisation">
             <TextField
               // basic
               type="text"
-              name="title"
-              value={formData.title}
+              name="organisation"
+              value={formData.organisation}
               //mui
-              label="Event Title"
+              label="MoU organisation"
               variant="outlined"
               fullWidth
               //hook form
-              {...register("title")}
+              {...register("organisation")}
               //to override onChange
               onChange={handleChange}
             />
             <small className="text-danger">
-              {errors.title ? errors.title.message : <span></span>}
+              {errors.organisation ? (
+                errors.organisation.message
+              ) : (
+                <span></span>
+              )}
             </small>
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicVenue">
+          <Form.Group className="mb-3" controlId="formBasicModeOfCollaboration">
             <TextField
               // basic
               type="text"
-              name="venue"
-              value={formData.venue}
+              name="mod_col"
+              value={formData.mod_col}
               //mui
-              label="Venue"
+              label="Mode Of Collaboration"
               variant="outlined"
               fullWidth
               //hook form
-              {...register("venue")}
+              {...register("mod_col")}
               //to override onChange
               onChange={handleChange}
             />
             <small className="text-danger">
-              {errors.venue ? errors.venue.message : <span></span>}
+              {errors.mod_col ? errors.mod_col.message : <span></span>}
             </small>
           </Form.Group>
-
-          <Grid container spacing={2}>
-            <Grid item sm={12} md={4}>
-              <Form.Group className="mb-3" controlId="formBasicStudents">
-                <TextField
-                  // basic
-                  type="text"
-                  name="n_stud"
-                  value={formData.n_stud}
-                  //mui
-                  label="No. of Students"
-                  variant="outlined"
-                  fullWidth
-                  onChange={handleChange}
-                />
-              </Form.Group>
-            </Grid>
-            <Grid item sm={12} md={4}>
-              <Form.Group className="mb-3" controlId="formBasicFaculty">
-                <TextField
-                  // basic
-                  type="text"
-                  name="n_fac"
-                  value={formData.n_fac}
-                  //mui
-                  label="No. of Faculty"
-                  variant="outlined"
-                  fullWidth
-                  onChange={handleChange}
-                />
-              </Form.Group>
-            </Grid>
-
-            <Grid item sm={12} md={4}>
-              <Form.Group className="mb-3" controlId="formBasicIndustry">
-                <TextField
-                  // basic
-                  type="text"
-                  name="n_ind"
-                  value={formData.n_ind}
-                  //mui
-                  label="No. from Industry"
-                  variant="outlined"
-                  fullWidth
-                  onChange={handleChange}
-                />
-              </Form.Group>
-            </Grid>
-          </Grid>
 
           <Grid container spacing={2}>
             <Grid item xs={4}>
               <FormControl>
                 <DatePicker
-                  label="Date of Event"
+                  label="Date of procurement"
                   value={date}
                   onChange={handleDateChange}
                   renderInput={(params) => <TextField {...params} />}
                 />
               </FormControl>
             </Grid>
-            <Grid item xs={8}>
-              <Form.Group className="mb-3" controlId="formBasicFacultyInvolved">
-                <FormControl fullWidth>
-                  <InputLabel id="u_id-select-label">
-                    Faculty Involved
-                  </InputLabel>
-                  <Select
-                    // basic
-                    name="u_id"
-                    value={facultySelected}
-                    {...register("u_id")}
-                    //overriding onChange
-                    onChange={handleFacultySelect}
-                    // mui
-                    multiple
-                    labelId="u_id-select-label"
-                    label="Faculty Involved"
-                    renderValue={(selected) => {
-                      let selectedItems = selected.map(
-                        (selectedObj) => selectedObj.name
-                      );
-                      return selectedItems.join(", ");
-                    }}
-                    inputProps={{ MenuProps: { disableScrollLock: true } }}
-                  >
-                    {users.map((user) => {
-                      return (
-                        <MenuItem key={user.id} value={user}>
-                          <Checkbox
-                            checked={facultySelected.indexOf(user) > -1}
-                          />
-                          <ListItemText primary={user.name} />
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </FormControl>
+            <Grid item sm={12} md={8}>
+              <Form.Group className="mb-3" controlId="formBasicValidity">
+                <TextField
+                  // basic
+                  type="text"
+                  name="validity"
+                  value={formData.validity}
+                  //mui
+                  label="Validity (in years)"
+                  variant="outlined"
+                  fullWidth
+                  //hook form
+                  {...register("validity")}
+                  //to override onChange
+                  onChange={handleChange}
+                />
                 <small className="text-danger">
-                  {errors.u_id ? errors.u_id.message : <span></span>}
+                  {errors.validity ? errors.validity.message : <span></span>}
                 </small>
               </Form.Group>
             </Grid>
           </Grid>
+
+          <Form.Group className="mb-3" controlId="formBasicFacultyInvolved">
+            <FormControl fullWidth>
+              <InputLabel id="u_id-select-label">Faculty Involved</InputLabel>
+              <Select
+                // basic
+                name="u_id"
+                value={facultySelected}
+                {...register("u_id")}
+                //overriding onChange
+                onChange={handleFacultySelect}
+                // mui
+                multiple
+                labelId="u_id-select-label"
+                label="Faculty Involved"
+                renderValue={(selected) => {
+                  let selectedItems = selected.map(
+                    (selectedObj) => selectedObj.name
+                  );
+                  return selectedItems.join(", ");
+                }}
+                inputProps={{ MenuProps: { disableScrollLock: true } }}
+              >
+                {users.map((user) => {
+                  return (
+                    <MenuItem key={user.id} value={user}>
+                      <Checkbox checked={facultySelected.indexOf(user) > -1} />
+                      <ListItemText primary={user.name} />
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+            <small className="text-danger">
+              {errors.u_id ? errors.u_id.message : <span></span>}
+            </small>
+          </Form.Group>
 
           <Button variant="contained" color="primary" type="submit" fullWidth>
             {type}
