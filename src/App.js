@@ -90,6 +90,13 @@ import PatentDetail from "./components/patents/patentDetail";
 import EditPatent from "./components/patents/editPatent";
 import CreatePatent from "./components/patents/createPatent";
 
+// activities
+import FilteredActivities from "./components/activities/filteredActivities";
+import Activities from "./components/activities/activities";
+import ActivityDetail from "./components/activities/activityDetail";
+import EditActivity from "./components/activities/editActivity";
+import CreateActivity from "./components/activities/createActivity";
+
 import { AuthProvider } from "./context/AuthContext";
 import { AlertProvider } from "./context/AlertContext";
 
@@ -201,6 +208,15 @@ function App() {
                       />
                     </Route>
 
+                    {/* activities */}
+                    <Route path="activities/" element={<Outlet />}>
+                      <Route index element={<Activities />} />
+                      <Route
+                        path="filter/date/:start_date/:end_date"
+                        element={<FilteredActivities />}
+                      />
+                    </Route>
+
                     {/* publications */}
                     <Route path="publications/" element={<Outlet />}>
                       <Route index element={<Publications />} />
@@ -299,6 +315,17 @@ function App() {
                   <Route path="/patents/:id" element={<PatentDetail />} />
                   <Route path="/patents/create" element={<CreatePatent />} />
                   <Route path="/patents/edit/:id" element={<EditPatent />} />
+
+                  {/* activity crud routes */}
+                  <Route path="/activities/:id" element={<ActivityDetail />} />
+                  <Route
+                    path="/activities/create"
+                    element={<CreateActivity />}
+                  />
+                  <Route
+                    path="/activities/edit/:id"
+                    element={<EditActivity />}
+                  />
                 </Route>
                 <Route path="/profile/:id" element={<Profile />} />
                 <Route path="/register" element={<SignUp />} />

@@ -1,6 +1,7 @@
 const tables = [
   "Home",
   "Achievements",
+  "Activities",
   "Books",
   "Conferences",
   "Consultancies",
@@ -10,7 +11,6 @@ const tables = [
   "Lectures",
   "Memberships",
   "MOUs",
-  "Other Activities",
   "Patents",
   "Proposals",
   "Publications",
