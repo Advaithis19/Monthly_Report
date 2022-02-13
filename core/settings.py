@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'books',
     'industrial_visits',
     'mous',
+    'memberships',
     'corsheaders',
     'rest_framework_simplejwt.token_blacklist',
     'crispy_forms',

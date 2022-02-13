@@ -57,4 +57,8 @@ urlpatterns = [
     # mous
     path('mous/', include('mous.urls',
                           namespace='mous')),
+
+    # memberships
+    path('memberships/', include('memberships.urls',
+                                 namespace='memberships')),
 ]

@@ -20,6 +20,7 @@ class Mou(models.Model):
     class Meta:
         ordering = ('-date_added',)
         db_table = 'mous'
+        verbose_name_plural = 'MoUs'
 
     def get_faculty(self):
         return ",".join([str(p) for p in self.u_id.all()])
