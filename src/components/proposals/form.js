@@ -175,9 +175,7 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
             <Grid item sm={12} md={4}>
               <Form.Group className="mb-3" controlId="formBasicStatus">
                 <FormControl fullWidth>
-                  <InputLabel id="status-select-label">
-                    Select Status
-                  </InputLabel>
+                  <InputLabel id="status-select-label">Status</InputLabel>
                   <Select
                     // basic
                     name="status"
@@ -185,7 +183,7 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
                     onChange={handleStatusSelect}
                     // mui
                     labelId="status-select-label"
-                    label="Select Status"
+                    label="Status"
                     inputProps={{ MenuProps: { disableScrollLock: true } }}
                   >
                     {status_options.map((status, index) => {

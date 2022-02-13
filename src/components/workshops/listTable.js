@@ -6,7 +6,6 @@ import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 
-import jwt_decode from "jwt-decode";
 import exportFromJSON from "export-from-json";
 
 let data = [{ foo: "foo" }, { bar: "bar" }];
@@ -54,7 +53,7 @@ const Table = ({ workshops }) => {
             </tbody>
           </table>
         </Grid>
-        <Grid item sm={6} className="bottomButton">
+        <Grid item xs={12} className="text-center">
           <Button
             variant="contained"
             style={{ height: 40 }}
@@ -63,20 +62,6 @@ const Table = ({ workshops }) => {
             Export To Excel
           </Button>
         </Grid>
-        {jwt_decode(JSON.parse(localStorage.getItem("authTokens")).access)
-          .is_teacher && (
-          <Grid item sm={6} className="bottomButton">
-            <Link to={"/workshops/create"}>
-              <Button
-                variant="contained"
-                style={{ height: 40 }}
-                color="primary"
-              >
-                New Workshop
-              </Button>
-            </Link>
-          </Grid>
-        )}
       </Grid>
     </Container>
   );

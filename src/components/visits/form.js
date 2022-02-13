@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import status_options from "../../constants/statusOptions";
+import semester_options from "../../constants/semesters";
 
 //yup
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -33,8 +33,8 @@ const CustomForm = ({
 }) => {
   // form validation rules
   const validationSchema = Yup.object().shape({
-    title: Yup.string().required("Title is required"),
-    topic: Yup.string().required("Topic is required"),
+    purpose: Yup.string().required("Purpose field is required"),
+    industry: Yup.string().required("Industry field is required"),
   });
   const formOptions = { resolver: yupResolver(validationSchema) };
 
@@ -63,7 +63,7 @@ const CustomForm = ({
   const { errors } = formState;
 
   const handleChange = (e) => {
-    if ([e.target.name] == "title") {
+    if ([e.target.name] == "purpose") {
       updateFormData({
         ...formData,
         [e.target.name]: e.target.value,
@@ -77,10 +77,10 @@ const CustomForm = ({
     }
   };
 
-  const handleStatusSelect = (e) => {
+  const handleSemesterSelect = (e) => {
     updateFormData({
       ...formData,
-      ["status"]: e.target.value,
+      ["semester"]: e.target.value,
     });
   };
 
@@ -106,66 +106,66 @@ const CustomForm = ({
           gutterBottom
           className="text-3xl font-semibold mb-3 text-center"
         >
-          {type} Patent
+          {type} Industrial-visit
         </Typography>
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <Form.Group className="mb-3" controlId="formBasicTitle">
+          <Form.Group className="mb-3" controlId="formBasicPurpose">
             <TextField
               // basic
               type="text"
-              name="title"
-              value={formData.title}
+              name="purpose"
+              value={formData.purpose}
               //mui
-              label="Patent Title"
+              label="Purpose of Visit"
               variant="outlined"
               fullWidth
               //hook form
-              {...register("title")}
+              {...register("purpose")}
               //to override onChange
               onChange={handleChange}
             />
             <small className="text-danger">
-              {errors.title ? errors.title.message : <span></span>}
+              {errors.purpose ? errors.purpose.message : <span></span>}
             </small>
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicTopic">
+          <Form.Group className="mb-3" controlId="formBasicIndustry">
             <TextField
               // basic
               type="text"
-              name="topic"
-              value={formData.topic}
+              name="industry"
+              value={formData.industry}
               //mui
-              label="Topic"
+              label="Industry Visited"
               variant="outlined"
               fullWidth
               //hook form
-              {...register("topic")}
+              {...register("industry")}
               //to override onChange
               onChange={handleChange}
             />
             <small className="text-danger">
-              {errors.topic ? errors.topic.message : <span></span>}
+              {errors.industry ? errors.industry.message : <span></span>}
             </small>
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicStatus">
+          <Form.Group className="mb-3" controlId="formBasicSemester">
             <FormControl fullWidth>
-              <InputLabel id="status-select-label">Status</InputLabel>
+              <InputLabel id="semester-select-label">Semester</InputLabel>
               <Select
                 // basic
-                name="status"
-                value={formData.status}
-                onChange={handleStatusSelect}
+                name="semester"
+                value={formData.semester}
+                onChange={handleSemesterSelect}
                 // mui
-                labelId="status-select-label"
-                label="Status"
+                labelId="semester-select-label"
+                label="Semester"
                 inputProps={{ MenuProps: { disableScrollLock: true } }}
               >
-                {status_options.map((status, index) => {
+                {semester_options.map((semester, index) => {
                   return (
-                    <MenuItem key={index} value={status.short}>
-                      {status.full}
+                    <MenuItem key={index} value={semester.short}>
+                      {semester.full}
                     </MenuItem>
                   );
                 })}

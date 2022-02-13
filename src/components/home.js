@@ -8,6 +8,7 @@ import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import DatePicker from "@mui/lab/DatePicker";
 import TextField from "@mui/material/TextField";
+import jwt_decode from "jwt-decode";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -89,21 +90,44 @@ const Home = () => {
 
         <Grid item xs={12}>
           <div className="text-3xl font-semibold mb-3">
-            <h1>{pathList[1][0].toUpperCase() + pathList[1].slice(1)}</h1>
+            <h1>
+              {pathList[1][0].toUpperCase() +
+                pathList[1].slice(1).split("_").join(" ")}
+            </h1>
           </div>
           <Outlet />
         </Grid>
-
-        <div className="w-[60%] h-[0.25px] bg-gray-400 mx-auto my-5" />
-
-        <Grid item xs={12} className="">
-          <Link to={"/reports/" + pathList[1]}>
-            <button className="w-[30%] border-1 border-[#27447e] rounded-2xl py-2 px-1 text-lg text-bold bg-[#b6def2] hover:bg-[#27447e] hover:text-white hover:bg-[#] transition duration-300">
-              All {pathList[1][0].toUpperCase() + pathList[1].slice(1)}
-            </button>
-          </Link>
-        </Grid>
       </Grid>
+
+      <div className="w-[60%] h-[0.25px] bg-gray-400 mx-auto my-5" />
+
+      {jwt_decode(JSON.parse(localStorage.getItem("authTokens")).access)
+        .is_teacher ? (
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={6} className="text-right">
+            <Link to={"/reports/" + pathList[1]}>
+              <button className="w-[50%] border-1 border-[#27447e] rounded-2xl py-2 px-1 text-lg text-bold bg-[#b6def2] hover:bg-[#27447e] hover:text-white hover:bg-[#] transition duration-300 mr-5">
+                All{" "}
+                {pathList[1][0].toUpperCase() +
+                  pathList[1].slice(1).split("_").join(" ")}
+              </button>
+            </Link>
+          </Grid>
+          <Grid item xs={12} md={6} className="text-left">
+            <Link to={"/" + pathList[1] + "/create"}>
+              <button className="w-[50%] border-1 border-[#27447e] rounded-2xl py-2 px-1 text-lg text-bold bg-[#b6def2] hover:bg-[#27447e] hover:text-white hover:bg-[#] transition duration-300 ml-5">
+                New
+              </button>
+            </Link>
+          </Grid>
+        </Grid>
+      ) : (
+        <Link to={"/reports/" + pathList[1]}>
+          <button className="w-[30%] border-1 border-[#27447e] rounded-2xl py-2 px-1 text-lg text-bold bg-[#b6def2] hover:bg-[#27447e] hover:text-white hover:bg-[#] transition duration-300">
+            All {pathList[1][0].toUpperCase() + pathList[1].slice(1)}
+          </button>
+        </Link>
+      )}
     </Container>
   );
 };

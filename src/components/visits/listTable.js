@@ -12,13 +12,13 @@ let data = [{ foo: "foo" }, { bar: "bar" }];
 const fileName = "report";
 const exportType = "csv";
 
-const Table = ({ books }) => {
+const Table = ({ industrial_visits }) => {
   const navigate = useNavigate();
   const goToDetail = (id) => {
-    navigate("/books/" + id);
+    navigate("/industrial_visits/" + id);
   };
 
-  data = books;
+  data = industrial_visits;
 
   let ExportToExcel = () => {
     exportFromJSON({ data, fileName, exportType });
@@ -31,22 +31,20 @@ const Table = ({ books }) => {
           <table className="border-solid border-1 border-black mx-auto font-sans text-md overflow-auto w-[75%] mb-3">
             <thead>
               <tr>
-                <th>ISBN #</th>
-                <th>Name of Book</th>
-                <th>Publisher</th>
+                <th>Purpose</th>
+                <th>Industry</th>
               </tr>
             </thead>
             <tbody>
-              {books.map((book) => {
+              {industrial_visits.map((industrial_visit) => {
                 return (
                   <tr
-                    key={book.id}
+                    key={industrial_visit.id}
                     className="hover:bg-[#27447e] hover:text-white cursor-pointer"
-                    onClick={() => goToDetail(book.id)}
+                    onClick={() => goToDetail(industrial_visit.id)}
                   >
-                    <td>{book.n_isbn}</td>
-                    <td>{book.name}</td>
-                    <td>{book.publisher}</td>
+                    <td>{industrial_visit.purpose}</td>
+                    <td>{industrial_visit.industry}</td>
                   </tr>
                 );
               })}

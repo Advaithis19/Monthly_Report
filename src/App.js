@@ -104,6 +104,13 @@ import BookDetail from "./components/books/bookDetail";
 import EditBook from "./components/books/editBook";
 import CreateBook from "./components/books/createBook";
 
+// visits
+import FilteredVisits from "./components/visits/filteredVisits";
+import Visits from "./components/visits/visits";
+import VisitDetail from "./components/visits/visitDetail";
+import EditVisit from "./components/visits/editVisit";
+import CreateVisit from "./components/visits/createVisit";
+
 import { AuthProvider } from "./context/AuthContext";
 import { AlertProvider } from "./context/AlertContext";
 
@@ -233,6 +240,15 @@ function App() {
                       />
                     </Route>
 
+                    {/* visits */}
+                    <Route path="industrial_visits/" element={<Outlet />}>
+                      <Route index element={<Visits />} />
+                      <Route
+                        path="filter/date/:start_date/:end_date"
+                        element={<FilteredVisits />}
+                      />
+                    </Route>
+
                     {/* publications */}
                     <Route path="publications/" element={<Outlet />}>
                       <Route index element={<Publications />} />
@@ -347,6 +363,20 @@ function App() {
                   <Route path="/books/:id" element={<BookDetail />} />
                   <Route path="/books/create" element={<CreateBook />} />
                   <Route path="/books/edit/:id" element={<EditBook />} />
+
+                  {/* visit crud routes */}
+                  <Route
+                    path="/industrial_visits/:id"
+                    element={<visitDetail />}
+                  />
+                  <Route
+                    path="/industrial_visits/create"
+                    element={<CreateVisit />}
+                  />
+                  <Route
+                    path="/industrial_visits/edit/:id"
+                    element={<EditVisit />}
+                  />
                 </Route>
                 <Route path="/profile/:id" element={<Profile />} />
                 <Route path="/register" element={<SignUp />} />
