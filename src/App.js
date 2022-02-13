@@ -97,6 +97,13 @@ import ActivityDetail from "./components/activities/activityDetail";
 import EditActivity from "./components/activities/editActivity";
 import CreateActivity from "./components/activities/createActivity";
 
+// books
+import FilteredBooks from "./components/books/filteredBooks";
+import Books from "./components/books/books";
+import BookDetail from "./components/books/bookDetail";
+import EditBook from "./components/books/editBook";
+import CreateBook from "./components/books/createBook";
+
 import { AuthProvider } from "./context/AuthContext";
 import { AlertProvider } from "./context/AlertContext";
 
@@ -217,6 +224,15 @@ function App() {
                       />
                     </Route>
 
+                    {/* books */}
+                    <Route path="books/" element={<Outlet />}>
+                      <Route index element={<Books />} />
+                      <Route
+                        path="filter/date/:start_date/:end_date"
+                        element={<FilteredBooks />}
+                      />
+                    </Route>
+
                     {/* publications */}
                     <Route path="publications/" element={<Outlet />}>
                       <Route index element={<Publications />} />
@@ -326,6 +342,11 @@ function App() {
                     path="/activities/edit/:id"
                     element={<EditActivity />}
                   />
+
+                  {/* book crud routes */}
+                  <Route path="/books/:id" element={<BookDetail />} />
+                  <Route path="/books/create" element={<CreateBook />} />
+                  <Route path="/books/edit/:id" element={<EditBook />} />
                 </Route>
                 <Route path="/profile/:id" element={<Profile />} />
                 <Route path="/register" element={<SignUp />} />

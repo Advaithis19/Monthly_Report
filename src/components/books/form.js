@@ -1,6 +1,5 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import status_options from "../../constants/statusOptions";
 
 //yup
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -10,6 +9,7 @@ import * as Yup from "yup";
 import { Form } from "react-bootstrap";
 
 // MUI
+import Grid from "@mui/material/Grid";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
@@ -33,8 +33,9 @@ const CustomForm = ({
 }) => {
   // form validation rules
   const validationSchema = Yup.object().shape({
-    title: Yup.string().required("Title is required"),
-    topic: Yup.string().required("Topic is required"),
+    name: Yup.string().required("Name field is required"),
+    n_isbn: Yup.string().required("ISBN # is required"),
+    publisher: Yup.string().required("Publisher field is required"),
   });
   const formOptions = { resolver: yupResolver(validationSchema) };
 
@@ -63,7 +64,7 @@ const CustomForm = ({
   const { errors } = formState;
 
   const handleChange = (e) => {
-    if ([e.target.name] == "title") {
+    if ([e.target.name] == "name") {
       updateFormData({
         ...formData,
         [e.target.name]: e.target.value,
@@ -75,13 +76,6 @@ const CustomForm = ({
         [e.target.name]: e.target.value,
       });
     }
-  };
-
-  const handleStatusSelect = (e) => {
-    updateFormData({
-      ...formData,
-      ["status"]: e.target.value,
-    });
   };
 
   const handleFacultySelect = (e) => {
@@ -106,72 +100,73 @@ const CustomForm = ({
           gutterBottom
           className="text-3xl font-semibold mb-3 text-center"
         >
-          {type} Patent
+          {type} Book
         </Typography>
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <Form.Group className="mb-3" controlId="formBasicTitle">
+          <Form.Group className="mb-3" controlId="formBasicName">
             <TextField
               // basic
               type="text"
-              name="title"
-              value={formData.title}
+              name="name"
+              value={formData.name}
               //mui
-              label="Patent Title"
+              label="Name of Book"
               variant="outlined"
               fullWidth
               //hook form
-              {...register("title")}
+              {...register("name")}
               //to override onChange
               onChange={handleChange}
             />
             <small className="text-danger">
-              {errors.title ? errors.title.message : <span></span>}
+              {errors.name ? errors.name.message : <span></span>}
             </small>
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicTopic">
-            <TextField
-              // basic
-              type="text"
-              name="topic"
-              value={formData.topic}
-              //mui
-              label="Topic"
-              variant="outlined"
-              fullWidth
-              //hook form
-              {...register("topic")}
-              //to override onChange
-              onChange={handleChange}
-            />
-            <small className="text-danger">
-              {errors.topic ? errors.topic.message : <span></span>}
-            </small>
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formBasicStatus">
-            <FormControl fullWidth>
-              <InputLabel id="status-select-label">Select Status</InputLabel>
-              <Select
-                // basic
-                name="status"
-                value={formData.status}
-                onChange={handleStatusSelect}
-                // mui
-                labelId="status-select-label"
-                label="Select Status"
-                inputProps={{ MenuProps: { disableScrollLock: true } }}
-              >
-                {status_options.map((status, index) => {
-                  return (
-                    <MenuItem key={index} value={status.short}>
-                      {status.full}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </FormControl>
-          </Form.Group>
+          <Grid container spacing={2}>
+            <Grid item sm={12} md={6}>
+              <Form.Group className="mb-3" controlId="formBasicISBNNumber">
+                <TextField
+                  // basic
+                  type="text"
+                  name="n_isbn"
+                  value={formData.n_isbn}
+                  //mui
+                  label="ISBN #"
+                  variant="outlined"
+                  fullWidth
+                  //hook form
+                  {...register("n_isbn")}
+                  //to override onChange
+                  onChange={handleChange}
+                />
+                <small className="text-danger">
+                  {errors.n_isbn ? errors.n_isbn.message : <span></span>}
+                </small>
+              </Form.Group>
+            </Grid>
+            <Grid item sm={12} md={6}>
+              <Form.Group className="mb-3" controlId="formBasicPublisher">
+                <TextField
+                  // basic
+                  type="text"
+                  name="publisher"
+                  value={formData.publisher}
+                  //mui
+                  label="Publisher"
+                  variant="outlined"
+                  fullWidth
+                  //hook form
+                  {...register("publisher")}
+                  //to override onChange
+                  onChange={handleChange}
+                />
+                <small className="text-danger">
+                  {errors.publisher ? errors.publisher.message : <span></span>}
+                </small>
+              </Form.Group>
+            </Grid>
+          </Grid>
 
           <Form.Group className="mb-3" controlId="formBasicFacultyInvolved">
             <FormControl fullWidth>
