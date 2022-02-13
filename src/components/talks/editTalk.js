@@ -110,7 +110,7 @@ const EditTalk = () => {
     api
       .put(`talks/edit/` + id + "/", postData)
       .then(() => {
-        navigate("/reports/talks/" + id);
+        navigate("/talks/" + id);
         // window.location.reload();
       })
       .catch((error) => {
@@ -119,7 +119,7 @@ const EditTalk = () => {
           navigate("/logout");
         } else if (error.response.status === 403) {
           alert("You do not have permission to perform this action!");
-          navigate("/reports/talks/" + id);
+          navigate("/talks/" + id);
         } else {
           alert("Error! Please check the values entered for any mistakes....");
         }

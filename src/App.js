@@ -83,6 +83,13 @@ import ConferenceDetail from "./components/conferences/conferenceDetail";
 import EditConference from "./components/conferences/editConference";
 import CreateConference from "./components/conferences/createConference";
 
+// patents
+import FilteredPatents from "./components/patents/filteredPatents";
+import Patents from "./components/patents/patents";
+import PatentDetail from "./components/patents/patentDetail";
+import EditPatent from "./components/patents/editPatent";
+import CreatePatent from "./components/patents/createPatent";
+
 import { AuthProvider } from "./context/AuthContext";
 import { AlertProvider } from "./context/AlertContext";
 
@@ -185,6 +192,15 @@ function App() {
                       />
                     </Route>
 
+                    {/* patents */}
+                    <Route path="patents/" element={<Outlet />}>
+                      <Route index element={<Patents />} />
+                      <Route
+                        path="filter/date/:start_date/:end_date"
+                        element={<FilteredPatents />}
+                      />
+                    </Route>
+
                     {/* publications */}
                     <Route path="publications/" element={<Outlet />}>
                       <Route index element={<Publications />} />
@@ -278,6 +294,11 @@ function App() {
                     path="/conferences/edit/:id"
                     element={<EditConference />}
                   />
+
+                  {/* patent crud routes */}
+                  <Route path="/patents/:id" element={<PatentDetail />} />
+                  <Route path="/patents/create" element={<CreatePatent />} />
+                  <Route path="/patents/edit/:id" element={<EditPatent />} />
                 </Route>
                 <Route path="/profile/:id" element={<Profile />} />
                 <Route path="/register" element={<SignUp />} />

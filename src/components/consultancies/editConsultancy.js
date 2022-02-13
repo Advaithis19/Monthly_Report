@@ -101,7 +101,7 @@ const EditConsultancy = () => {
     api
       .put(`consultancies/edit/` + id + "/", postData)
       .then(() => {
-        navigate("/reports/consultancies/" + id);
+        navigate("/consultancies/" + id);
       })
       .catch((error) => {
         if (error.response.status === 401) {
@@ -109,7 +109,7 @@ const EditConsultancy = () => {
           navigate("/logout");
         } else if (error.response.status === 403) {
           alert("You do not have permission to perform this action!");
-          navigate("/reports/consultancies/" + id);
+          navigate("/consultancies/" + id);
         } else {
           alert("Error! Please check the values entered for any mistakes....");
         }

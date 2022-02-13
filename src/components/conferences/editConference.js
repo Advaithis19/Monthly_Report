@@ -106,7 +106,7 @@ const EditConference = () => {
     api
       .put(`conferences/edit/` + id + "/", postData)
       .then(() => {
-        navigate("/reports/conferences/" + id);
+        navigate("/conferences/" + id);
         // window.location.reload();
       })
       .catch((error) => {
@@ -115,7 +115,7 @@ const EditConference = () => {
           navigate("/logout");
         } else if (error.response.status === 403) {
           alert("You do not have permission to perform this action!");
-          navigate("/reports/conferences/" + id);
+          navigate("/conferences/" + id);
         } else {
           alert("Error! Please check the values entered for any mistakes....");
         }

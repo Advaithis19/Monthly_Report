@@ -2,22 +2,20 @@ import React, { useState, useEffect, useRef } from "react";
 import useAxios from "../../utils/axios";
 import Form from "./form";
 import { useNavigate, useParams } from "react-router-dom";
-import { getProposalInstance } from "../../services/proposals";
+import { getPatentInstance } from "../../services/patents";
 import { getUsers } from "../../services/users";
 import { trackPromise } from "react-promise-tracker";
 
-const EditProposal = () => {
+const EditPatent = () => {
   const initialFormData = Object.freeze({
     title: "",
-    submitted_to: "",
-    budg_amt: "",
-    status: "ON",
+    topic: "",
+    status: "",
     slug: "",
-    PI: "",
-    CO_PI: "",
   });
 
   const [formData, updateFormData] = useState(initialFormData);
+  const [facultySelected, setFacultySelected] = useState([]);
 
   let api = useAxios();
   api.defaults.xsrfCookieName = "csrftoken";
@@ -36,8 +34,8 @@ const EditProposal = () => {
           if (mounted) {
             usersRef.current = response.data.map((user) => {
               return {
-                label: user.first_name + " " + user.last_name,
-                value: user.id,
+                name: user.first_name + " " + user.last_name,
+                id: user.id,
               };
             });
             setUsers(usersRef.current);
@@ -55,19 +53,19 @@ const EditProposal = () => {
         })
     );
     trackPromise(
-      getProposalInstance(api, id)
+      getPatentInstance(api, id)
         .then((res) => {
           if (mounted) {
             updateFormData({
               ...formData,
               ["title"]: res.data.title,
-              ["submitted_to"]: res.data.submitted_to,
-              ["budg_amt"]: res.data.budg_amt,
+              ["topic"]: res.data.topic,
               ["status"]: res.data.status,
               ["slug"]: res.data.slug,
-              ["PI"]: findMatchingUser(res.data.PI, usersRef.current),
-              ["CO_PI"]: findMatchingUser(res.data.CO_PI, usersRef.current),
             });
+            setFacultySelected(
+              findMatchingUsers(res.data.f_id, usersRef.current)
+            );
           }
         })
         .catch((error) => {
@@ -85,30 +83,28 @@ const EditProposal = () => {
     return () => {
       mounted = false;
     };
-  }, [setUsers, updateFormData]);
+  }, [setUsers, updateFormData, setFacultySelected]);
 
-  const findMatchingUser = (userInstance, userResponseArray) => {
-    return userResponseArray.filter((userResponseInstance) => {
-      return userInstance === userResponseInstance.label;
-    })[0].value;
+  const findMatchingUsers = (facultyList, userResponseArray) => {
+    let faculty_selected = [];
+    facultyList.forEach((name) => {
+      faculty_selected.push(
+        userResponseArray.filter((userObj) => userObj.name === name)[0]
+      );
+    });
+    return faculty_selected;
   };
 
-  const onSubmit = async (e) => {
-    // console.log(formData);
-    let postData = new FormData();
-    postData.append("title", formData.title);
-    postData.append("submitted_to", formData.submitted_to);
-    postData.append("budg_amt", formData.budg_amt);
-    postData.append("status", formData.status);
-    postData.append("slug", formData.slug);
-    postData.append("PI", formData.PI);
-    postData.append("CO_PI", formData.CO_PI);
+  const onSubmit = async () => {
+    let postData = {
+      ...formData,
+      f_id: facultySelected.map((selectedObj) => selectedObj.id),
+    };
 
     api
-      .put(`proposals/edit/` + id + "/", postData)
+      .put(`patents/edit/` + id + "/", postData)
       .then(() => {
-        navigate("/proposals/" + id);
-        // window.location.reload();
+        navigate("/patents/" + id);
       })
       .catch((error) => {
         if (error.response.status === 401) {
@@ -116,7 +112,7 @@ const EditProposal = () => {
           navigate("/logout");
         } else if (error.response.status === 403) {
           alert("You do not have permission to perform this action!");
-          navigate("/proposals/" + id);
+          navigate("/patents/" + id);
         } else {
           alert("Error! Please check the values entered for any mistakes....");
         }
@@ -127,6 +123,8 @@ const EditProposal = () => {
     <Form
       formData={formData}
       updateFormData={updateFormData}
+      facultySelected={facultySelected}
+      setFacultySelected={setFacultySelected}
       users={users}
       onSubmit={onSubmit}
       type="Edit"
@@ -134,4 +132,4 @@ const EditProposal = () => {
   );
 };
 
-export default EditProposal;
+export default EditPatent;
