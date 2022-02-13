@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'conferences',
     'patents',
     'activities',
+    'books',
     'corsheaders',
     'rest_framework_simplejwt.token_blacklist',
     'crispy_forms',

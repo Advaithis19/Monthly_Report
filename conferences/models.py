@@ -9,7 +9,8 @@ User = get_user_model()
 
 class Conference(models.Model):
 
-    title = models.CharField("title of publication", max_length=50)
+    title = models.CharField("title of publication",
+                             unique=True, max_length=50)
     conference = models.CharField("conference", max_length=100)
     volume = models.IntegerField("volume #")
     issue = models.IntegerField("issue #")

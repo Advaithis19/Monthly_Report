@@ -7,7 +7,7 @@ User = get_user_model()
 
 class Patent(models.Model):
 
-    title = models.CharField("title", max_length=50)
+    title = models.CharField("title", unique=True, max_length=50)
     topic = models.CharField("topic", max_length=50)
 
     ACCEPT = 'AC'

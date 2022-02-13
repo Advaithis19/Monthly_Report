@@ -7,7 +7,7 @@ User = get_user_model()
 
 class Event(models.Model):
 
-    title = models.CharField("title", max_length=50)
+    title = models.CharField("title", unique=True, max_length=50)
     venue = models.CharField("venue of event", max_length=100)
     n_stud = models.IntegerField("number of students", null=True, blank=True)
     n_fac = models.IntegerField("number of faculty", null=True, blank=True)

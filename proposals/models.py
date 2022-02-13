@@ -9,7 +9,7 @@ User = get_user_model()
 
 class Proposal(models.Model):
 
-    title = models.CharField("title", max_length=50)
+    title = models.CharField("title", unique=True, max_length=50)
     submitted_to = models.CharField("submitted", max_length=50)
     budg_amt = models.DecimalField(
         "budgetted amount", max_digits=10, decimal_places=2)

@@ -20,7 +20,7 @@ class Activity(models.Model):
     class Meta:
         ordering = ('-date_added',)
         db_table = 'other_activity'
-        verbose_name_plural = 'other_activities'
+        verbose_name_plural = 'other activities'
 
     def __str__(self):
         return self.activity

@@ -1,3 +1,4 @@
+from re import T
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth import get_user_model
@@ -7,7 +8,7 @@ User = get_user_model()
 
 class Workshop(models.Model):
 
-    event_name = models.CharField("name of event", max_length=50)
+    event_name = models.CharField("name of event", unique=True, max_length=50)
     venue = models.CharField("venue", max_length=100)
     date = models.DateField("date of event")
     slug = models.SlugField(max_length=250)
