@@ -2,22 +2,22 @@ from rest_framework import permissions, generics
 from rest_framework.response import Response
 
 # importing models
-from users.models import User
-from achievements.models import Achievement
-from activities.models import Activity
-from books.models import Book
-from conferences.models import Conference
-from consultancies.models import Consultancy
-from events.models import Event
-from grants.models import Grant
-from industrial_visits.models import Industrial_visit
-from lectures.models import Lecture
-from memberships.models import Membership
-from mous.models import Mou
-from patents.models import Patent
-from proposals.models import Proposal
-from talks.models import Talk
 from workshops.models import Workshop
+from talks.models import Talk
+from proposals.models import Proposal
+from patents.models import Patent
+from mous.models import Mou
+from memberships.models import Membership
+from lectures.models import Lecture
+from industrial_visits.models import Industrial_visit
+from grants.models import Grant
+from events.models import Event
+from consultancies.models import Consultancy
+from conferences.models import Conference
+from books.models import Book
+from activities.models import Activity
+from achievements.models import Achievement
+from users.models import User
 
 
 class AggregateAccessPermission(permissions.BasePermission):
@@ -185,91 +185,112 @@ class AggregateCount(generics.RetrieveAPIView):
         Return JSON object containing conditional count of all tables
         """
         user = request.user
-        aggregate_obj = {}
+
+        aggregate_list = [{
+            "label": "Achievements", "count": ""},
+            {"label": "Activities", "count": ""},
+            {"label": "Books published", "count": ""},
+            {
+            "label": "Conference publications", "count": ""},
+            {
+            "label": "Consultancies", "count": ""},
+            {"label": "Events organized", "count": ""},
+            {"label": "Grants procured", "count": ""},
+            {"label": "Industrial visits", "count": ""},
+            {
+            "label": "Lectures delivered", "count": ""},
+            {
+            "label": "Memberships obtained", "count": ""},
+            {"label": "MoUs", "count": ""},
+            {"label": "Patents published", "count": ""},
+            {"label": "Proposals", "count": ""},
+            {"label": "Talks delivered", "count": ""},
+            {
+            "label": "Workshops organized", "count": ""}]
 
         if user.is_teacher:
-            aggregate_obj['count_achievements'] = Achievement.objects.filter(
+            aggregate_list[0]['count'] = Achievement.objects.filter(
                 f_id=user).count()
-            aggregate_obj['count_activities'] = Activity.objects.filter(
+            aggregate_list[1]['count'] = Activity.objects.filter(
                 f_id=user).count()
-            aggregate_obj['count_books'] = get_book_queryset(
+            aggregate_list[2]['count'] = get_book_queryset(
                 "teacher", user, users_in_dept=None).count()
-            aggregate_obj['count_conferences'] = Conference.objects.filter(
+            aggregate_list[3]['count'] = Conference.objects.filter(
                 f_id=user).count()
-            aggregate_obj['count_consultancies'] = Consultancy.objects.filter(
+            aggregate_list[4]['count'] = Consultancy.objects.filter(
                 f_id=user).count()
-            aggregate_obj['count_events'] = get_event_queryset(
+            aggregate_list[5]['count'] = get_event_queryset(
                 "teacher", user, users_in_dept=None).count()
-            aggregate_obj['count_grant'] = (Grant.objects.filter(
+            aggregate_list[6]['count'] = (Grant.objects.filter(
                 PI=user) | Grant.objects.filter(CO_PI=user)).count()
-            aggregate_obj['count_visits'] = get_industrial_visit_queryset(
+            aggregate_list[7]['count'] = get_industrial_visit_queryset(
                 "teacher", user, users_in_dept=None).count()
-            aggregate_obj['count_lectures'] = Lecture.objects.filter(
+            aggregate_list[8]['count'] = Lecture.objects.filter(
                 f_id=user).count()
-            aggregate_obj['count_memberships'] = get_membership_queryset(
+            aggregate_list[9]['count'] = get_membership_queryset(
                 "teacher", user, users_in_dept=None).count()
-            aggregate_obj['count_mous'] = get_mou_queryset(
+            aggregate_list[10]['count'] = get_mou_queryset(
                 "teacher", user, users_in_dept=None).count()
-            aggregate_obj['count_patents'] = get_patent_queryset(
+            aggregate_list[11]['count'] = get_patent_queryset(
                 "teacher", user, users_in_dept=None).count()
-            aggregate_obj['count_proposals'] = (Proposal.objects.filter(
+            aggregate_list[12]['count'] = (Proposal.objects.filter(
                 PI=user) | Proposal.objects.filter(CO_PI=user)).count()
-            aggregate_obj['count_talks'] = Talk.objects.filter(
+            aggregate_list[13]['count'] = Talk.objects.filter(
                 f_id=user).count()
-            aggregate_obj['count_workshops'] = get_workshop_queryset(
+            aggregate_list[14]['count'] = get_workshop_queryset(
                 "teacher", user, users_in_dept=None).count()
 
         elif user.is_admin:
             users_in_dept = User.objects.filter(department=user.department)
 
-            aggregate_obj['count_achievements'] = Achievement.objects.filter(
+            aggregate_list[0]['count'] = Achievement.objects.filter(
                 f_id__in=users_in_dept).count()
-            aggregate_obj['count_activities'] = Activity.objects.filter(
+            aggregate_list[1]['count'] = Activity.objects.filter(
                 f_id__in=users_in_dept).count()
-            aggregate_obj['count_books'] = get_book_queryset(
+            aggregate_list[2]['count'] = get_book_queryset(
                 "admin", user, users_in_dept).count()
-            aggregate_obj['count_conferences'] = Conference.objects.filter(
+            aggregate_list[3]['count'] = Conference.objects.filter(
                 f_id__in=users_in_dept).count()
-            aggregate_obj['count_consultancies'] = Consultancy.objects.filter(
+            aggregate_list[4]['count'] = Consultancy.objects.filter(
                 f_id__in=users_in_dept).count()
-            aggregate_obj['count_events'] = get_event_queryset(
+            aggregate_list[5]['count'] = get_event_queryset(
                 "admin", user, users_in_dept).count()
-            aggregate_obj['count_grant'] = (Grant.objects.filter(
+            aggregate_list[6]['count'] = (Grant.objects.filter(
                 PI__in=users_in_dept) | Grant.objects.filter(
                 CO_PI__in=users_in_dept)).count()
-            aggregate_obj['count_visits'] = get_industrial_visit_queryset(
+            aggregate_list[7]['count'] = get_industrial_visit_queryset(
                 "admin", user, users_in_dept).count()
-            aggregate_obj['count_lectures'] = Lecture.objects.filter(
+            aggregate_list[8]['count'] = Lecture.objects.filter(
                 f_id__in=users_in_dept).count()
-            aggregate_obj['count_memberships'] = get_membership_queryset(
+            aggregate_list[9]['count'] = get_membership_queryset(
                 "admin", user, users_in_dept).count()
-            aggregate_obj['count_mous'] = get_mou_queryset(
+            aggregate_list[10]['count'] = get_mou_queryset(
                 "admin", user, users_in_dept).count()
-            aggregate_obj['count_patents'] = get_patent_queryset(
+            aggregate_list[11]['count'] = get_patent_queryset(
                 "admin", user, users_in_dept).count()
-            aggregate_obj['count_proposals'] = (Proposal.objects.filter(
+            aggregate_list[12]['count'] = (Proposal.objects.filter(
                 PI__in=users_in_dept) | Proposal.objects.filter(
                 CO_PI__in=users_in_dept)).count()
-            aggregate_obj['count_talks'] = Talk.objects.filter(
+            aggregate_list[13]['count'] = Talk.objects.filter(
                 f_id__in=users_in_dept).count()
-            aggregate_obj['count_workshops'] = get_workshop_queryset(
+            aggregate_list[14]['count'] = get_workshop_queryset(
                 "admin", user, users_in_dept).count()
 
         else:
-            aggregate_obj['count_achievements'] = Achievement.objects.count()
-            aggregate_obj['count_activities'] = Activity.objects.count()
-            aggregate_obj['count_books'] = Book.objects.count()
-            aggregate_obj['count_conferences'] = Conference.objects.count()
-            aggregate_obj['count_consultancies'] = Consultancy.objects.count()
-            aggregate_obj['count_events'] = Event.objects.count()
-            aggregate_obj['count_grant'] = Grant.objects.count()
-            aggregate_obj['count_visits'] = Industrial_visit.objects.count()
-            aggregate_obj['count_lectures'] = Lecture.objects.count()
-            aggregate_obj['count_memberships'] = Membership.objects.count()
-            aggregate_obj['count_mous'] = Mou.objects.count()
-            aggregate_obj['count_patents'] = Patent.objects.count()
-            aggregate_obj['count_proposals'] = Proposal.objects.count()
-            aggregate_obj['count_talks'] = Talk.objects.count()
-            aggregate_obj['count_workshops'] = Workshop.objects.count()
+            aggregate_list[0]['count'] = Achievement.objects.count()
+            aggregate_list[1]['count'] = Activity.objects.count()
+            aggregate_list[2]['count'] = Book.objects.count()
+            aggregate_list[3]['count'] = Conference.objects.count()
+            aggregate_list[4]['count'] = Consultancy.objects.count()
+            aggregate_list[5]['count'] = Event.objects.count()
+            aggregate_list[6]['count'] = Grant.objects.count()
+            aggregate_list[7]['count'] = Industrial_visit.objects.count()
+            aggregate_list[8]['count'] = Lecture.objects.count()
+            aggregate_list[9]['count'] = Membership.objects.count()
+            aggregate_list[10]['count'] = Mou.objects.count()
+            aggregate_list[11]['count'] = Patent.objects.count()
+            aggregate_list[12]['count'] = Proposal.objects.count()
+            aggregate_list[13]['count'] = Talk.objects.count()
+            aggregate_list[14]['count'] = Workshop.objects.count()
 
-        return Response(aggregate_obj)
+        return Response({"values": aggregate_list})
