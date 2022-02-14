@@ -51,7 +51,7 @@ const MouDetail = () => {
     api
       .delete("mous/delete/" + id)
       .then(function () {
-        navigate("/mous");
+        navigate("/reports/mous");
       })
       .catch((error) => {
         if (error.response.status === 401) {
@@ -59,7 +59,7 @@ const MouDetail = () => {
           navigate("/logout");
         } else if (error.response.status === 403) {
           alert("You do not have permission to perform this action!");
-          navigate("/mous");
+          navigate("/reports/mous");
         } else {
           alert("Something went wrong! Please logout and try again");
         }

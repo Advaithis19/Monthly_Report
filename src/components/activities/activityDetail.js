@@ -51,7 +51,7 @@ const ActivityDetail = () => {
     api
       .delete("activities/delete/" + id)
       .then(function () {
-        navigate("/activities");
+        navigate("/reports/activities");
       })
       .catch((error) => {
         if (error.response.status === 401) {
@@ -59,7 +59,7 @@ const ActivityDetail = () => {
           navigate("/logout");
         } else if (error.response.status === 403) {
           alert("You do not have permission to perform this action!");
-          navigate("/activities");
+          navigate("/reports/activities");
         } else {
           alert("Something went wrong! Please logout and try again");
         }

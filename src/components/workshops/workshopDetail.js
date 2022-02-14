@@ -51,7 +51,7 @@ const WorkshopDetail = () => {
     api
       .delete("workshops/delete/" + id)
       .then(function () {
-        navigate("/workshops");
+        navigate("/reports/workshops");
       })
       .catch((error) => {
         if (error.response.status === 401) {
@@ -59,7 +59,7 @@ const WorkshopDetail = () => {
           navigate("/logout");
         } else if (error.response.status === 403) {
           alert("You do not have permission to perform this action!");
-          navigate("/workshops");
+          navigate("/reports/workshops");
         } else {
           alert("Something went wrong! Please logout and try again");
         }

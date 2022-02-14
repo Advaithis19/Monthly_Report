@@ -52,7 +52,7 @@ const PatentDetail = () => {
     api
       .delete("patents/delete/" + id)
       .then(function () {
-        navigate("/patents");
+        navigate("/reports/patents");
       })
       .catch((error) => {
         if (error.response.status === 401) {
@@ -60,7 +60,7 @@ const PatentDetail = () => {
           navigate("/logout");
         } else if (error.response.status === 403) {
           alert("You do not have permission to perform this action!");
-          navigate("/patents");
+          navigate("/reports/patents");
         } else {
           alert("Something went wrong! Please logout and try again");
         }

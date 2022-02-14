@@ -51,7 +51,7 @@ const TalkDetail = () => {
     api
       .delete("talks/delete/" + id)
       .then(function () {
-        navigate("/talks");
+        navigate("/reports/talks");
       })
       .catch((error) => {
         if (error.response.status === 401) {
@@ -59,7 +59,7 @@ const TalkDetail = () => {
           navigate("/logout");
         } else if (error.response.status === 403) {
           alert("You do not have permission to perform this action!");
-          navigate("/talks");
+          navigate("/reports/talks");
         } else {
           alert("Something went wrong! Please logout and try again");
         }

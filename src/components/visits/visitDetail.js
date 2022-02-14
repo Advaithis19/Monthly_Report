@@ -51,7 +51,7 @@ const Industrial_visitDetail = () => {
     api
       .delete("industrial_visits/delete/" + id)
       .then(function () {
-        navigate("/industrial_visits");
+        navigate("/reports/industrial_visits");
       })
       .catch((error) => {
         if (error.response.status === 401) {
@@ -59,7 +59,7 @@ const Industrial_visitDetail = () => {
           navigate("/logout");
         } else if (error.response.status === 403) {
           alert("You do not have permission to perform this action!");
-          navigate("/industrial_visits");
+          navigate("/reports/industrial_visits");
         } else {
           alert("Something went wrong! Please logout and try again");
         }

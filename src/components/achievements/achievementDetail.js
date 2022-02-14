@@ -51,7 +51,7 @@ const AchievementDetail = () => {
     api
       .delete("achievements/delete/" + id)
       .then(function () {
-        navigate("/achievements");
+        navigate("/reports/achievements");
       })
       .catch((error) => {
         if (error.response.status === 401) {
@@ -59,7 +59,7 @@ const AchievementDetail = () => {
           navigate("/logout");
         } else if (error.response.status === 403) {
           alert("You do not have permission to perform this action!");
-          navigate("/achievements");
+          navigate("/reports/achievements");
         } else {
           alert("Something went wrong! Please logout and try again");
         }

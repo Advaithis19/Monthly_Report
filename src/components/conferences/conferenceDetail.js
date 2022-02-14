@@ -52,7 +52,7 @@ const ConferenceDetail = () => {
     api
       .delete("conferences/delete/" + id)
       .then(function () {
-        navigate("/conferences");
+        navigate("/reports/conferences");
       })
       .catch((error) => {
         if (error.response.status === 401) {
@@ -60,7 +60,7 @@ const ConferenceDetail = () => {
           navigate("/logout");
         } else if (error.response.status === 403) {
           alert("You do not have permission to perform this action!");
-          navigate("/conferences");
+          navigate("/reports/conferences");
         } else {
           alert("Something went wrong! Please logout and try again");
         }

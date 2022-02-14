@@ -51,7 +51,7 @@ const GrantDetail = () => {
     api
       .delete("grants/delete/" + id)
       .then(function () {
-        navigate("/grants");
+        navigate("/reports/grants");
       })
       .catch((error) => {
         if (error.response.status === 401) {
@@ -59,7 +59,7 @@ const GrantDetail = () => {
           navigate("/logout");
         } else if (error.response.status === 403) {
           alert("You do not have permission to perform this action!");
-          navigate("/grants");
+          navigate("/reports/grants");
         } else {
           alert("Something went wrong! Please logout and try again");
         }
