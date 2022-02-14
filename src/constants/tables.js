@@ -1,5 +1,4 @@
 const tables = [
-  "Home",
   "Achievements",
   "Activities",
   "Books",

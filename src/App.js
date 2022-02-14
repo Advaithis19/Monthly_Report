@@ -126,7 +126,6 @@ import EditMembership from "./components/memberships/editMembership";
 import CreateMembership from "./components/memberships/createMembership";
 
 import { AuthProvider } from "./context/AuthContext";
-import { AlertProvider } from "./context/AlertContext";
 
 // date provider
 import DateAdapter from "@mui/lab/AdapterDayjs";
@@ -140,302 +139,276 @@ function App() {
       <LocalizationProvider dateAdapter={DateAdapter}>
         <Router>
           <AuthProvider>
-            <AlertProvider>
-              <Navbar />
-              <Routes>
-                <Route path="/" element={<PrivateOutlet />}>
-                  <Route exact path="home" element={<Dashboard />} />
-                  <Route path="reports" element={<Home />}>
-                    {/* grants */}
-                    <Route path="grants/" element={<Outlet />}>
-                      <Route index element={<Grants />} />
-                      <Route
-                        path="filter/date/:start_date/:end_date"
-                        element={<FilteredGrants />}
-                      />
-                    </Route>
-
-                    {/* events */}
-                    <Route path="events/" element={<Outlet />}>
-                      <Route index element={<Events />} />
-                      <Route
-                        path="filter/date/:start_date/:end_date"
-                        element={<FilteredEvents />}
-                      />
-                    </Route>
-
-                    {/* proposals */}
-                    <Route path="proposals/" element={<Outlet />}>
-                      <Route index element={<Proposals />} />
-                      <Route
-                        path="filter/date/:start_date/:end_date"
-                        element={<FilteredProposals />}
-                      />
-                    </Route>
-
-                    {/* consultancies */}
-                    <Route path="consultancies/" element={<Outlet />}>
-                      <Route index element={<Consultancies />} />
-                      <Route
-                        path="filter/date/:start_date/:end_date"
-                        element={<FilteredConsultancies />}
-                      />
-                    </Route>
-
-                    {/* workshops */}
-                    <Route path="workshops/" element={<Outlet />}>
-                      <Route index element={<Workshops />} />
-                      <Route
-                        path="filter/date/:start_date/:end_date"
-                        element={<FilteredWorkshops />}
-                      />
-                    </Route>
-
-                    {/* lectures */}
-                    <Route path="lectures/" element={<Outlet />}>
-                      <Route index element={<Lectures />} />
-                      <Route
-                        path="filter/date/:start_date/:end_date"
-                        element={<FilteredLectures />}
-                      />
-                    </Route>
-
-                    {/* talks */}
-                    <Route path="talks/" element={<Outlet />}>
-                      <Route index element={<Talks />} />
-                      <Route
-                        path="filter/date/:start_date/:end_date"
-                        element={<FilteredTalks />}
-                      />
-                    </Route>
-
-                    {/* achievements */}
-                    <Route path="achievements/" element={<Outlet />}>
-                      <Route index element={<Achievements />} />
-                      <Route
-                        path="filter/date/:start_date/:end_date"
-                        element={<FilteredAchievements />}
-                      />
-                    </Route>
-
-                    {/* conferences */}
-                    <Route path="conferences/" element={<Outlet />}>
-                      <Route index element={<Conferences />} />
-                      <Route
-                        path="filter/date/:start_date/:end_date"
-                        element={<FilteredConferences />}
-                      />
-                    </Route>
-
-                    {/* patents */}
-                    <Route path="patents/" element={<Outlet />}>
-                      <Route index element={<Patents />} />
-                      <Route
-                        path="filter/date/:start_date/:end_date"
-                        element={<FilteredPatents />}
-                      />
-                    </Route>
-
-                    {/* activities */}
-                    <Route path="activities/" element={<Outlet />}>
-                      <Route index element={<Activities />} />
-                      <Route
-                        path="filter/date/:start_date/:end_date"
-                        element={<FilteredActivities />}
-                      />
-                    </Route>
-
-                    {/* books */}
-                    <Route path="books/" element={<Outlet />}>
-                      <Route index element={<Books />} />
-                      <Route
-                        path="filter/date/:start_date/:end_date"
-                        element={<FilteredBooks />}
-                      />
-                    </Route>
-
-                    {/* visits */}
-                    <Route path="industrial_visits/" element={<Outlet />}>
-                      <Route index element={<Visits />} />
-                      <Route
-                        path="filter/date/:start_date/:end_date"
-                        element={<FilteredVisits />}
-                      />
-                    </Route>
-
-                    {/* mous */}
-                    <Route path="mous/" element={<Outlet />}>
-                      <Route index element={<Mous />} />
-                      <Route
-                        path="filter/date/:start_date/:end_date"
-                        element={<FilteredMous />}
-                      />
-                    </Route>
-
-                    {/* memberships */}
-                    <Route path="memberships/" element={<Outlet />}>
-                      <Route index element={<Memberships />} />
-                      <Route
-                        path="filter/date/:start_date/:end_date"
-                        element={<FilteredMemberships />}
-                      />
-                    </Route>
-
-                    {/* publications */}
-                    <Route path="publications/" element={<Outlet />}>
-                      <Route index element={<Publications />} />
-                      <Route
-                        path="filter/year/:start_year/:end_year"
-                        element={<FilteredPublications />}
-                      />
-                    </Route>
+            <Navbar />
+            <Routes>
+              <Route path="/" element={<PrivateOutlet />}>
+                <Route exact path="home" element={<Dashboard />} />
+                <Route path="reports" element={<Home />}>
+                  {/* grants */}
+                  <Route path="grants/" element={<Outlet />}>
+                    <Route index element={<Grants />} />
+                    <Route
+                      path="filter/date/:start_date/:end_date"
+                      element={<FilteredGrants />}
+                    />
                   </Route>
 
-                  {/* grants crud routes */}
-                  <Route path="/grants/:id" element={<GrantDetail />} />
-                  <Route path="/grants/create" element={<CreateGrant />} />
-                  <Route path="/grants/edit/:id" element={<EditGrant />} />
+                  {/* events */}
+                  <Route path="events/" element={<Outlet />}>
+                    <Route index element={<Events />} />
+                    <Route
+                      path="filter/date/:start_date/:end_date"
+                      element={<FilteredEvents />}
+                    />
+                  </Route>
 
-                  {/* event crud routes */}
-                  <Route path="/events/:id" element={<EventDetail />} />
-                  <Route path="/events/create" element={<CreateEvent />} />
-                  <Route path="/events/edit/:id" element={<EditEvent />} />
+                  {/* proposals */}
+                  <Route path="proposals/" element={<Outlet />}>
+                    <Route index element={<Proposals />} />
+                    <Route
+                      path="filter/date/:start_date/:end_date"
+                      element={<FilteredProposals />}
+                    />
+                  </Route>
 
-                  {/* proposal crud routes */}
-                  <Route path="/proposals/:id" element={<ProposalDetail />} />
-                  <Route
-                    path="/proposals/create"
-                    element={<CreateProposal />}
-                  />
-                  <Route
-                    path="/proposals/edit/:id"
-                    element={<EditProposal />}
-                  />
+                  {/* consultancies */}
+                  <Route path="consultancies/" element={<Outlet />}>
+                    <Route index element={<Consultancies />} />
+                    <Route
+                      path="filter/date/:start_date/:end_date"
+                      element={<FilteredConsultancies />}
+                    />
+                  </Route>
 
-                  {/* consultancy crud routes */}
-                  <Route
-                    path="/consultancies/:id"
-                    element={<ConsultancyDetail />}
-                  />
-                  <Route
-                    path="/consultancies/create"
-                    element={<CreateConsultancy />}
-                  />
-                  <Route
-                    path="/consultancies/edit/:id"
-                    element={<EditConsultancy />}
-                  />
+                  {/* workshops */}
+                  <Route path="workshops/" element={<Outlet />}>
+                    <Route index element={<Workshops />} />
+                    <Route
+                      path="filter/date/:start_date/:end_date"
+                      element={<FilteredWorkshops />}
+                    />
+                  </Route>
 
-                  {/* workshop crud routes */}
-                  <Route path="/workshops/:id" element={<WorkshopDetail />} />
-                  <Route
-                    path="/workshops/create"
-                    element={<CreateWorkshop />}
-                  />
-                  <Route
-                    path="/workshops/edit/:id"
-                    element={<EditWorkshop />}
-                  />
+                  {/* lectures */}
+                  <Route path="lectures/" element={<Outlet />}>
+                    <Route index element={<Lectures />} />
+                    <Route
+                      path="filter/date/:start_date/:end_date"
+                      element={<FilteredLectures />}
+                    />
+                  </Route>
 
-                  {/* lecture crud routes */}
-                  <Route path="/lectures/:id" element={<LectureDetail />} />
-                  <Route path="/lectures/create" element={<CreateLecture />} />
-                  <Route path="/lectures/edit/:id" element={<EditLecture />} />
+                  {/* talks */}
+                  <Route path="talks/" element={<Outlet />}>
+                    <Route index element={<Talks />} />
+                    <Route
+                      path="filter/date/:start_date/:end_date"
+                      element={<FilteredTalks />}
+                    />
+                  </Route>
 
-                  {/* talk crud routes */}
-                  <Route path="/talks/:id" element={<TalkDetail />} />
-                  <Route path="/talks/create" element={<CreateTalk />} />
-                  <Route path="/talks/edit/:id" element={<EditTalk />} />
+                  {/* achievements */}
+                  <Route path="achievements/" element={<Outlet />}>
+                    <Route index element={<Achievements />} />
+                    <Route
+                      path="filter/date/:start_date/:end_date"
+                      element={<FilteredAchievements />}
+                    />
+                  </Route>
 
-                  {/* achievement crud routes */}
-                  <Route
-                    path="/achievements/:id"
-                    element={<AchievementDetail />}
-                  />
-                  <Route
-                    path="/achievements/create"
-                    element={<CreateAchievement />}
-                  />
-                  <Route
-                    path="/achievements/edit/:id"
-                    element={<EditAchievement />}
-                  />
+                  {/* conferences */}
+                  <Route path="conferences/" element={<Outlet />}>
+                    <Route index element={<Conferences />} />
+                    <Route
+                      path="filter/date/:start_date/:end_date"
+                      element={<FilteredConferences />}
+                    />
+                  </Route>
 
-                  {/* conference crud routes */}
-                  <Route
-                    path="/conferences/:id"
-                    element={<ConferenceDetail />}
-                  />
-                  <Route
-                    path="/conferences/create"
-                    element={<CreateConference />}
-                  />
-                  <Route
-                    path="/conferences/edit/:id"
-                    element={<EditConference />}
-                  />
+                  {/* patents */}
+                  <Route path="patents/" element={<Outlet />}>
+                    <Route index element={<Patents />} />
+                    <Route
+                      path="filter/date/:start_date/:end_date"
+                      element={<FilteredPatents />}
+                    />
+                  </Route>
 
-                  {/* patent crud routes */}
-                  <Route path="/patents/:id" element={<PatentDetail />} />
-                  <Route path="/patents/create" element={<CreatePatent />} />
-                  <Route path="/patents/edit/:id" element={<EditPatent />} />
+                  {/* activities */}
+                  <Route path="activities/" element={<Outlet />}>
+                    <Route index element={<Activities />} />
+                    <Route
+                      path="filter/date/:start_date/:end_date"
+                      element={<FilteredActivities />}
+                    />
+                  </Route>
 
-                  {/* activity crud routes */}
-                  <Route path="/activities/:id" element={<ActivityDetail />} />
-                  <Route
-                    path="/activities/create"
-                    element={<CreateActivity />}
-                  />
-                  <Route
-                    path="/activities/edit/:id"
-                    element={<EditActivity />}
-                  />
+                  {/* books */}
+                  <Route path="books/" element={<Outlet />}>
+                    <Route index element={<Books />} />
+                    <Route
+                      path="filter/date/:start_date/:end_date"
+                      element={<FilteredBooks />}
+                    />
+                  </Route>
 
-                  {/* book crud routes */}
-                  <Route path="/books/:id" element={<BookDetail />} />
-                  <Route path="/books/create" element={<CreateBook />} />
-                  <Route path="/books/edit/:id" element={<EditBook />} />
+                  {/* visits */}
+                  <Route path="industrial_visits/" element={<Outlet />}>
+                    <Route index element={<Visits />} />
+                    <Route
+                      path="filter/date/:start_date/:end_date"
+                      element={<FilteredVisits />}
+                    />
+                  </Route>
 
-                  {/* visit crud routes */}
-                  <Route
-                    path="/industrial_visits/:id"
-                    element={<VisitDetail />}
-                  />
-                  <Route
-                    path="/industrial_visits/create"
-                    element={<CreateVisit />}
-                  />
-                  <Route
-                    path="/industrial_visits/edit/:id"
-                    element={<EditVisit />}
-                  />
+                  {/* mous */}
+                  <Route path="mous/" element={<Outlet />}>
+                    <Route index element={<Mous />} />
+                    <Route
+                      path="filter/date/:start_date/:end_date"
+                      element={<FilteredMous />}
+                    />
+                  </Route>
 
-                  {/* mou crud routes */}
-                  <Route path="/mous/:id" element={<MouDetail />} />
-                  <Route path="/mous/create" element={<CreateMou />} />
-                  <Route path="/mous/edit/:id" element={<EditMou />} />
+                  {/* memberships */}
+                  <Route path="memberships/" element={<Outlet />}>
+                    <Route index element={<Memberships />} />
+                    <Route
+                      path="filter/date/:start_date/:end_date"
+                      element={<FilteredMemberships />}
+                    />
+                  </Route>
 
-                  {/* membership crud routes */}
-                  <Route
-                    path="/memberships/:id"
-                    element={<MembershipDetail />}
-                  />
-                  <Route
-                    path="/memberships/create"
-                    element={<CreateMembership />}
-                  />
-                  <Route
-                    path="/memberships/edit/:id"
-                    element={<EditMembership />}
-                  />
+                  {/* publications */}
+                  <Route path="publications/" element={<Outlet />}>
+                    <Route index element={<Publications />} />
+                    <Route
+                      path="filter/year/:start_year/:end_year"
+                      element={<FilteredPublications />}
+                    />
+                  </Route>
                 </Route>
-                <Route path="/profile/:id" element={<Profile />} />
-                <Route path="/register" element={<SignUp />} />
-                <Route path="/login" element={<SignIn />} />
-                <Route path="/logout" element={<Logout />} />
-              </Routes>
-              <Footer />
-            </AlertProvider>
+
+                {/* grants crud routes */}
+                <Route path="/grants/:id" element={<GrantDetail />} />
+                <Route path="/grants/create" element={<CreateGrant />} />
+                <Route path="/grants/edit/:id" element={<EditGrant />} />
+
+                {/* event crud routes */}
+                <Route path="/events/:id" element={<EventDetail />} />
+                <Route path="/events/create" element={<CreateEvent />} />
+                <Route path="/events/edit/:id" element={<EditEvent />} />
+
+                {/* proposal crud routes */}
+                <Route path="/proposals/:id" element={<ProposalDetail />} />
+                <Route path="/proposals/create" element={<CreateProposal />} />
+                <Route path="/proposals/edit/:id" element={<EditProposal />} />
+
+                {/* consultancy crud routes */}
+                <Route
+                  path="/consultancies/:id"
+                  element={<ConsultancyDetail />}
+                />
+                <Route
+                  path="/consultancies/create"
+                  element={<CreateConsultancy />}
+                />
+                <Route
+                  path="/consultancies/edit/:id"
+                  element={<EditConsultancy />}
+                />
+
+                {/* workshop crud routes */}
+                <Route path="/workshops/:id" element={<WorkshopDetail />} />
+                <Route path="/workshops/create" element={<CreateWorkshop />} />
+                <Route path="/workshops/edit/:id" element={<EditWorkshop />} />
+
+                {/* lecture crud routes */}
+                <Route path="/lectures/:id" element={<LectureDetail />} />
+                <Route path="/lectures/create" element={<CreateLecture />} />
+                <Route path="/lectures/edit/:id" element={<EditLecture />} />
+
+                {/* talk crud routes */}
+                <Route path="/talks/:id" element={<TalkDetail />} />
+                <Route path="/talks/create" element={<CreateTalk />} />
+                <Route path="/talks/edit/:id" element={<EditTalk />} />
+
+                {/* achievement crud routes */}
+                <Route
+                  path="/achievements/:id"
+                  element={<AchievementDetail />}
+                />
+                <Route
+                  path="/achievements/create"
+                  element={<CreateAchievement />}
+                />
+                <Route
+                  path="/achievements/edit/:id"
+                  element={<EditAchievement />}
+                />
+
+                {/* conference crud routes */}
+                <Route path="/conferences/:id" element={<ConferenceDetail />} />
+                <Route
+                  path="/conferences/create"
+                  element={<CreateConference />}
+                />
+                <Route
+                  path="/conferences/edit/:id"
+                  element={<EditConference />}
+                />
+
+                {/* patent crud routes */}
+                <Route path="/patents/:id" element={<PatentDetail />} />
+                <Route path="/patents/create" element={<CreatePatent />} />
+                <Route path="/patents/edit/:id" element={<EditPatent />} />
+
+                {/* activity crud routes */}
+                <Route path="/activities/:id" element={<ActivityDetail />} />
+                <Route path="/activities/create" element={<CreateActivity />} />
+                <Route path="/activities/edit/:id" element={<EditActivity />} />
+
+                {/* book crud routes */}
+                <Route path="/books/:id" element={<BookDetail />} />
+                <Route path="/books/create" element={<CreateBook />} />
+                <Route path="/books/edit/:id" element={<EditBook />} />
+
+                {/* visit crud routes */}
+                <Route
+                  path="/industrial_visits/:id"
+                  element={<VisitDetail />}
+                />
+                <Route
+                  path="/industrial_visits/create"
+                  element={<CreateVisit />}
+                />
+                <Route
+                  path="/industrial_visits/edit/:id"
+                  element={<EditVisit />}
+                />
+
+                {/* mou crud routes */}
+                <Route path="/mous/:id" element={<MouDetail />} />
+                <Route path="/mous/create" element={<CreateMou />} />
+                <Route path="/mous/edit/:id" element={<EditMou />} />
+
+                {/* membership crud routes */}
+                <Route path="/memberships/:id" element={<MembershipDetail />} />
+                <Route
+                  path="/memberships/create"
+                  element={<CreateMembership />}
+                />
+                <Route
+                  path="/memberships/edit/:id"
+                  element={<EditMembership />}
+                />
+              </Route>
+              <Route path="/profile/:id" element={<Profile />} />
+              <Route path="/register" element={<SignUp />} />
+              <Route path="/login" element={<SignIn />} />
+              <Route path="/logout" element={<Logout />} />
+            </Routes>
+            <Footer />
           </AuthProvider>
         </Router>
       </LocalizationProvider>

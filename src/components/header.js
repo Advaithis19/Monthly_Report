@@ -11,6 +11,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
+import SvgIcon from "@mui/material/SvgIcon";
 
 import AuthContext from "../context/AuthContext";
 
@@ -20,7 +21,9 @@ import tables from "../constants/tables";
 
 const NavbarItem = ({ title, nav_link, handleToggle, classprops }) => {
   const navigate = useNavigate();
+
   const pathList = window.location.pathname.split("/").slice(1);
+
   const [active, setActive] = useState(false);
 
   const handleNavSelect = () => {
@@ -44,7 +47,17 @@ const NavbarItem = ({ title, nav_link, handleToggle, classprops }) => {
   );
 };
 
+const HomeIcon = (props) => {
+  return (
+    <SvgIcon {...props}>
+      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+    </SvgIcon>
+  );
+};
+
 const Navbar = () => {
+  const pathList = window.location.pathname.split("/").slice(1);
+
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   //context api consumption - declaration
@@ -71,6 +84,10 @@ const Navbar = () => {
   const handleProfileOpen = () => {
     setAnchorEl(null);
     navigate("/profile/" + user.user_id);
+  };
+
+  const goToDashboard = () => {
+    if (user && !(pathList[0] == "home")) navigate("/home");
   };
 
   const handleLogout = () => {
@@ -101,6 +118,7 @@ const Navbar = () => {
     </Menu>
   );
 
+  useEffect(() => {}, [pathList]);
   return (
     <div>
       <div>
@@ -172,6 +190,20 @@ const Navbar = () => {
               >
                 <MenuIcon />
               </IconButton>
+
+              <IconButton
+                edge="start"
+                aria-label="menu"
+                sx={{ mr: 2 }}
+                onClick={goToDashboard}
+              >
+                {pathList[0] == "home" ? (
+                  <HomeIcon color="disabled" />
+                ) : (
+                  <HomeIcon color="inherit" />
+                )}
+              </IconButton>
+
               {toggleMenu && user && (
                 <ul
                   className="z-10 fixed -top-0 left-0 p-3 md:w-[20vw] h-screen shadow-2xl list-none

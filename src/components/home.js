@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import dayjs from "dayjs";
 import { Outlet, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -13,11 +13,13 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-
-import jwt_decode from "jwt-decode";
+import AuthContext from "../context/AuthContext";
 
 const Home = () => {
   const navigate = useNavigate();
+
+  //context api consumption - declaration
+  let { user } = useContext(AuthContext);
 
   //for regular tables
   const [dateobj, setDate] = useState({
@@ -217,8 +219,7 @@ const Home = () => {
 
       <div className="w-[60%] h-[0.25px] bg-gray-400 mx-auto my-5" />
 
-      {jwt_decode(JSON.parse(localStorage.getItem("authTokens")).access)
-        .is_teacher && !(pathList[1] === "publications") ? (
+      {user.is_teacher && !(pathList[1] === "publications") ? (
         <Grid container spacing={2}>
           <Grid item xs={12} md={6} className="text-right">
             <Link to={"/reports/" + pathList[1]}>
