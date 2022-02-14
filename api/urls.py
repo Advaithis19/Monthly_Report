@@ -1,6 +1,7 @@
 from django.urls import path, include
 from users.views import MyTokenObtainPairView
 from rest_framework_simplejwt.views import TokenRefreshView
+from .views import AggregateCount
 
 app_name = 'api'
 
@@ -61,4 +62,7 @@ urlpatterns = [
     # memberships
     path('memberships/', include('memberships.urls',
                                  namespace='memberships')),
+
+    # for chart data
+    path('aggregate/', AggregateCount.as_view(), name='listcount')
 ]
