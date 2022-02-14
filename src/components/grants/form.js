@@ -1,10 +1,5 @@
 import React from "react";
 import { years } from "../../constants/years";
-import { useForm } from "react-hook-form";
-
-//yup
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
 
 // Bootstrap UI
 import { Form } from "react-bootstrap";
@@ -21,47 +16,14 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 
-const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
-  // form validation rules
-  const validationSchema = Yup.object().shape({
-    title: Yup.string().required("Title is required"),
-    agency: Yup.string().required("Agency is required"),
-    sanc_amt: Yup.string().required("Amount is required"),
-  });
-  const formOptions = { resolver: yupResolver(validationSchema) };
-
-  // get functions to build form with useForm() hook
-  const { register, handleSubmit, formState } = useForm(formOptions);
-  const { errors } = formState;
-
-  const handleChange = (e) => {
-    updateFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handlePISelect = (e) => {
-    updateFormData({
-      ...formData,
-      ["PI"]: e.target.value,
-    });
-  };
-
-  const handleCO_PISelect = (e) => {
-    updateFormData({
-      ...formData,
-      ["CO_PI"]: e.target.value,
-    });
-  };
-
-  const handleYearSelect = (e) => {
-    updateFormData({
-      ...formData,
-      ["year"]: e.target.value,
-    });
-  };
-
+const CustomForm = ({
+  values,
+  handleChange,
+  users,
+  handleSubmit,
+  errors,
+  type,
+}) => {
   return (
     <Container
       maxWidth="sm"
@@ -76,24 +38,22 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
         >
           {type} Grant
         </Typography>
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formBasicTitle">
             <TextField
               // basic
               type="text"
               name="title"
-              value={formData.title}
+              value={values.title}
               //mui
               label="Grant Title"
               variant="outlined"
               fullWidth
-              //hook form
-              {...register("title")}
               //to override onChange
               onChange={handleChange}
             />
             <small className="text-danger">
-              {errors.title ? errors.title.message : <span></span>}
+              {errors.title ? errors.title : <span></span>}
             </small>
           </Form.Group>
 
@@ -102,19 +62,16 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
               // basic
               type="text"
               name="agency"
-              value={formData.agency}
+              value={values.agency}
               //mui
               label="Agency"
               variant="outlined"
               fullWidth
-              multiline
-              //hook form
-              {...register("agency")}
               //to override onChange
               onChange={handleChange}
             />
             <small className="text-danger">
-              {errors.agency ? errors.agency.message : <span></span>}
+              {errors.agency ? errors.agency : <span></span>}
             </small>
           </Form.Group>
 
@@ -123,20 +80,18 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
               <Form.Group className="mb-3" controlId="formBasicAmount">
                 <TextField
                   // basic
-                  type="text"
+                  type="number"
                   name="sanc_amt"
-                  value={formData.sanc_amt}
+                  value={values.sanc_amt}
                   //mui
                   label="Sanctioned Amount"
                   variant="outlined"
                   fullWidth
-                  //hook form
-                  {...register("sanc_amt")}
                   //to override onChange
                   onChange={handleChange}
                 />
                 <small className="text-danger">
-                  {errors.sanc_amt ? errors.sanc_amt.message : <span></span>}
+                  {errors.sanc_amt ? errors.sanc_amt : <span></span>}
                 </small>
               </Form.Group>
             </Grid>
@@ -147,8 +102,8 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
                   <Select
                     // basic
                     name="year"
-                    value={formData.year}
-                    onChange={handleYearSelect}
+                    value={values.year}
+                    onChange={handleChange}
                     // mui
                     labelId="year-select-label"
                     label="Select Year"
@@ -195,10 +150,9 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
                   <Select
                     // basic
                     name="PI"
-                    value={formData.PI}
-                    {...register("PI")}
+                    value={values.PI}
                     //overriding onChange
-                    onChange={handlePISelect}
+                    onChange={handleChange}
                     // mui
                     labelId="pi-select-label"
                     label="Principal Investigator"
@@ -214,7 +168,7 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
                   </Select>
                 </FormControl>
                 <small className="text-danger">
-                  {errors.PI ? errors.PI.message : <span></span>}
+                  {errors.PI ? errors.PI : <span></span>}
                 </small>
               </Form.Group>
             </Grid>
@@ -230,10 +184,9 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
                   <Select
                     // basic
                     name="CO_PI"
-                    value={formData.CO_PI}
-                    {...register("CO_PI")}
+                    value={values.CO_PI}
                     //overriding onChange
-                    onChange={handleCO_PISelect}
+                    onChange={handleChange}
                     // mui
                     labelId="co_pi-select-label"
                     label="Co-Principal Investigator"
@@ -249,7 +202,7 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
                   </Select>
                 </FormControl>
                 <small className="text-danger">
-                  {errors.CO_PI ? errors.CO_PI.message : <span></span>}
+                  {errors.CO_PI ? errors.CO_PI : <span></span>}
                 </small>
               </Form.Group>
             </Grid>

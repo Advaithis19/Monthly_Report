@@ -1,10 +1,5 @@
 import React from "react";
 import status_options from "../../constants/statusOptions";
-import { useForm } from "react-hook-form";
-
-//yup
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
 
 // Bootstrap UI
 import { Form } from "react-bootstrap";
@@ -21,47 +16,14 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 
-const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
-  // form validation rules
-  const validationSchema = Yup.object().shape({
-    title: Yup.string().required("Title is required"),
-    submitted_to: Yup.string().required("Agency is required"),
-    budg_amt: Yup.string().required("Amount is required"),
-  });
-  const formOptions = { resolver: yupResolver(validationSchema) };
-
-  // get functions to build form with useForm() hook
-  const { register, handleSubmit, formState } = useForm(formOptions);
-  const { errors } = formState;
-
-  const handleChange = (e) => {
-    updateFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handlePISelect = (e) => {
-    updateFormData({
-      ...formData,
-      ["PI"]: e.target.value,
-    });
-  };
-
-  const handleCO_PISelect = (e) => {
-    updateFormData({
-      ...formData,
-      ["CO_PI"]: e.target.value,
-    });
-  };
-
-  const handleStatusSelect = (e) => {
-    updateFormData({
-      ...formData,
-      ["status"]: e.target.value,
-    });
-  };
-
+const CustomForm = ({
+  values,
+  handleChange,
+  users,
+  handleSubmit,
+  type,
+  errors,
+}) => {
   return (
     <Container
       maxWidth="sm"
@@ -76,24 +38,22 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
         >
           {type} Proposal
         </Typography>
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formBasicTitle">
             <TextField
               // basic
               type="text"
               name="title"
-              value={formData.title}
+              value={values.title}
               //mui
               label="Proposal Title"
               variant="outlined"
               fullWidth
-              //hook form
-              {...register("title")}
               //to override onChange
               onChange={handleChange}
             />
             <small className="text-danger">
-              {errors.title ? errors.title.message : <span></span>}
+              {errors.title ? errors.title : <span></span>}
             </small>
           </Form.Group>
 
@@ -102,23 +62,16 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
               // basic
               type="text"
               name="submitted_to"
-              value={formData.submitted_to}
+              value={values.submitted_to}
               //mui
               label="Submitted to"
               variant="outlined"
               fullWidth
-              multiline
-              //hook form
-              {...register("submitted_to")}
               //to override onChange
               onChange={handleChange}
             />
             <small className="text-danger">
-              {errors.submitted_to ? (
-                errors.submitted_to.message
-              ) : (
-                <span></span>
-              )}
+              {errors.submitted_to ? errors.submitted_to : <span></span>}
             </small>
           </Form.Group>
 
@@ -127,20 +80,18 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
               <Form.Group className="mb-3" controlId="formBasicAmount">
                 <TextField
                   // basic
-                  type="text"
+                  type="number"
                   name="budg_amt"
-                  value={formData.budg_amt}
+                  value={values.budg_amt}
                   //mui
                   label="Budgetted Amount"
                   variant="outlined"
                   fullWidth
-                  //hook form
-                  {...register("budg_amt")}
                   //to override onChange
                   onChange={handleChange}
                 />
                 <small className="text-danger">
-                  {errors.budg_amt ? errors.budg_amt.message : <span></span>}
+                  {errors.budg_amt ? errors.budg_amt : <span></span>}
                 </small>
               </Form.Group>
             </Grid>
@@ -151,8 +102,8 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
                   <Select
                     // basic
                     name="status"
-                    value={formData.status}
-                    onChange={handleStatusSelect}
+                    value={values.status}
+                    onChange={handleChange}
                     // mui
                     labelId="status-select-label"
                     label="Status"
@@ -184,10 +135,9 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
                   <Select
                     // basic
                     name="PI"
-                    value={formData.PI}
-                    {...register("PI")}
+                    value={values.PI}
                     //overriding onChange
-                    onChange={handlePISelect}
+                    onChange={handleChange}
                     // mui
                     labelId="pi-select-label"
                     label="Principal Investigator"
@@ -203,7 +153,7 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
                   </Select>
                 </FormControl>
                 <small className="text-danger">
-                  {errors.PI ? errors.PI.message : <span></span>}
+                  {errors.PI ? errors.PI : <span></span>}
                 </small>
               </Form.Group>
             </Grid>
@@ -219,10 +169,9 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
                   <Select
                     // basic
                     name="CO_PI"
-                    value={formData.CO_PI}
-                    {...register("CO_PI")}
+                    value={values.CO_PI}
                     //overriding onChange
-                    onChange={handleCO_PISelect}
+                    onChange={handleChange}
                     // mui
                     labelId="co_pi-select-label"
                     label="Co-Principal Investigator"
@@ -238,7 +187,7 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
                   </Select>
                 </FormControl>
                 <small className="text-danger">
-                  {errors.CO_PI ? errors.CO_PI.message : <span></span>}
+                  {errors.CO_PI ? errors.CO_PI : <span></span>}
                 </small>
               </Form.Group>
             </Grid>

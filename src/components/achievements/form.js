@@ -1,9 +1,4 @@
 import React from "react";
-import { useForm } from "react-hook-form";
-
-//yup
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
 
 // Bootstrap UI
 import { Form } from "react-bootstrap";
@@ -20,32 +15,14 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 
-const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
-  // form validation rules
-  const validationSchema = Yup.object().shape({
-    title: Yup.string().required("Title is required"),
-    organisation: Yup.string().required("Organisation is required"),
-  });
-  const formOptions = { resolver: yupResolver(validationSchema) };
-
-  // get functions to build form with useForm() hook
-  const { register, handleSubmit, formState } = useForm(formOptions);
-  const { errors } = formState;
-
-  const handleChange = (e) => {
-    updateFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleFacultySelect = (e) => {
-    updateFormData({
-      ...formData,
-      ["f_id"]: e.target.value,
-    });
-  };
-
+const CustomForm = ({
+  values,
+  handleChange,
+  users,
+  handleSubmit,
+  type,
+  errors,
+}) => {
   return (
     <Container
       maxWidth="sm"
@@ -60,24 +37,22 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
         >
           {type} Achievement
         </Typography>
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formBasicTitle">
             <TextField
               // basic
               type="text"
               name="title"
-              value={formData.title}
+              value={values.title}
               //mui
               label="Title"
               variant="outlined"
               fullWidth
-              //hook form
-              {...register("title")}
               //to override onChange
               onChange={handleChange}
             />
             <small className="text-danger">
-              {errors.title ? errors.title.message : <span></span>}
+              {errors.title ? errors.title : <span></span>}
             </small>
           </Form.Group>
           <Grid container spacing={2}>
@@ -87,22 +62,16 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
                   // basic
                   type="text"
                   name="organisation"
-                  value={formData.organisation}
+                  value={values.organisation}
                   //mui
                   label="Associated Organisation"
                   variant="outlined"
                   fullWidth
-                  //hook form
-                  {...register("organisation")}
                   //to override onChange
                   onChange={handleChange}
                 />
                 <small className="text-danger">
-                  {errors.organisation ? (
-                    errors.organisation.message
-                  ) : (
-                    <span></span>
-                  )}
+                  {errors.organisation ? errors.organisation : <span></span>}
                 </small>
               </Form.Group>
             </Grid>
@@ -115,10 +84,9 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
                   <Select
                     // basic
                     name="f_id"
-                    value={formData.f_id}
-                    {...register("f_id")}
+                    value={values.f_id}
                     //overriding onChange
-                    onChange={handleFacultySelect}
+                    onChange={handleChange}
                     // mui
                     labelId="f_id-select-label"
                     label="Faculty Involved"
@@ -134,7 +102,7 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
                   </Select>
                 </FormControl>
                 <small className="text-danger">
-                  {errors.f_id ? errors.f_id.message : <span></span>}
+                  {errors.f_id ? errors.f_id : <span></span>}
                 </small>
               </Form.Group>
             </Grid>

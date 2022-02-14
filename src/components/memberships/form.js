@@ -1,9 +1,4 @@
 import React from "react";
-import { useForm } from "react-hook-form";
-
-//yup
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
 
 // Bootstrap UI
 import { Form } from "react-bootstrap";
@@ -23,43 +18,13 @@ import Checkbox from "@mui/material/Checkbox";
 import ListItemText from "@mui/material/ListItemText";
 
 const CustomForm = ({
-  formData,
-  updateFormData,
-  facultySelected,
-  setFacultySelected,
+  values,
+  handleChange,
   users,
-  onSubmit,
+  handleSubmit,
   type,
+  errors,
 }) => {
-  // form validation rules
-  const validationSchema = Yup.object().shape({
-    membership: Yup.string().required("Membership field is required"),
-    association: Yup.string().required("Association is required"),
-    term: Yup.string().required("Term field is required"),
-  });
-  const formOptions = { resolver: yupResolver(validationSchema) };
-
-  // get functions to build form with useForm() hook
-  const { register, handleSubmit, formState } = useForm(formOptions);
-  const { errors } = formState;
-
-  const handleChange = (e) => {
-    updateFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleFacultySelect = (e) => {
-    const {
-      target: { value },
-    } = e;
-    setFacultySelected(
-      // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value
-    );
-  };
-
   return (
     <Container
       maxWidth="sm"
@@ -74,25 +39,25 @@ const CustomForm = ({
         >
           {type} Membership
         </Typography>
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formBasicMembership">
             <TextField
               // basic
               type="text"
               name="membership"
-              value={formData.membership}
+              value={values.membership}
               //mui
               label="Membership Details"
               variant="outlined"
               fullWidth
               multiline
               //hook form
-              {...register("membership")}
+
               //to override onChange
               onChange={handleChange}
             />
             <small className="text-danger">
-              {errors.membership ? errors.membership.message : <span></span>}
+              {errors.membership ? errors.membership : <span></span>}
             </small>
           </Form.Group>
 
@@ -103,22 +68,18 @@ const CustomForm = ({
                   // basic
                   type="text"
                   name="association"
-                  value={formData.association}
+                  value={values.association}
                   //mui
                   label="Association"
                   variant="outlined"
                   fullWidth
                   //hook form
-                  {...register("association")}
+
                   //to override onChange
                   onChange={handleChange}
                 />
                 <small className="text-danger">
-                  {errors.association ? (
-                    errors.association.message
-                  ) : (
-                    <span></span>
-                  )}
+                  {errors.association ? errors.association : <span></span>}
                 </small>
               </Form.Group>
             </Grid>
@@ -126,20 +87,20 @@ const CustomForm = ({
               <Form.Group className="mb-3" controlId="formBasicTerm">
                 <TextField
                   // basic
-                  type="text"
+                  type="number"
                   name="term"
-                  value={formData.term}
+                  value={values.term}
                   //mui
                   label="Term (in years)"
                   variant="outlined"
                   fullWidth
                   //hook form
-                  {...register("term")}
+
                   //to override onChange
                   onChange={handleChange}
                 />
                 <small className="text-danger">
-                  {errors.term ? errors.term.message : <span></span>}
+                  {errors.term ? errors.term : <span></span>}
                 </small>
               </Form.Group>
             </Grid>
@@ -151,10 +112,9 @@ const CustomForm = ({
               <Select
                 // basic
                 name="f_id"
-                value={facultySelected}
-                {...register("f_id")}
+                value={values.f_id}
                 //overriding onChange
-                onChange={handleFacultySelect}
+                onChange={handleChange}
                 // mui
                 multiple
                 labelId="f_id-select-label"
@@ -170,7 +130,7 @@ const CustomForm = ({
                 {users.map((user) => {
                   return (
                     <MenuItem key={user.id} value={user}>
-                      <Checkbox checked={facultySelected.indexOf(user) > -1} />
+                      <Checkbox checked={values.f_id.indexOf(user) > -1} />
                       <ListItemText primary={user.name} />
                     </MenuItem>
                   );
@@ -178,7 +138,7 @@ const CustomForm = ({
               </Select>
             </FormControl>
             <small className="text-danger">
-              {errors.f_id ? errors.f_id.message : <span></span>}
+              {errors.f_id ? errors.f_id : <span></span>}
             </small>
           </Form.Group>
 

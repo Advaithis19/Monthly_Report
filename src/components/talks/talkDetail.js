@@ -88,7 +88,7 @@ const TalkDetail = () => {
               <tbody>
                 <tr>
                   <td>Venue</td>
-                  <td>{talk.res_person}</td>
+                  <td>{talk.venue}</td>
                 </tr>
                 <tr>
                   <td>Date</td>

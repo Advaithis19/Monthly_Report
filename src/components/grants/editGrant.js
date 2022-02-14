@@ -5,20 +5,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getGrantInstance } from "../../services/grants";
 import { getUsers } from "../../services/users";
 import { trackPromise } from "react-promise-tracker";
+import useForm from "../../validation/grants/useForm";
+import validate from "../../validation/grants/validateInfo";
 
 const EditGrant = () => {
-  const initialFormData = Object.freeze({
-    title: "",
-    agency: "",
-    sanc_amt: "",
-    year: 2022,
-    remarks: "",
-    PI: "",
-    CO_PI: "",
-  });
-
-  const [formData, updateFormData] = useState(initialFormData);
-
   let api = useAxios();
   api.defaults.xsrfCookieName = "csrftoken";
   api.defaults.xsrfHeaderName = "X-CSRFToken";
@@ -27,6 +17,47 @@ const EditGrant = () => {
   const { id } = useParams();
   const [users, setUsers] = useState([]);
   const usersRef = useRef();
+
+  const submitForm = async (e) => {
+    // console.log(values);
+    let postData = new FormData();
+    postData.append("title", values.title);
+    postData.append("agency", values.agency);
+    postData.append("sanc_amt", values.sanc_amt);
+    postData.append("year", values.year);
+    postData.append("remarks", values.remarks);
+    postData.append("PI", values.PI);
+    postData.append("CO_PI", values.CO_PI);
+
+    api
+      .put(`grants/edit/` + id + "/", postData)
+      .then(() => {
+        navigate("/grants/" + id);
+        // window.location.reload();
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          alert("Authentication has expired! Please re-login");
+          navigate("/logout");
+        } else if (error.response.status === 403) {
+          alert("You do not have permission to perform this action!");
+          navigate("/grants/" + id);
+        } else {
+          alert("Error! Please check the values entered for any mistakes....");
+        }
+      });
+  };
+
+  const { handleChange, handleSubmit, values, errors, setValues } = useForm(
+    submitForm,
+    validate
+  );
+
+  const findMatchingUser = (userInstance, userResponseArray) => {
+    return userResponseArray.filter((userResponseInstance) => {
+      return userInstance === userResponseInstance.label;
+    })[0].value;
+  };
 
   useEffect(() => {
     let mounted = true;
@@ -58,8 +89,8 @@ const EditGrant = () => {
       getGrantInstance(api, id)
         .then((res) => {
           if (mounted) {
-            updateFormData({
-              ...formData,
+            setValues({
+              ...values,
               ["title"]: res.data.title,
               ["agency"]: res.data.agency,
               ["sanc_amt"]: res.data.sanc_amt,
@@ -85,50 +116,15 @@ const EditGrant = () => {
     return () => {
       mounted = false;
     };
-  }, [setUsers, updateFormData]);
-
-  const findMatchingUser = (userInstance, userResponseArray) => {
-    return userResponseArray.filter((userResponseInstance) => {
-      return userInstance === userResponseInstance.label;
-    })[0].value;
-  };
-
-  const onSubmit = async (e) => {
-    // console.log(formData);
-    let postData = new FormData();
-    postData.append("title", formData.title);
-    postData.append("agency", formData.agency);
-    postData.append("sanc_amt", formData.sanc_amt);
-    postData.append("year", formData.year);
-    postData.append("remarks", formData.remarks);
-    postData.append("PI", formData.PI);
-    postData.append("CO_PI", formData.CO_PI);
-
-    api
-      .put(`grants/edit/` + id + "/", postData)
-      .then(() => {
-        navigate("/grants/" + id);
-        // window.location.reload();
-      })
-      .catch((error) => {
-        if (error.response.status === 401) {
-          alert("Authentication has expired! Please re-login");
-          navigate("/logout");
-        } else if (error.response.status === 403) {
-          alert("You do not have permission to perform this action!");
-          navigate("/grants/" + id);
-        } else {
-          alert("Error! Please check the values entered for any mistakes....");
-        }
-      });
-  };
+  }, [errors]);
 
   return (
     <Form
-      formData={formData}
-      updateFormData={updateFormData}
+      values={values}
+      handleChange={handleChange}
       users={users}
-      onSubmit={onSubmit}
+      handleSubmit={handleSubmit}
+      errors={errors}
       type="Edit"
     />
   );

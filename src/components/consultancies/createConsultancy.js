@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import useAxios from "../../utils/axios";
 import Form from "./form";
 import { useNavigate } from "react-router-dom";
-
 import { getUsers } from "../../services/users";
 import { trackPromise } from "react-promise-tracker";
+import useForm from "../../validation/consultancies/useForm";
+import validate from "../../validation/consultancies/validateInfo";
 
 const CreateConsultancy = () => {
   let api = useAxios();
@@ -12,15 +13,33 @@ const CreateConsultancy = () => {
   api.defaults.xsrfHeaderName = "X-CSRFToken";
 
   const navigate = useNavigate();
-  const initialFormData = Object.freeze({
-    title: "",
-    fund_agency: "",
-    rec_amt: "",
-    f_id: "",
-  });
-
-  const [formData, updateFormData] = useState(initialFormData);
   const [users, setUsers] = useState([]);
+
+  const submitForm = async () => {
+    let postData = new FormData();
+    postData.append("title", values.title);
+    postData.append("fund_agency", values.fund_agency);
+    postData.append("rec_amt", values.rec_amt);
+    postData.append("f_id", values.f_id);
+    api
+      .post(`consultancies/create/`, postData)
+      .then(() => {
+        navigate("/reports/consultancies/");
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          alert("Authentication has expired! Please re-login");
+          navigate("/logout");
+        } else {
+          alert("Error! Please check the values entered for any mistakes....");
+        }
+      });
+  };
+
+  const { handleChange, handleSubmit, values, errors } = useForm(
+    submitForm,
+    validate
+  );
 
   useEffect(() => {
     let mounted = true;
@@ -52,35 +71,15 @@ const CreateConsultancy = () => {
     return () => {
       mounted = false;
     };
-  }, []);
-
-  const onSubmit = async () => {
-    let postData = new FormData();
-    postData.append("title", formData.title);
-    postData.append("fund_agency", formData.fund_agency);
-    postData.append("rec_amt", formData.rec_amt);
-    postData.append("f_id", formData.f_id);
-    api
-      .post(`consultancies/create/`, postData)
-      .then(() => {
-        navigate("/reports/consultancies/");
-      })
-      .catch((error) => {
-        if (error.response.status === 401) {
-          alert("Authentication has expired! Please re-login");
-          navigate("/logout");
-        } else {
-          alert("Error! Please check the values entered for any mistakes....");
-        }
-      });
-  };
+  }, [errors]);
 
   return (
     <Form
-      formData={formData}
-      updateFormData={updateFormData}
+      values={values}
+      handleChange={handleChange}
       users={users}
-      onSubmit={onSubmit}
+      handleSubmit={handleSubmit}
+      errors={errors}
       type="Create"
     />
   );

@@ -1,9 +1,4 @@
 import React from "react";
-import { useForm } from "react-hook-form";
-
-//yup
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
 
 // Bootstrap UI
 import { Form } from "react-bootstrap";
@@ -24,49 +19,13 @@ import ListItemText from "@mui/material/ListItemText";
 import DatePicker from "@mui/lab/DatePicker";
 
 const CustomForm = ({
-  formData,
-  updateFormData,
-  date,
-  setDate,
-  facultySelected,
-  setFacultySelected,
+  values,
+  handleChange,
   users,
-  onSubmit,
+  handleSubmit,
   type,
+  errors,
 }) => {
-  // form validation rules
-  const validationSchema = Yup.object().shape({
-    organisation: Yup.string().required("Organisation is required"),
-    mod_col: Yup.string().required("Mode of Collaboration field is required"),
-    validity: Yup.string().required("Validity is required"),
-  });
-  const formOptions = { resolver: yupResolver(validationSchema) };
-
-  // get functions to build form with useForm() hook
-  const { register, handleSubmit, formState } = useForm(formOptions);
-  const { errors } = formState;
-
-  const handleChange = (e) => {
-    updateFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleDateChange = (e) => {
-    setDate(e);
-  };
-
-  const handleFacultySelect = (e) => {
-    const {
-      target: { value },
-    } = e;
-    setFacultySelected(
-      // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value
-    );
-  };
-
   return (
     <Container
       maxWidth="sm"
@@ -81,28 +40,22 @@ const CustomForm = ({
         >
           {type} MoU
         </Typography>
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formBasicorganisation">
             <TextField
               // basic
               type="text"
               name="organisation"
-              value={formData.organisation}
+              value={values.organisation}
               //mui
               label="MoU organisation"
               variant="outlined"
               fullWidth
-              //hook form
-              {...register("organisation")}
               //to override onChange
               onChange={handleChange}
             />
             <small className="text-danger">
-              {errors.organisation ? (
-                errors.organisation.message
-              ) : (
-                <span></span>
-              )}
+              {errors.organisation ? errors.organisation : <span></span>}
             </small>
           </Form.Group>
 
@@ -111,18 +64,18 @@ const CustomForm = ({
               // basic
               type="text"
               name="mod_col"
-              value={formData.mod_col}
+              value={values.mod_col}
               //mui
               label="Mode Of Collaboration"
               variant="outlined"
               fullWidth
               //hook form
-              {...register("mod_col")}
+
               //to override onChange
               onChange={handleChange}
             />
             <small className="text-danger">
-              {errors.mod_col ? errors.mod_col.message : <span></span>}
+              {errors.mod_col ? errors.mod_col : <span></span>}
             </small>
           </Form.Group>
 
@@ -131,8 +84,8 @@ const CustomForm = ({
               <FormControl>
                 <DatePicker
                   label="Date of procurement"
-                  value={date}
-                  onChange={handleDateChange}
+                  value={values.date}
+                  onChange={handleChange}
                   renderInput={(params) => <TextField {...params} />}
                 />
               </FormControl>
@@ -141,20 +94,18 @@ const CustomForm = ({
               <Form.Group className="mb-3" controlId="formBasicValidity">
                 <TextField
                   // basic
-                  type="text"
+                  type="number"
                   name="validity"
-                  value={formData.validity}
+                  value={values.validity}
                   //mui
                   label="Validity (in years)"
                   variant="outlined"
                   fullWidth
-                  //hook form
-                  {...register("validity")}
                   //to override onChange
                   onChange={handleChange}
                 />
                 <small className="text-danger">
-                  {errors.validity ? errors.validity.message : <span></span>}
+                  {errors.validity ? errors.validity : <span></span>}
                 </small>
               </Form.Group>
             </Grid>
@@ -166,10 +117,9 @@ const CustomForm = ({
               <Select
                 // basic
                 name="f_id"
-                value={facultySelected}
-                {...register("f_id")}
+                value={values.f_id}
                 //overriding onChange
-                onChange={handleFacultySelect}
+                onChange={handleChange}
                 // mui
                 multiple
                 labelId="f_id-select-label"
@@ -185,7 +135,7 @@ const CustomForm = ({
                 {users.map((user) => {
                   return (
                     <MenuItem key={user.id} value={user}>
-                      <Checkbox checked={facultySelected.indexOf(user) > -1} />
+                      <Checkbox checked={values.f_id.indexOf(user) > -1} />
                       <ListItemText primary={user.name} />
                     </MenuItem>
                   );
@@ -193,7 +143,7 @@ const CustomForm = ({
               </Select>
             </FormControl>
             <small className="text-danger">
-              {errors.f_id ? errors.f_id.message : <span></span>}
+              {errors.f_id ? errors.f_id : <span></span>}
             </small>
           </Form.Group>
 

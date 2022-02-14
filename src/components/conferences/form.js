@@ -1,10 +1,5 @@
 import React from "react";
-import { useForm } from "react-hook-form";
 import nat_int_options from "../../constants/nat_int";
-
-//yup
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
 
 // Bootstrap UI
 import { Form } from "react-bootstrap";
@@ -21,42 +16,14 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 
-const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
-  // form validation rules
-  const validationSchema = Yup.object().shape({
-    title: Yup.string().required("Title is required"),
-    conference: Yup.string().required("Conference is required"),
-    volume: Yup.string().required("Volume # is required"),
-    issue: Yup.string().required("Issue # is required"),
-    n_page: Yup.string().required("Page # is required"),
-  });
-  const formOptions = { resolver: yupResolver(validationSchema) };
-
-  // get functions to build form with useForm() hook
-  const { register, handleSubmit, formState } = useForm(formOptions);
-  const { errors } = formState;
-
-  const handleChange = (e) => {
-    updateFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleNatIntSelect = (e) => {
-    updateFormData({
-      ...formData,
-      ["nat_int"]: e.target.value,
-    });
-  };
-
-  const handleFacultySelect = (e) => {
-    updateFormData({
-      ...formData,
-      ["f_id"]: e.target.value,
-    });
-  };
-
+const CustomForm = ({
+  values,
+  handleChange,
+  users,
+  handleSubmit,
+  type,
+  errors,
+}) => {
   return (
     <Container
       maxWidth="sm"
@@ -72,24 +39,22 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
           {type} Conference
         </Typography>
 
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formBasicTitle">
             <TextField
               // basic
               type="text"
               name="title"
-              value={formData.title}
+              value={values.title}
               //mui
               label="Conference Title"
               variant="outlined"
               fullWidth
-              //hook form
-              {...register("title")}
               //to override onChange
               onChange={handleChange}
             />
             <small className="text-danger">
-              {errors.title ? errors.title.message : <span></span>}
+              {errors.title ? errors.title : <span></span>}
             </small>
           </Form.Group>
 
@@ -100,22 +65,18 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
                   // basic
                   type="text"
                   name="conference"
-                  value={formData.conference}
+                  value={values.conference}
                   //mui
                   label="Conference"
                   variant="outlined"
                   fullWidth
                   //hook form
-                  {...register("conference")}
+
                   //to override onChange
                   onChange={handleChange}
                 />
                 <small className="text-danger">
-                  {errors.conference ? (
-                    errors.conference.message
-                  ) : (
-                    <span></span>
-                  )}
+                  {errors.conference ? errors.conference : <span></span>}
                 </small>
               </Form.Group>
             </Grid>
@@ -128,8 +89,8 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
                   <Select
                     // basic
                     name="nat_int"
-                    value={formData.nat_int}
-                    onChange={handleNatIntSelect}
+                    value={values.nat_int}
+                    onChange={handleChange}
                     // mui
                     labelId="nat_int-select-label"
                     label="National/International"
@@ -155,18 +116,18 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
                   // basic
                   type="text"
                   name="volume"
-                  value={formData.volume}
+                  value={values.volume}
                   //mui
                   label="Volume #"
                   variant="outlined"
                   fullWidth
                   //hook form
-                  {...register("volume")}
+
                   //to override onChange
                   onChange={handleChange}
                 />
                 <small className="text-danger">
-                  {errors.volume ? errors.volume.message : <span></span>}
+                  {errors.volume ? errors.volume : <span></span>}
                 </small>
               </Form.Group>
             </Grid>
@@ -176,18 +137,18 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
                   // basic
                   type="text"
                   name="issue"
-                  value={formData.issue}
+                  value={values.issue}
                   //mui
                   label="Issue #"
                   variant="outlined"
                   fullWidth
                   //hook form
-                  {...register("issue")}
+
                   //to override onChange
                   onChange={handleChange}
                 />
                 <small className="text-danger">
-                  {errors.issue ? errors.issue.message : <span></span>}
+                  {errors.issue ? errors.issue : <span></span>}
                 </small>
               </Form.Group>
             </Grid>
@@ -195,20 +156,20 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
               <Form.Group className="mb-3" controlId="formBasicPageNumber">
                 <TextField
                   // basic
-                  type="text"
+                  type="number"
                   name="n_page"
-                  value={formData.n_page}
+                  value={values.n_page}
                   //mui
                   label="Page #"
                   variant="outlined"
                   fullWidth
                   //hook form
-                  {...register("n_page")}
+
                   //to override onChange
                   onChange={handleChange}
                 />
                 <small className="text-danger">
-                  {errors.n_page ? errors.n_page.message : <span></span>}
+                  {errors.n_page ? errors.n_page : <span></span>}
                 </small>
               </Form.Group>
             </Grid>
@@ -220,10 +181,9 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
               <Select
                 // basic
                 name="f_id"
-                value={formData.f_id}
-                {...register("f_id")}
+                value={values.f_id}
                 //overriding onChange
-                onChange={handleFacultySelect}
+                onChange={handleChange}
                 // mui
                 labelId="f_id-select-label"
                 label="Faculty Involved"
@@ -239,7 +199,7 @@ const CustomForm = ({ formData, updateFormData, users, onSubmit, type }) => {
               </Select>
             </FormControl>
             <small className="text-danger">
-              {errors.f_id ? errors.f_id.message : <span></span>}
+              {errors.f_id ? errors.f_id : <span></span>}
             </small>
           </Form.Group>
 

@@ -2,24 +2,13 @@ import React, { useState, useEffect, useRef } from "react";
 import useAxios from "../../utils/axios";
 import Form from "./form";
 import { useNavigate, useParams } from "react-router-dom";
-
 import { getLectureInstance } from "../../services/lectures";
 import { getUsers } from "../../services/users";
 import { trackPromise } from "react-promise-tracker";
+import useForm from "../../validation/lectures/useForm";
+import validate from "../../validation/lectures/validateInfo";
 
 const EditLecture = () => {
-  const initialFormData = Object.freeze({
-    topic: "",
-    res_person: "",
-    organisation: "",
-    n_stud: "",
-    n_fac: "",
-    n_ind: "",
-    f_id: "",
-  });
-
-  const [formData, updateFormData] = useState(initialFormData);
-
   let api = useAxios();
   api.defaults.xsrfCookieName = "csrftoken";
   api.defaults.xsrfHeaderName = "X-CSRFToken";
@@ -28,6 +17,46 @@ const EditLecture = () => {
   const { id } = useParams();
   const [users, setUsers] = useState([]);
   const usersRef = useRef();
+
+  const submitForm = async (e) => {
+    let postData = new FormData();
+    postData.append("topic", values.topic);
+    postData.append("res_person", values.res_person);
+    postData.append("organisation", values.organisation);
+    postData.append("n_stud", values.n_stud);
+    postData.append("n_fac", values.n_fac);
+    postData.append("n_ind", values.n_ind);
+    postData.append("f_id", values.f_id);
+
+    api
+      .put(`lectures/edit/` + id + "/", postData)
+      .then(() => {
+        navigate("/lectures/" + id);
+        // window.location.reload();
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          alert("Authentication has expired! Please re-login");
+          navigate("/logout");
+        } else if (error.response.status === 403) {
+          alert("You do not have permission to perform this action!");
+          navigate("/lectures/" + id);
+        } else {
+          alert("Error! Please check the values entered for any mistakes....");
+        }
+      });
+  };
+
+  const { handleChange, handleSubmit, values, errors, setValues } = useForm(
+    submitForm,
+    validate
+  );
+
+  const findMatchingUser = (userInstance, userResponseArray) => {
+    return userResponseArray.filter((userResponseInstance) => {
+      return userInstance === userResponseInstance.label;
+    })[0].value;
+  };
 
   useEffect(() => {
     let mounted = true;
@@ -59,8 +88,8 @@ const EditLecture = () => {
       getLectureInstance(api, id)
         .then((res) => {
           if (mounted) {
-            updateFormData({
-              ...formData,
+            setValues({
+              ...values,
               ["topic"]: res.data.topic,
               ["res_person"]: res.data.res_person,
               ["organisation"]: res.data.organisation,
@@ -86,49 +115,15 @@ const EditLecture = () => {
     return () => {
       mounted = false;
     };
-  }, [setUsers, updateFormData]);
-
-  const findMatchingUser = (userInstance, userResponseArray) => {
-    return userResponseArray.filter((userResponseInstance) => {
-      return userInstance === userResponseInstance.label;
-    })[0].value;
-  };
-
-  const onSubmit = async (e) => {
-    let postData = new FormData();
-    postData.append("topic", formData.topic);
-    postData.append("res_person", formData.res_person);
-    postData.append("organisation", formData.organisation);
-    postData.append("n_stud", formData.n_stud);
-    postData.append("n_fac", formData.n_fac);
-    postData.append("n_ind", formData.n_ind);
-    postData.append("f_id", formData.f_id);
-
-    api
-      .put(`lectures/edit/` + id + "/", postData)
-      .then(() => {
-        navigate("/lectures/" + id);
-        // window.location.reload();
-      })
-      .catch((error) => {
-        if (error.response.status === 401) {
-          alert("Authentication has expired! Please re-login");
-          navigate("/logout");
-        } else if (error.response.status === 403) {
-          alert("You do not have permission to perform this action!");
-          navigate("/lectures/" + id);
-        } else {
-          alert("Error! Please check the values entered for any mistakes....");
-        }
-      });
-  };
+  }, [errors]);
 
   return (
     <Form
-      formData={formData}
-      updateFormData={updateFormData}
+      values={values}
+      handleChange={handleChange}
       users={users}
-      onSubmit={onSubmit}
+      handleSubmit={handleSubmit}
+      errors={errors}
       type="Edit"
     />
   );

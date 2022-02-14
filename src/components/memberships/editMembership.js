@@ -5,17 +5,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getMembershipInstance } from "../../services/memberships";
 import { getUsers } from "../../services/users";
 import { trackPromise } from "react-promise-tracker";
+import useForm from "../../validation/memberships/useForm";
+import validate from "../../validation/memberships/validateInfo";
 
 const EditMembership = () => {
-  const initialFormData = Object.freeze({
-    membership: "",
-    association: "",
-    term: "",
-  });
-
-  const [formData, updateFormData] = useState(initialFormData);
-  const [facultySelected, setFacultySelected] = useState([]);
-
   let api = useAxios();
   api.defaults.xsrfCookieName = "csrftoken";
   api.defaults.xsrfHeaderName = "X-CSRFToken";
@@ -24,6 +17,45 @@ const EditMembership = () => {
   const { id } = useParams();
   const [users, setUsers] = useState([]);
   const usersRef = useRef();
+
+  const submitForm = async () => {
+    let postData = {
+      ...values,
+      f_id: values.f_id.map((selectedObj) => selectedObj.id),
+    };
+
+    api
+      .put(`memberships/edit/` + id + "/", postData)
+      .then(() => {
+        navigate("/memberships/" + id);
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          alert("Authentication has expired! Please re-login");
+          navigate("/logout");
+        } else if (error.response.status === 403) {
+          alert("You do not have permission to perform this action!");
+          navigate("/memberships/" + id);
+        } else {
+          alert("Error! Please check the values entered for any mistakes....");
+        }
+      });
+  };
+
+  const { handleChange, handleSubmit, values, errors, setValues } = useForm(
+    submitForm,
+    validate
+  );
+
+  const findMatchingUsers = (facultyList, userResponseArray) => {
+    let faculty_selected = [];
+    facultyList.forEach((name) => {
+      faculty_selected.push(
+        userResponseArray.filter((userObj) => userObj.name === name)[0]
+      );
+    });
+    return faculty_selected;
+  };
 
   useEffect(() => {
     let mounted = true;
@@ -55,15 +87,13 @@ const EditMembership = () => {
       getMembershipInstance(api, id)
         .then((res) => {
           if (mounted) {
-            updateFormData({
-              ...formData,
+            setValues({
+              ...values,
               ["membership"]: res.data.membership,
               ["association"]: res.data.association,
               ["term"]: res.data.term,
+              ["f_id"]: findMatchingUsers(res.data.f_id, usersRef.current),
             });
-            setFacultySelected(
-              findMatchingUsers(res.data.f_id, usersRef.current)
-            );
           }
         })
         .catch((error) => {
@@ -81,50 +111,15 @@ const EditMembership = () => {
     return () => {
       mounted = false;
     };
-  }, [setUsers, updateFormData, setFacultySelected]);
-
-  const findMatchingUsers = (facultyList, userResponseArray) => {
-    let faculty_selected = [];
-    facultyList.forEach((name) => {
-      faculty_selected.push(
-        userResponseArray.filter((userObj) => userObj.name === name)[0]
-      );
-    });
-    return faculty_selected;
-  };
-
-  const onSubmit = async () => {
-    let postData = {
-      ...formData,
-      f_id: facultySelected.map((selectedObj) => selectedObj.id),
-    };
-
-    api
-      .put(`memberships/edit/` + id + "/", postData)
-      .then(() => {
-        navigate("/memberships/" + id);
-      })
-      .catch((error) => {
-        if (error.response.status === 401) {
-          alert("Authentication has expired! Please re-login");
-          navigate("/logout");
-        } else if (error.response.status === 403) {
-          alert("You do not have permission to perform this action!");
-          navigate("/memberships/" + id);
-        } else {
-          alert("Error! Please check the values entered for any mistakes....");
-        }
-      });
-  };
+  }, [errors]);
 
   return (
     <Form
-      formData={formData}
-      updateFormData={updateFormData}
-      facultySelected={facultySelected}
-      setFacultySelected={setFacultySelected}
+      values={values}
+      handleChange={handleChange}
       users={users}
-      onSubmit={onSubmit}
+      handleSubmit={handleSubmit}
+      errors={errors}
       type="Edit"
     />
   );

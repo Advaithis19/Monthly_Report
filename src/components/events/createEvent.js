@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import { getUsers } from "../../services/users";
 import { trackPromise } from "react-promise-tracker";
+import useForm from "../../validation/events/useForm";
+import validate from "../../validation/events/validateInfo";
 
 const CreateEvent = () => {
   let api = useAxios();
@@ -12,19 +14,35 @@ const CreateEvent = () => {
   api.defaults.xsrfHeaderName = "X-CSRFToken";
 
   const navigate = useNavigate();
-  const initialFormData = Object.freeze({
-    title: "",
-    venue: "",
-    n_stud: "",
-    n_fac: "",
-    n_ind: "",
-  });
-
-  const [formData, updateFormData] = useState(initialFormData);
-  const [date, setDate] = useState(new Date());
-  const [facultySelected, setFacultySelected] = useState([]);
 
   const [users, setUsers] = useState([]);
+
+  const submitForm = async () => {
+    let postData = {
+      ...values,
+      date: dayjs(values.date).format("YYYY-MM-DD"),
+      f_id: values.f_id.map((selectedObj) => selectedObj.id),
+    };
+
+    api
+      .post(`events/create/`, postData)
+      .then(() => {
+        navigate("/reports/events/");
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          alert("Authentication has expired! Please re-login");
+          navigate("/logout");
+        } else {
+          alert("Error! Please check the values entered for any mistakes....");
+        }
+      });
+  };
+
+  const { handleChange, handleSubmit, values, errors } = useForm(
+    submitForm,
+    validate
+  );
 
   useEffect(() => {
     let mounted = true;
@@ -56,40 +74,15 @@ const CreateEvent = () => {
     return () => {
       mounted = false;
     };
-  }, []);
-
-  const onSubmit = async () => {
-    let postData = {
-      ...formData,
-      date: dayjs(date).format("YYYY-MM-DD"),
-      f_id: facultySelected.map((selectedObj) => selectedObj.id),
-    };
-
-    api
-      .post(`events/create/`, postData)
-      .then(() => {
-        navigate("/reports/events/");
-      })
-      .catch((error) => {
-        if (error.response.status === 401) {
-          alert("Authentication has expired! Please re-login");
-          navigate("/logout");
-        } else {
-          alert("Error! Please check the values entered for any mistakes....");
-        }
-      });
-  };
+  }, [errors]);
 
   return (
     <Form
-      formData={formData}
-      updateFormData={updateFormData}
-      date={date}
-      setDate={setDate}
-      facultySelected={facultySelected}
-      setFacultySelected={setFacultySelected}
+      values={values}
+      handleChange={handleChange}
       users={users}
-      onSubmit={onSubmit}
+      handleSubmit={handleSubmit}
+      errors={errors}
       type="Create"
     />
   );

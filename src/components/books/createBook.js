@@ -4,6 +4,8 @@ import Form from "./form";
 import { useNavigate } from "react-router-dom";
 import { getUsers } from "../../services/users";
 import { trackPromise } from "react-promise-tracker";
+import useForm from "../../validation/books/useForm";
+import validate from "../../validation/books/validateInfo";
 
 const CreateBook = () => {
   let api = useAxios();
@@ -11,16 +13,33 @@ const CreateBook = () => {
   api.defaults.xsrfHeaderName = "X-CSRFToken";
 
   const navigate = useNavigate();
-  const initialFormData = Object.freeze({
-    name: "",
-    n_isbn: "",
-    publisher: "",
-  });
-
-  const [formData, updateFormData] = useState(initialFormData);
-  const [facultySelected, setFacultySelected] = useState([]);
-
   const [users, setUsers] = useState([]);
+
+  const submitForm = async () => {
+    let postData = {
+      ...values,
+      f_id: values.f_id.map((selectedObj) => selectedObj.id),
+    };
+
+    api
+      .post(`books/create/`, postData)
+      .then(() => {
+        navigate("/reports/books/");
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          alert("Authentication has expired! Please re-login");
+          navigate("/logout");
+        } else {
+          alert("Error! Please check the values entered for any mistakes....");
+        }
+      });
+  };
+
+  const { handleChange, handleSubmit, values, errors } = useForm(
+    submitForm,
+    validate
+  );
 
   useEffect(() => {
     let mounted = true;
@@ -52,37 +71,15 @@ const CreateBook = () => {
     return () => {
       mounted = false;
     };
-  }, []);
-
-  const onSubmit = async () => {
-    let postData = {
-      ...formData,
-      f_id: facultySelected.map((selectedObj) => selectedObj.id),
-    };
-
-    api
-      .post(`books/create/`, postData)
-      .then(() => {
-        navigate("/reports/books/");
-      })
-      .catch((error) => {
-        if (error.response.status === 401) {
-          alert("Authentication has expired! Please re-login");
-          navigate("/logout");
-        } else {
-          alert("Error! Please check the values entered for any mistakes....");
-        }
-      });
-  };
+  }, [errors]);
 
   return (
     <Form
-      formData={formData}
-      updateFormData={updateFormData}
-      facultySelected={facultySelected}
-      setFacultySelected={setFacultySelected}
+      values={values}
+      handleChange={handleChange}
       users={users}
-      onSubmit={onSubmit}
+      handleSubmit={handleSubmit}
+      errors={errors}
       type="Create"
     />
   );

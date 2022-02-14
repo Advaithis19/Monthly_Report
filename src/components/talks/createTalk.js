@@ -5,6 +5,8 @@ import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 import { getUsers } from "../../services/users";
 import { trackPromise } from "react-promise-tracker";
+import useForm from "../../validation/talks/useForm";
+import validate from "../../validation/talks/validateInfo";
 
 const CreateTalk = () => {
   let api = useAxios();
@@ -12,18 +14,37 @@ const CreateTalk = () => {
   api.defaults.xsrfHeaderName = "X-CSRFToken";
 
   const navigate = useNavigate();
-  const initialFormData = Object.freeze({
-    topic: "",
-    venue: "",
-    n_stud: "",
-    n_fac: "",
-    n_ind: "",
-    f_id: "",
-  });
-
-  const [formData, updateFormData] = useState(initialFormData);
-  const [date, setDate] = useState(new Date());
   const [users, setUsers] = useState([]);
+
+  const submitForm = async () => {
+    let postData = new FormData();
+    postData.append("topic", values.topic);
+    postData.append("venue", values.venue);
+    postData.append("n_stud", values.n_stud);
+    postData.append("n_fac", values.n_fac);
+    postData.append("n_ind", values.n_ind);
+    postData.append("date", dayjs(values.date).format("YYYY-MM-DD"));
+    postData.append("f_id", values.f_id);
+
+    api
+      .post(`talks/create/`, postData)
+      .then(() => {
+        navigate("/reports/talks/");
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          alert("Authentication has expired! Please re-login");
+          navigate("/logout");
+        } else {
+          alert("Error! Please check the values entered for any mistakes....");
+        }
+      });
+  };
+
+  const { handleChange, handleSubmit, values, errors } = useForm(
+    submitForm,
+    validate
+  );
 
   useEffect(() => {
     let mounted = true;
@@ -55,41 +76,15 @@ const CreateTalk = () => {
     return () => {
       mounted = false;
     };
-  }, []);
-
-  const onSubmit = async () => {
-    let postData = new FormData();
-    postData.append("topic", formData.topic);
-    postData.append("venue", formData.venue);
-    postData.append("n_stud", formData.n_stud);
-    postData.append("n_fac", formData.n_fac);
-    postData.append("n_ind", formData.n_ind);
-    postData.append("date", dayjs(date).format("YYYY-MM-DD"));
-    postData.append("f_id", formData.f_id);
-
-    api
-      .post(`talks/create/`, postData)
-      .then(() => {
-        navigate("/reports/talks/");
-      })
-      .catch((error) => {
-        if (error.response.status === 401) {
-          alert("Authentication has expired! Please re-login");
-          navigate("/logout");
-        } else {
-          alert("Error! Please check the values entered for any mistakes....");
-        }
-      });
-  };
+  }, [errors]);
 
   return (
     <Form
-      formData={formData}
-      updateFormData={updateFormData}
-      date={date}
-      setDate={setDate}
+      values={values}
+      handleChange={handleChange}
       users={users}
-      onSubmit={onSubmit}
+      handleSubmit={handleSubmit}
+      errors={errors}
       type="Create"
     />
   );

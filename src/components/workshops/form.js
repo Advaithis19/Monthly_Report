@@ -1,9 +1,4 @@
 import React from "react";
-import { useForm } from "react-hook-form";
-
-//yup
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
 
 // Bootstrap UI
 import { Form } from "react-bootstrap";
@@ -24,48 +19,13 @@ import ListItemText from "@mui/material/ListItemText";
 import DatePicker from "@mui/lab/DatePicker";
 
 const CustomForm = ({
-  formData,
-  updateFormData,
-  date,
-  setDate,
-  facultySelected,
-  setFacultySelected,
+  values,
+  handleChange,
   users,
-  onSubmit,
+  handleSubmit,
   type,
+  errors,
 }) => {
-  // form validation rules
-  const validationSchema = Yup.object().shape({
-    event_name: Yup.string().required("Name of Event is required"),
-    venue: Yup.string().required("Venue is required"),
-  });
-  const formOptions = { resolver: yupResolver(validationSchema) };
-
-  // get functions to build form with useForm() hook
-  const { register, handleSubmit, formState } = useForm(formOptions);
-  const { errors } = formState;
-
-  const handleChange = (e) => {
-    updateFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleDateChange = (e) => {
-    setDate(e);
-  };
-
-  const handleFacultySelect = (e) => {
-    const {
-      target: { value },
-    } = e;
-    setFacultySelected(
-      // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value
-    );
-  };
-
   return (
     <Container
       maxWidth="sm"
@@ -80,24 +40,24 @@ const CustomForm = ({
         >
           {type} Workshop
         </Typography>
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formBasicEventName">
             <TextField
               // basic
               type="text"
               name="event_name"
-              value={formData.event_name}
+              value={values.event_name}
               //mui
               label="Event Name"
               variant="outlined"
               fullWidth
               //hook form
-              {...register("event_name")}
+
               //to override onChange
               onChange={handleChange}
             />
             <small className="text-danger">
-              {errors.event_name ? errors.event_name.message : <span></span>}
+              {errors.event_name ? errors.event_name : <span></span>}
             </small>
           </Form.Group>
 
@@ -106,19 +66,18 @@ const CustomForm = ({
               // basic
               type="text"
               name="venue"
-              value={formData.venue}
+              value={values.venue}
               //mui
               label="Venue"
               variant="outlined"
               fullWidth
-              multiline
               //hook form
-              {...register("venue")}
+
               //to override onChange
               onChange={handleChange}
             />
             <small className="text-danger">
-              {errors.venue ? errors.venue.message : <span></span>}
+              {errors.venue ? errors.venue : <span></span>}
             </small>
           </Form.Group>
 
@@ -126,9 +85,10 @@ const CustomForm = ({
             <Grid item xs={4}>
               <FormControl>
                 <DatePicker
+                  name="date"
                   label="Date of Workshop"
-                  value={date}
-                  onChange={handleDateChange}
+                  value={values.date}
+                  onChange={handleChange}
                   renderInput={(params) => <TextField {...params} />}
                 />
               </FormControl>
@@ -142,10 +102,9 @@ const CustomForm = ({
                   <Select
                     // basic
                     name="f_id"
-                    value={facultySelected}
-                    {...register("f_id")}
+                    value={values.f_id}
                     //overriding onChange
-                    onChange={handleFacultySelect}
+                    onChange={handleChange}
                     // mui
                     multiple
                     labelId="f_id-select-label"
@@ -161,9 +120,7 @@ const CustomForm = ({
                     {users.map((user) => {
                       return (
                         <MenuItem key={user.id} value={user}>
-                          <Checkbox
-                            checked={facultySelected.indexOf(user) > -1}
-                          />
+                          <Checkbox checked={values.f_id.indexOf(user) > -1} />
                           <ListItemText primary={user.name} />
                         </MenuItem>
                       );
@@ -171,7 +128,7 @@ const CustomForm = ({
                   </Select>
                 </FormControl>
                 <small className="text-danger">
-                  {errors.f_id ? errors.f_id.message : <span></span>}
+                  {errors.f_id ? errors.f_id : <span></span>}
                 </small>
               </Form.Group>
             </Grid>

@@ -1,9 +1,4 @@
 import React from "react";
-import { useForm } from "react-hook-form";
-
-//yup
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
 
 // Bootstrap UI
 import { Form } from "react-bootstrap";
@@ -22,42 +17,13 @@ import Box from "@mui/material/Box";
 import DatePicker from "@mui/lab/DatePicker";
 
 const CustomForm = ({
-  formData,
-  updateFormData,
-  date,
-  setDate,
+  values,
+  handleChange,
   users,
-  onSubmit,
+  handleSubmit,
+  errors,
   type,
 }) => {
-  // form validation rules
-  const validationSchema = Yup.object().shape({
-    activity: Yup.string().required("Activity field is required"),
-  });
-  const formOptions = { resolver: yupResolver(validationSchema) };
-
-  // get functions to build form with useForm() hook
-  const { register, handleSubmit, formState } = useForm(formOptions);
-  const { errors } = formState;
-
-  const handleChange = (e) => {
-    updateFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleFacultySelect = (e) => {
-    updateFormData({
-      ...formData,
-      ["f_id"]: e.target.value,
-    });
-  };
-
-  const handleDateChange = (e) => {
-    setDate(e);
-  };
-
   return (
     <Container
       maxWidth="sm"
@@ -73,24 +39,22 @@ const CustomForm = ({
           {type} Activity
         </Typography>
 
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formBasicActivity">
             <TextField
               // basic
               type="text"
               name="activity"
-              value={formData.activity}
+              value={values.activity}
               //mui
               label="Activity Description"
               variant="outlined"
               fullWidth
-              //hook form
-              {...register("activity")}
               //to override onChange
               onChange={handleChange}
             />
             <small className="text-danger">
-              {errors.activity ? errors.activity.message : <span></span>}
+              {errors.activity ? errors.activity : <span></span>}
             </small>
           </Form.Group>
           <Grid container spacing={2}>
@@ -99,8 +63,8 @@ const CustomForm = ({
                 <DatePicker
                   fullWidth
                   label="Date of Activiy"
-                  value={date}
-                  onChange={handleDateChange}
+                  value={values.date}
+                  onChange={handleChange}
                   renderInput={(params) => <TextField {...params} />}
                 />
               </FormControl>
@@ -114,10 +78,9 @@ const CustomForm = ({
                   <Select
                     // basic
                     name="f_id"
-                    value={formData.f_id}
-                    {...register("f_id")}
+                    value={values.f_id}
                     //overriding onChange
-                    onChange={handleFacultySelect}
+                    onChange={handleChange}
                     // mui
                     labelId="f_id-select-label"
                     label="Faculty Involved"
@@ -133,7 +96,7 @@ const CustomForm = ({
                   </Select>
                 </FormControl>
                 <small className="text-danger">
-                  {errors.f_id ? errors.f_id.message : <span></span>}
+                  {errors.f_id ? errors.f_id : <span></span>}
                 </small>
               </Form.Group>
             </Grid>

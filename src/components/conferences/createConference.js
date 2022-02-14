@@ -4,6 +4,8 @@ import Form from "./form";
 import { useNavigate } from "react-router-dom";
 import { getUsers } from "../../services/users";
 import { trackPromise } from "react-promise-tracker";
+import useForm from "../../validation/conferences/useForm";
+import validate from "../../validation/conferences/validateInfo";
 
 const CreateConference = () => {
   let api = useAxios();
@@ -11,18 +13,37 @@ const CreateConference = () => {
   api.defaults.xsrfHeaderName = "X-CSRFToken";
 
   const navigate = useNavigate();
-  const initialFormData = Object.freeze({
-    title: "",
-    conference: "",
-    volume: "",
-    issue: "",
-    n_page: "",
-    nat_int: "NAT",
-    f_id: "",
-  });
-
-  const [formData, updateFormData] = useState(initialFormData);
   const [users, setUsers] = useState([]);
+
+  const submitForm = async () => {
+    let postData = new FormData();
+    postData.append("title", values.title);
+    postData.append("conference", values.conference);
+    postData.append("volume", values.volume);
+    postData.append("issue", values.issue);
+    postData.append("n_page", values.n_page);
+    postData.append("nat_int", values.nat_int);
+    postData.append("f_id", values.f_id);
+
+    api
+      .post(`conferences/create/`, postData)
+      .then(() => {
+        navigate("/reports/conferences/");
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          alert("Authentication has expired! Please re-login");
+          navigate("/logout");
+        } else {
+          alert("Error! Please check the values entered for any mistakes....");
+        }
+      });
+  };
+
+  const { handleChange, handleSubmit, values, errors } = useForm(
+    submitForm,
+    validate
+  );
 
   useEffect(() => {
     let mounted = true;
@@ -54,39 +75,15 @@ const CreateConference = () => {
     return () => {
       mounted = false;
     };
-  }, []);
-
-  const onSubmit = async () => {
-    let postData = new FormData();
-    postData.append("title", formData.title);
-    postData.append("conference", formData.conference);
-    postData.append("volume", formData.volume);
-    postData.append("issue", formData.issue);
-    postData.append("n_page", formData.n_page);
-    postData.append("nat_int", formData.nat_int);
-    postData.append("f_id", formData.f_id);
-
-    api
-      .post(`conferences/create/`, postData)
-      .then(() => {
-        navigate("/reports/conferences/");
-      })
-      .catch((error) => {
-        if (error.response.status === 401) {
-          alert("Authentication has expired! Please re-login");
-          navigate("/logout");
-        } else {
-          alert("Error! Please check the values entered for any mistakes....");
-        }
-      });
-  };
+  }, [errors]);
 
   return (
     <Form
-      formData={formData}
-      updateFormData={updateFormData}
+      values={values}
+      handleChange={handleChange}
       users={users}
-      onSubmit={onSubmit}
+      handleSubmit={handleSubmit}
+      errors={errors}
       type="Create"
     />
   );

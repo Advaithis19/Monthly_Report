@@ -4,6 +4,8 @@ import Form from "./form";
 import { useNavigate } from "react-router-dom";
 import { getUsers } from "../../services/users";
 import { trackPromise } from "react-promise-tracker";
+import useForm from "../../validation/lectures/useForm";
+import validate from "../../validation/lectures/validateInfo";
 
 const CreateLecture = () => {
   let api = useAxios();
@@ -11,18 +13,37 @@ const CreateLecture = () => {
   api.defaults.xsrfHeaderName = "X-CSRFToken";
 
   const navigate = useNavigate();
-  const initialFormData = Object.freeze({
-    topic: "",
-    res_person: "",
-    organisation: "",
-    n_stud: "",
-    n_fac: "",
-    n_ind: "",
-    f_id: "",
-  });
-
-  const [formData, updateFormData] = useState(initialFormData);
   const [users, setUsers] = useState([]);
+
+  const submitForm = async () => {
+    let postData = new FormData();
+    postData.append("topic", values.topic);
+    postData.append("res_person", values.res_person);
+    postData.append("organisation", values.organisation);
+    postData.append("n_stud", values.n_stud);
+    postData.append("n_fac", values.n_fac);
+    postData.append("n_ind", values.n_ind);
+    postData.append("f_id", values.f_id);
+
+    api
+      .post(`lectures/create/`, postData)
+      .then(() => {
+        navigate("/reports/lectures/");
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          alert("Authentication has expired! Please re-login");
+          navigate("/logout");
+        } else {
+          alert("Error! Please check the values entered for any mistakes....");
+        }
+      });
+  };
+
+  const { handleChange, handleSubmit, values, errors } = useForm(
+    submitForm,
+    validate
+  );
 
   useEffect(() => {
     let mounted = true;
@@ -54,39 +75,15 @@ const CreateLecture = () => {
     return () => {
       mounted = false;
     };
-  }, []);
-
-  const onSubmit = async () => {
-    let postData = new FormData();
-    postData.append("topic", formData.topic);
-    postData.append("res_person", formData.res_person);
-    postData.append("organisation", formData.organisation);
-    postData.append("n_stud", formData.n_stud);
-    postData.append("n_fac", formData.n_fac);
-    postData.append("n_ind", formData.n_ind);
-    postData.append("f_id", formData.f_id);
-
-    api
-      .post(`lectures/create/`, postData)
-      .then(() => {
-        navigate("/reports/lectures/");
-      })
-      .catch((error) => {
-        if (error.response.status === 401) {
-          alert("Authentication has expired! Please re-login");
-          navigate("/logout");
-        } else {
-          alert("Error! Please check the values entered for any mistakes....");
-        }
-      });
-  };
+  }, [errors]);
 
   return (
     <Form
-      formData={formData}
-      updateFormData={updateFormData}
+      values={values}
+      handleChange={handleChange}
       users={users}
-      onSubmit={onSubmit}
+      handleSubmit={handleSubmit}
+      errors={errors}
       type="Create"
     />
   );

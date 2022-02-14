@@ -5,19 +5,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getProposalInstance } from "../../services/proposals";
 import { getUsers } from "../../services/users";
 import { trackPromise } from "react-promise-tracker";
+import useForm from "../../validation/proposals/useForm";
+import validate from "../../validation/proposals/validateInfo";
 
 const EditProposal = () => {
-  const initialFormData = Object.freeze({
-    title: "",
-    submitted_to: "",
-    budg_amt: "",
-    status: "",
-    PI: "",
-    CO_PI: "",
-  });
-
-  const [formData, updateFormData] = useState(initialFormData);
-
   let api = useAxios();
   api.defaults.xsrfCookieName = "csrftoken";
   api.defaults.xsrfHeaderName = "X-CSRFToken";
@@ -26,6 +17,46 @@ const EditProposal = () => {
   const { id } = useParams();
   const [users, setUsers] = useState([]);
   const usersRef = useRef();
+
+  const submitForm = async (e) => {
+    // console.log(values);
+    let postData = new FormData();
+    postData.append("title", values.title);
+    postData.append("submitted_to", values.submitted_to);
+    postData.append("budg_amt", values.budg_amt);
+    postData.append("status", values.status);
+    postData.append("PI", values.PI);
+    postData.append("CO_PI", values.CO_PI);
+
+    api
+      .put(`proposals/edit/` + id + "/", postData)
+      .then(() => {
+        navigate("/proposals/" + id);
+        // window.location.reload();
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          alert("Authentication has expired! Please re-login");
+          navigate("/logout");
+        } else if (error.response.status === 403) {
+          alert("You do not have permission to perform this action!");
+          navigate("/proposals/" + id);
+        } else {
+          alert("Error! Please check the values entered for any mistakes....");
+        }
+      });
+  };
+
+  const { handleChange, handleSubmit, values, errors, setValues } = useForm(
+    submitForm,
+    validate
+  );
+
+  const findMatchingUser = (userInstance, userResponseArray) => {
+    return userResponseArray.filter((userResponseInstance) => {
+      return userInstance === userResponseInstance.label;
+    })[0].value;
+  };
 
   useEffect(() => {
     let mounted = true;
@@ -57,8 +88,8 @@ const EditProposal = () => {
       getProposalInstance(api, id)
         .then((res) => {
           if (mounted) {
-            updateFormData({
-              ...formData,
+            setValues({
+              ...values,
               ["title"]: res.data.title,
               ["submitted_to"]: res.data.submitted_to,
               ["budg_amt"]: res.data.budg_amt,
@@ -83,49 +114,15 @@ const EditProposal = () => {
     return () => {
       mounted = false;
     };
-  }, [setUsers, updateFormData]);
-
-  const findMatchingUser = (userInstance, userResponseArray) => {
-    return userResponseArray.filter((userResponseInstance) => {
-      return userInstance === userResponseInstance.label;
-    })[0].value;
-  };
-
-  const onSubmit = async (e) => {
-    // console.log(formData);
-    let postData = new FormData();
-    postData.append("title", formData.title);
-    postData.append("submitted_to", formData.submitted_to);
-    postData.append("budg_amt", formData.budg_amt);
-    postData.append("status", formData.status);
-    postData.append("PI", formData.PI);
-    postData.append("CO_PI", formData.CO_PI);
-
-    api
-      .put(`proposals/edit/` + id + "/", postData)
-      .then(() => {
-        navigate("/proposals/" + id);
-        // window.location.reload();
-      })
-      .catch((error) => {
-        if (error.response.status === 401) {
-          alert("Authentication has expired! Please re-login");
-          navigate("/logout");
-        } else if (error.response.status === 403) {
-          alert("You do not have permission to perform this action!");
-          navigate("/proposals/" + id);
-        } else {
-          alert("Error! Please check the values entered for any mistakes....");
-        }
-      });
-  };
+  }, [errors]);
 
   return (
     <Form
-      formData={formData}
-      updateFormData={updateFormData}
+      values={values}
+      handleChange={handleChange}
       users={users}
-      onSubmit={onSubmit}
+      handleSubmit={handleSubmit}
+      errors={errors}
       type="Edit"
     />
   );
