@@ -70,7 +70,7 @@ const SignIn = () => {
       .then((response) => {
         localStorage.setItem("authTokens", JSON.stringify(response.data));
         setAuthTokens(response.data);
-        navigate("/reports/grants");
+        navigate("/home");
       })
       .catch((error) => {
         if (error.response.status === 401) {

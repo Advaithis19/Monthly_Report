@@ -1,5 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import AuthContext from "../context/AuthContext";
 
 // mui
 import AppBar from "@mui/material/AppBar";
@@ -12,8 +14,6 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import SvgIcon from "@mui/material/SvgIcon";
-
-import AuthContext from "../context/AuthContext";
 
 import { AiOutlineClose } from "react-icons/ai";
 
@@ -61,7 +61,7 @@ const Navbar = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   //context api consumption - declaration
-  let { user } = useContext(AuthContext);
+  let { user, setAuthTokens } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -92,7 +92,21 @@ const Navbar = () => {
 
   const handleLogout = () => {
     setAnchorEl(null);
-    navigate("/logout");
+    axios
+      .post("http://127.0.0.1:8000/api/users/logout/blacklist/", {
+        refresh_token: localStorage.getItem("refresh_token"),
+      })
+      .then(() => {
+        localStorage.removeItem("authTokens");
+        setAuthTokens(null);
+        navigate("/login");
+      })
+      .catch(() => {
+        localStorage.removeItem("authTokens");
+        setAuthTokens(null);
+        alert("Something went wrong!");
+        navigate("/login");
+      });
   };
 
   const menuId = "primary-search-account-menu";

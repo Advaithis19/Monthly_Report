@@ -71,10 +71,10 @@ const Dashboard = () => {
 
   return (
     <Container
-      maxWidth="lg"
+      // maxWidth="md"
       component="main"
       className="text-center border-solid border-1 border-[#27447e] shadow-xl shadow-blue-500/50 p-5"
-      style={{ margin: "2% auto" }}
+      style={{ margin: "2% auto", width: "65%" }}
     >
       <div className="text-3xl font-semibold mb-3">
         {user.is_teacher ? (

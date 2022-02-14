@@ -10,7 +10,6 @@ import Footer from "./components/footer";
 
 import SignIn from "./components/auth/login";
 import SignUp from "./components/auth/register";
-import Logout from "./components/auth/logout";
 import PrivateOutlet from "./utils/private";
 import Profile from "./components/profile";
 
@@ -406,7 +405,6 @@ function App() {
               <Route path="/profile/:id" element={<Profile />} />
               <Route path="/register" element={<SignUp />} />
               <Route path="/login" element={<SignIn />} />
-              <Route path="/logout" element={<Logout />} />
             </Routes>
             <Footer />
           </AuthProvider>
