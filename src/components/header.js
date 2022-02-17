@@ -211,10 +211,12 @@ const Navbar = () => {
                 sx={{ mr: 2 }}
                 onClick={goToDashboard}
               >
-                {pathList[0] == "home" ? (
+                {pathList[0] == "home" ||
+                pathList[0] == "login" ||
+                pathList[0] == "register" ? (
                   <HomeIcon color="disabled" />
                 ) : (
-                  <HomeIcon color="inherit" />
+                  <HomeIcon color="primary" />
                 )}
               </IconButton>
 
