@@ -127,6 +127,7 @@ const CustomForm = ({
               // basic
               type="text"
               name="remarks"
+              value={values.remarks}
               //mui
               label="Remarks"
               variant="outlined"

@@ -32,7 +32,8 @@ const NavbarItem = ({ title, nav_link, handleToggle, classprops }) => {
   };
 
   useEffect(() => {
-    if (pathList[1] === nav_link.slice(1)) setActive(true);
+    if (pathList[1] === nav_link.slice(1) || pathList[0] === nav_link.slice(1))
+      setActive(true);
   });
 
   return (
