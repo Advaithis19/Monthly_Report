@@ -4,6 +4,7 @@ import {
   BrowserRouter as Router,
   Routes,
   Outlet,
+  Navigate,
 } from "react-router-dom";
 import Navbar from "./components/header";
 import Footer from "./components/footer";
@@ -140,6 +141,8 @@ function App() {
           <AuthProvider>
             <Navbar />
             <Routes>
+              <Route exact path="/" element={<Navigate replace to="/home" />} />
+
               <Route path="/" element={<PrivateOutlet />}>
                 <Route exact path="home" element={<Dashboard />} />
                 <Route path="reports" element={<Home />}>
