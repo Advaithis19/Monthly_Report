@@ -1,8 +1,6 @@
 from django.urls import path, re_path
 from .views import CreateAchievement, DeleteAchievement, EditAchievement, AchievementList, AchievementDetail, AchievementListDateFilter
 
-app_name = 'achievements'
-
 urlpatterns = [
     path('', AchievementList.as_view(), name='listachievement'),
     path('<int:pk>/', AchievementDetail.as_view(), name='detailachievement'),

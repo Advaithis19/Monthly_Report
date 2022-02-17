@@ -1,8 +1,6 @@
 from django.urls import path, re_path
 from .views import CreateProposal, DeleteProposal, EditProposal, ProposalList, ProposalDetail, ProposalListDateFilter
 
-app_name = 'proposals'
-
 urlpatterns = [
     path('', ProposalList.as_view(), name='listproposal'),
     path('<int:pk>/', ProposalDetail.as_view(), name='detailproposal'),

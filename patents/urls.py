@@ -1,8 +1,6 @@
 from django.urls import path, re_path
 from .views import PatentList, PatentDetail, CreatePatent, EditPatent, DeletePatent, PatentListDateFilter
 
-app_name = 'patents'
-
 urlpatterns = [
     path('', PatentList.as_view(), name='listpatent'),
     path('<int:pk>/', PatentDetail.as_view(), name='detailpatent'),

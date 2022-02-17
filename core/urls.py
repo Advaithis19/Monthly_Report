@@ -2,13 +2,24 @@ from django.conf.urls import include
 from django.contrib import admin
 from django.urls import path
 from django.contrib.auth import views as auth_views
+from django.shortcuts import redirect
+
+
+front_end_url = 'http://127.0.0.1:3000/'
+
+
+def redirect_view(request):
+    return redirect(front_end_url)
+
 
 urlpatterns = [
+    path('', redirect_view, name='redirect'),
+
     # path for admin site
     path('admin/', admin.site.urls),
 
     # path for api
-    path('api/', include('api.urls', namespace='api')),
+    path('api/', include('api.urls')),
 
     # path for Browsable Api login/logout interface
     path('api-auth/', include('rest_framework.urls')),

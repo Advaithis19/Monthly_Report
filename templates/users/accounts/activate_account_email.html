@@ -14,7 +14,7 @@
                <p style="text-align:left">Hello {{ user.username }},<br><br> Please click on the following link to confirm your registration
               </p>
               <p>
-                <a target="_blank" style="text-decoration:none; background-color: black; border: black 1px solid; color: #fff; padding:10px 10px; display:block;" href="{{ protocol }}://{{ domain }}{% url 'users:activate' uidb64=uid token=token %}">
+                <a target="_blank" style="text-decoration:none; background-color: black; border: black 1px solid; color: #fff; padding:10px 10px; display:block;" href="{{ protocol }}://{{ domain }}{% url 'activate' uidb64=uid token=token %}">
                   <strong>Activate Account</strong></a>
               </p>
               <p style="text-align:left">This link can only be used once. You may login to your account following the confirmation. <br><br>If you did not make this request, you can simply ignore this email.</p>

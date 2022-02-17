@@ -1,8 +1,6 @@
 from django.urls import path, re_path
 from .views import BookList, BookDetail, CreateBook, EditBook, DeleteBook, BookListDateFilter
 
-app_name = 'books'
-
 urlpatterns = [
     path('', BookList.as_view(), name='listbook'),
     path('<int:pk>/', BookDetail.as_view(), name='detailbook'),

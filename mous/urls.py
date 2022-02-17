@@ -1,8 +1,6 @@
 from django.urls import path, re_path
 from .views import MouList, MouDetail, CreateMou, EditMou, DeleteMou, MouListDateFilter
 
-app_name = 'mous'
-
 urlpatterns = [
     path('', MouList.as_view(), name='listmou'),
     path('<int:pk>/', MouDetail.as_view(), name='detailmou'),

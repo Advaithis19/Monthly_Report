@@ -1,8 +1,6 @@
 from django.urls import path, re_path
 from .views import CreateActivity, DeleteActivity, EditActivity, ActivityList, ActivityDetail, ActivityListDateFilter
 
-app_name = 'activities'
-
 urlpatterns = [
     path('', ActivityList.as_view(), name='listactivity'),
     path('<int:pk>/', ActivityDetail.as_view(), name='detailactivity'),

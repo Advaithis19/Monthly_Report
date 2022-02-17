@@ -1,8 +1,6 @@
 from django.urls import path, re_path
 from .views import CreateTalk, DeleteTalk, EditTalk, TalkList, TalkDetail, TalkListDateFilter
 
-app_name = 'talks'
-
 urlpatterns = [
     path('', TalkList.as_view(), name='listtalk'),
     path('<int:pk>/', TalkDetail.as_view(), name='detailtalk'),

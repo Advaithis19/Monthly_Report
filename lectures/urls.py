@@ -1,8 +1,6 @@
 from django.urls import path, re_path
 from .views import CreateLecture, DeleteLecture, EditLecture, LectureList, LectureDetail, LectureListDateFilter
 
-app_name = 'lectures'
-
 urlpatterns = [
     path('', LectureList.as_view(), name='listlecture'),
     path('<int:pk>/', LectureDetail.as_view(), name='detaillecture'),

@@ -1,8 +1,6 @@
 from django.urls import path, re_path
 from .views import EventList, EventDetail, CreateEvent, EditEvent, DeleteEvent, EventListDateFilter
 
-app_name = 'events'
-
 urlpatterns = [
     path('', EventList.as_view(), name='listevent'),
     path('<int:pk>/', EventDetail.as_view(), name='detailevent'),

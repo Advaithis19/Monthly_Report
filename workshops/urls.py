@@ -1,8 +1,6 @@
 from django.urls import path, re_path
 from .views import WorkshopList, WorkshopDetail, CreateWorkshop, EditWorkshop, DeleteWorkshop, WorkshopListDateFilter
 
-app_name = 'workshops'
-
 urlpatterns = [
     path('', WorkshopList.as_view(), name='listworkshop'),
     path('<int:pk>/', WorkshopDetail.as_view(), name='detailworkshop'),

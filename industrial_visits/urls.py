@@ -1,8 +1,6 @@
 from django.urls import path, re_path
 from .views import Industrial_visitList, Industrial_visitDetail, CreateIndustrial_visit, EditIndustrial_visit, DeleteIndustrial_visit, Industrial_visitListDateFilter
 
-app_name = 'industrial_visits'
-
 urlpatterns = [
     path('', Industrial_visitList.as_view(), name='listindustrial_visit'),
     path('<int:pk>/', Industrial_visitDetail.as_view(),

@@ -1,8 +1,6 @@
 from django.urls import path, re_path
 from .views import CreateConference, DeleteConference, EditConference, ConferenceList, ConferenceDetail, ConferenceListDateFilter
 
-app_name = 'conferences'
-
 urlpatterns = [
     path('', ConferenceList.as_view(), name='listconference'),
     path('<int:pk>/', ConferenceDetail.as_view(), name='detailconference'),

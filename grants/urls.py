@@ -1,8 +1,6 @@
 from django.urls import path, re_path
 from .views import CreateGrant, DeleteGrant, EditGrant, GrantList, GrantDetail, GrantListDateFilter
 
-app_name = 'grants'
-
 urlpatterns = [
     path('', GrantList.as_view(), name='listgrant'),
     path('<int:pk>/', GrantDetail.as_view(), name='detailgrant'),

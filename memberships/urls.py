@@ -1,8 +1,6 @@
 from django.urls import path, re_path
 from .views import MembershipList, MembershipDetail, CreateMembership, EditMembership, DeleteMembership, MembershipListDateFilter
 
-app_name = 'memberships'
-
 urlpatterns = [
     path('', MembershipList.as_view(), name='listmembership'),
     path('<int:pk>/', MembershipDetail.as_view(), name='detailmembership'),
