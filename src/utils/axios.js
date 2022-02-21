@@ -1,21 +1,3 @@
-// import axios from "axios";
-// import jwt_decode from "jwt-decode";
-// import dayjs from "dayjs";
-
-// const baseURL = "http://127.0.0.1:8000/api/";
-
-// const axiosInstance = axios.create({
-//   baseURL: baseURL,
-//   timeout: 5000,
-//   //   headers: {
-//   //     Authorization: "JWT " + localStorage.getItem("access_token"),
-//       // "Content-Type": "application/json",
-//       // accept: "application/json",
-//   //   },
-// });
-
-// export default axiosInstance;
-
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import dayjs from "dayjs";
@@ -23,10 +5,6 @@ import dayjs from "dayjs";
 const apiBaseURL = "http://127.0.0.1:8000/api/";
 
 const useAxios = () => {
-  // const accessToken = localStorage.getItem("access_token");
-  // const refreshToken = localStorage.getItem("refresh_token");
-  // const user = jwt_decode(accessToken);
-
   const axiosInstance = axios.create({
     baseURL: apiBaseURL,
     timeout: 5000,
@@ -56,32 +34,9 @@ const useAxios = () => {
       return req;
     }
 
-    // console.log("access token has expired and hence making refresh request");
-
-    // console.log("oldaccesstoken", accessToken);
-    // console.log("oldrefreshtoken", refreshToken);
-
     const response = await axios.post(`${apiBaseURL}token/refresh/`, {
       refresh: authTokens.refresh,
     });
-
-    // let newAccessToken = JSON.stringify(response.data.access);
-    // console.log("newaccesstoken", newAccessToken);
-
-    // let newRefreshToken = JSON.stringify(response.data.refresh);
-    // console.log("newrefreshtoken", newRefreshToken);
-
-    // localStorage.setItem("access_token", newAccessToken);
-    // console.log(
-    //   "localstorage access token",
-    //   localStorage.getItem("access_token")
-    // );
-
-    // localStorage.setItem("refresh_token", newRefreshToken);
-    // console.log(
-    //   "localstorage refresh token",
-    //   localStorage.getItem("refresh_token")
-    // );
 
     localStorage.setItem("authTokens", JSON.stringify(response.data));
 
