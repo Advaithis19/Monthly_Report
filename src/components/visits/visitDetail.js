@@ -68,9 +68,11 @@ const Industrial_visitDetail = () => {
 
   if (!industrial_visit || industrial_visit.length === 0)
     return (
-      <p className="text-xl text-bold">
-        Can not find required industrial_visit, sorry
-      </p>
+      <div className="h-[100vh] text-center">
+        <p className="text-xl text-bold">
+          Can not find required industrial_visit, sorry
+        </p>
+      </div>
     );
   return (
     <Container

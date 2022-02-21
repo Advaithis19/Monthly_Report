@@ -69,7 +69,9 @@ const PatentDetail = () => {
 
   if (!patent || patent.length === 0)
     return (
-      <p className="text-xl text-bold">Can not find required patent, sorry</p>
+      <div className="h-[100vh] text-center">
+        <p className="text-xl text-bold">Can not find required patent, sorry</p>
+      </div>
     );
   return (
     <Container

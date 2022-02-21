@@ -68,7 +68,9 @@ const MouDetail = () => {
 
   if (!mou || mou.length === 0)
     return (
-      <p className="text-xl text-bold">Can not find required MoU, sorry</p>
+      <div className="h-[100vh] text-center">
+        <p className="text-xl text-bold">Can not find required MoU, sorry</p>
+      </div>
     );
   return (
     <Container

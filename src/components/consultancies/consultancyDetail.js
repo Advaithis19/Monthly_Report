@@ -68,9 +68,11 @@ const ConsultancyDetail = () => {
 
   if (!consultancy || consultancy.length === 0)
     return (
-      <p className="text-xl text-bold">
-        Can not find required consultancy, sorry
-      </p>
+      <div className="h-[100vh] text-center">
+        <p className="text-xl text-bold">
+          Can not find required consultancy, sorry
+        </p>
+      </div>
     );
   return (
     <Container

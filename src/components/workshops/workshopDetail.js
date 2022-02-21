@@ -68,7 +68,11 @@ const WorkshopDetail = () => {
 
   if (!workshop || workshop.length === 0)
     return (
-      <p className="text-xl text-bold">Can not find required workshop, sorry</p>
+      <div className="h-[100vh] text-center">
+        <p className="text-xl text-bold">
+          Can not find required workshop, sorry
+        </p>
+      </div>
     );
   return (
     <Container

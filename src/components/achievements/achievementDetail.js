@@ -68,9 +68,11 @@ const AchievementDetail = () => {
 
   if (!achievement || achievement.length === 0)
     return (
-      <p className="text-xl text-bold">
-        Can not find required achievement, sorry
-      </p>
+      <div className="h-[100vh] text-center">
+        <p className="text-xl text-bold">
+          Can not find required achievement, sorry
+        </p>
+      </div>
     );
   return (
     <Container
