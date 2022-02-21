@@ -68,9 +68,7 @@ const TalkDetail = () => {
 
   if (!talk || talk.length === 0)
     return (
-      <div className="h-[100vh] text-center">
-        <p className="text-xl text-bold">Can not find required talk, sorry</p>
-      </div>
+      <p className="text-xl text-bold">Can not find required talk, sorry</p>
     );
   return (
     <Container

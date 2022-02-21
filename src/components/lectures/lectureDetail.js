@@ -68,11 +68,7 @@ const LectureDetail = () => {
 
   if (!lecture || lecture.length === 0)
     return (
-      <div className="h-[100vh] text-center">
-        <p className="text-xl text-bold">
-          Can not find required lecture, sorry
-        </p>
-      </div>
+      <p className="text-xl text-bold">Can not find required lecture, sorry</p>
     );
   return (
     <Container

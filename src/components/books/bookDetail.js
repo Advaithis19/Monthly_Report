@@ -68,9 +68,7 @@ const BookDetail = () => {
 
   if (!book || book.length === 0)
     return (
-      <div className="h-[100vh] text-center">
-        <p className="text-xl text-bold">Can not find required book, sorry</p>
-      </div>
+      <p className="text-xl text-bold">Can not find required book, sorry</p>
     );
   return (
     <Container

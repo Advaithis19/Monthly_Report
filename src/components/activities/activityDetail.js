@@ -68,11 +68,7 @@ const ActivityDetail = () => {
 
   if (!activity || activity.length === 0)
     return (
-      <div className="h-[100vh] text-center">
-        <p className="text-xl text-bold">
-          Can not find required activity, sorry
-        </p>
-      </div>
+      <p className="text-xl text-bold">Can not find required activity, sorry</p>
     );
   return (
     <Container
