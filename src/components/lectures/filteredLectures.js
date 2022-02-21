@@ -39,7 +39,9 @@ const FilteredLectures = () => {
 
   if (!lectures || lectures.length === 0)
     return (
-      <p className="text-xl text-bold">Can not find any lectures, sorry</p>
+      <div className="text-center pt-5">
+        <p className="text-xl text-bold">Can not find any lectures, sorry</p>
+      </div>
     );
 
   return <Table lectures={lectures} />;

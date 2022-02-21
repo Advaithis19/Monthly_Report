@@ -38,7 +38,7 @@ const Mous = () => {
 
   if (!mous || mous.length === 0)
     return (
-      <div>
+      <div className="text-center pt-5">
         <p className="text-xl text-bold">Can not find any MoUs, sorry</p>
       </div>
     );

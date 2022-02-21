@@ -38,7 +38,11 @@ const FilteredBooks = () => {
   }, [start_date, end_date]);
 
   if (!books || books.length === 0)
-    return <p className="text-xl text-bold">Can not find any books, sorry</p>;
+    return (
+      <div className="text-center pt-5">
+        <p className="text-xl text-bold">Can not find any books, sorry</p>
+      </div>
+    );
 
   return <Table books={books} />;
 };

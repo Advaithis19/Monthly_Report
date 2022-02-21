@@ -38,7 +38,7 @@ const Conferences = () => {
 
   if (!conferences || conferences.length === 0)
     return (
-      <div>
+      <div className="text-center pt-5">
         <p className="text-xl text-bold">Can not find any conferences, sorry</p>
       </div>
     );

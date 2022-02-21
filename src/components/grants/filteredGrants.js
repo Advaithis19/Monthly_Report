@@ -39,7 +39,11 @@ const FilteredGrants = () => {
   }, [start_date, end_date]);
 
   if (!grants || grants.length === 0)
-    return <p className="text-xl text-bold">Can not find any grants, sorry</p>;
+    return (
+      <div className="text-center pt-5">
+        <p className="text-xl text-bold">Can not find any grants, sorry</p>
+      </div>
+    );
 
   return <Table grants={grants} />;
 };

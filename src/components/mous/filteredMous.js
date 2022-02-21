@@ -38,7 +38,11 @@ const FilteredMous = () => {
   }, [start_date, end_date]);
 
   if (!mous || mous.length === 0)
-    return <p className="text-xl text-bold">Can not find any MoUs, sorry</p>;
+    return (
+      <div className="text-center pt-5">
+        <p className="text-xl text-bold">Can not find any MoUs, sorry</p>
+      </div>
+    );
 
   return <Table mous={mous} />;
 };

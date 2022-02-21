@@ -31,7 +31,11 @@ const FilteredPublications = () => {
 
   if (!publications || publications.length === 0)
     return (
-      <p className="text-xl text-bold">Can not find any publications, sorry</p>
+      <div className="text-center pt-5">
+        <p className="text-xl text-bold">
+          Can not find any publications, sorry
+        </p>
+      </div>
     );
 
   return <Table publications={publications} />;

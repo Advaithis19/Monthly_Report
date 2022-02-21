@@ -38,7 +38,11 @@ const FilteredEvents = () => {
   }, [start_date, end_date]);
 
   if (!events || events.length === 0)
-    return <p className="text-xl text-bold">Can not find any events, sorry</p>;
+    return (
+      <div className="text-center pt-5">
+        <p className="text-xl text-bold">Can not find any events, sorry</p>
+      </div>
+    );
 
   return <Table events={events} />;
 };

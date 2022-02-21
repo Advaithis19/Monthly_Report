@@ -68,9 +68,11 @@ const MembershipDetail = () => {
 
   if (!membership || membership.length === 0)
     return (
-      <p className="text-xl text-bold">
-        Can not find required membership, sorry
-      </p>
+      <div className="text-center pt-5">
+        <p className="text-xl text-bold">
+          Can not find required membership, sorry
+        </p>
+      </div>
     );
   return (
     <Container

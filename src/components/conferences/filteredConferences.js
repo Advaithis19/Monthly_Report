@@ -39,7 +39,9 @@ const FilteredConferences = () => {
 
   if (!conferences || conferences.length === 0)
     return (
-      <p className="text-xl text-bold">Can not find any conferences, sorry</p>
+      <div className="text-center pt-5">
+        <p className="text-xl text-bold">Can not find any conferences, sorry</p>
+      </div>
     );
 
   return <Table conferences={conferences} />;

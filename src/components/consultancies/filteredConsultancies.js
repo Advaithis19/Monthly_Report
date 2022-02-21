@@ -39,7 +39,11 @@ const FilteredConsultancies = () => {
 
   if (!consultancies || consultancies.length === 0)
     return (
-      <p className="text-xl text-bold">Can not find any consultancies, sorry</p>
+      <div className="text-center pt-5">
+        <p className="text-xl text-bold">
+          Can not find any consultancies, sorry
+        </p>
+      </div>
     );
 
   return <Table consultancies={consultancies} />;

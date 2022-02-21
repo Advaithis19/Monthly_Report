@@ -39,9 +39,11 @@ const FilteredIndustrial_visits = () => {
 
   if (!industrial_visits || industrial_visits.length === 0)
     return (
-      <p className="text-xl text-bold">
-        Can not find any industrial_visits, sorry
-      </p>
+      <div className="text-center pt-5">
+        <p className="text-xl text-bold">
+          Can not find any industrial_visits, sorry
+        </p>
+      </div>
     );
 
   return <Table industrial_visits={industrial_visits} />;

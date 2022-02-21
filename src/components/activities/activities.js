@@ -38,7 +38,7 @@ const Activities = () => {
 
   if (!activities || activities.length === 0)
     return (
-      <div>
+      <div className="text-center pt-5">
         <p className="text-xl text-bold">Can not find any activities, sorry</p>
       </div>
     );

@@ -43,9 +43,11 @@ const Profile = () => {
 
   if (!profile || profile.length === 0)
     return (
-      <p className="text-xl text-bold">
-        Could not find the profile you asked for, sorry
-      </p>
+      <div className="text-center pt-5">
+        <p className="text-xl text-bold">
+          Could not find the profile you asked for, sorry
+        </p>
+      </div>
     );
   return (
     <Container

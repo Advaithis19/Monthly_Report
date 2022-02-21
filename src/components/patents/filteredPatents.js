@@ -38,7 +38,11 @@ const FilteredPatents = () => {
   }, [start_date, end_date]);
 
   if (!patents || patents.length === 0)
-    return <p className="text-xl text-bold">Can not find any patents, sorry</p>;
+    return (
+      <div className="text-center pt-5">
+        <p className="text-xl text-bold">Can not find any patents, sorry</p>
+      </div>
+    );
 
   return <Table patents={patents} />;
 };

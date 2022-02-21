@@ -39,7 +39,9 @@ const FilteredWorkshops = () => {
 
   if (!workshops || workshops.length === 0)
     return (
-      <p className="text-xl text-bold">Can not find any workshops, sorry</p>
+      <div className="text-center pt-5">
+        <p className="text-xl text-bold">Can not find any workshops, sorry</p>
+      </div>
     );
 
   return <Table workshops={workshops} />;

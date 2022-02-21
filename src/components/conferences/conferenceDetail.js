@@ -69,9 +69,11 @@ const ConferenceDetail = () => {
 
   if (!conference || conference.length === 0)
     return (
-      <p className="text-xl text-bold">
-        Can not find required conference, sorry
-      </p>
+      <div className="text-center pt-5">
+        <p className="text-xl text-bold">
+          Can not find required conference, sorry
+        </p>
+      </div>
     );
   return (
     <Container

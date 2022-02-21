@@ -68,7 +68,9 @@ const EventDetail = () => {
 
   if (!event || event.length === 0)
     return (
-      <p className="text-xl text-bold">Can not find required event, sorry</p>
+      <div className="text-center pt-5">
+        <p className="text-xl text-bold">Can not find required event, sorry</p>
+      </div>
     );
   return (
     <Container
