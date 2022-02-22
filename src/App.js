@@ -142,7 +142,8 @@ function App() {
           <AuthProvider>
             <Navbar />
             <LoadingIndicator />
-            <div className="min-h-[100vh] pt-5">
+
+            <div className="min-h-[100vh] pt-5 z-0">
               <Routes>
                 <Route
                   exact

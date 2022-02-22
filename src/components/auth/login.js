@@ -1,7 +1,8 @@
 import React, { useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-import { useForm } from "react-hook-form";
+import useForm from "../../validation/login/useForm";
+import validate from "../../validation/login/validateInfo";
 
 import AuthContext from "../../context/AuthContext";
 
@@ -16,54 +17,18 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 
-//yup
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
-
 const SignIn = () => {
   //context api consumption - declaration
   let { setAuthTokens } = useContext(AuthContext);
-
-  // form validation rules
-  const validationSchema = Yup.object().shape({
-    email: Yup.string()
-      .matches(
-        /[a-zA-Z]+[0-9]*[a-zA-Z]*@rvce\.edu\.in/i,
-        "Please enter RVCE email address"
-      )
-      .required("Email is required"),
-    password: Yup.string()
-      .required("Password is required")
-      .min(8, "Password must be at least 8 characters"),
-  });
-  const formOptions = { resolver: yupResolver(validationSchema) };
-
-  // get functions to build form with useForm() hook
-  const { register, handleSubmit, formState } = useForm(formOptions);
-  const { errors } = formState;
-
-  const initialFormData = Object.freeze({
-    email: "",
-    password: "",
-  });
-
-  const [formData, updateFormData] = useState(initialFormData);
 
   const HOST_SERVER_URL = "http://127.0.0.1:8000/";
 
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    updateFormData({
-      ...formData,
-      [e.target.name]: e.target.value.trim(),
-    });
-  };
-
-  const onSubmit = async (e) => {
+  const submitForm = async (e) => {
     let postData = new FormData();
-    postData.append("email", formData.email);
-    postData.append("password", formData.password);
+    postData.append("email", values.email);
+    postData.append("password", values.password);
 
     axios
       .post(`http://127.0.0.1:8000/api/token/`, postData)
@@ -83,6 +48,11 @@ const SignIn = () => {
       });
   };
 
+  const { handleChange, handleSubmit, values, errors } = useForm(
+    submitForm,
+    validate
+  );
+
   return (
     <Container
       maxWidth="sm"
@@ -98,7 +68,7 @@ const SignIn = () => {
         >
           Sign in
         </Typography>
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <TextField
               // basic
@@ -108,13 +78,11 @@ const SignIn = () => {
               label="Email address"
               variant="outlined"
               fullWidth
-              //hook form
-              {...register("email")}
               //to override onChange
               onChange={handleChange}
             />
             <small className="text-danger">
-              {errors.email ? errors.email.message : <span></span>}
+              {errors.email ? errors.email : <span></span>}
             </small>
           </Form.Group>
 
@@ -128,33 +96,31 @@ const SignIn = () => {
               label="Password"
               variant="outlined"
               fullWidth
-              //hook form
-              {...register("password")}
               //to override onChange
               onChange={handleChange}
             />
             <small className="text-danger">
-              {errors.password ? errors.password.message : <span></span>}
+              {errors.password ? errors.password : <span></span>}
             </small>
           </Form.Group>
 
           <Button variant="contained" color="primary" type="submit" fullWidth>
             Sign In
           </Button>
-          <Grid container className="mt-3">
-            <Grid item xs={6} className="text-left">
-              <a
-                href={HOST_SERVER_URL + "api/users/password_reset/"}
-                target="_blank"
-              >
-                Forgot password?
-              </a>
-            </Grid>
-            <Grid item xs={6} className="text-right">
-              <Link to="/register">Don't have an account? Sign up</Link>
-            </Grid>
-          </Grid>
         </Form>
+        <Grid container className="mt-3">
+          <Grid item xs={6} className="text-left">
+            <a
+              href={HOST_SERVER_URL + "api/users/password_reset/"}
+              target="_blank"
+            >
+              Forgot password?
+            </a>
+          </Grid>
+          <Grid item xs={6} className="text-right">
+            <Link to="/register">Don't have an account? Sign up</Link>
+          </Grid>
+        </Grid>
       </Box>
     </Container>
   );
