@@ -219,8 +219,7 @@ const Home = () => {
 
       <div className="w-[60%] h-[0.25px] bg-gray-400 mx-auto my-5" />
 
-      {user.is_teacher &&
-      !(pathList[1] === "publications" || pathList[0] === "publications") ? (
+      {user.is_teacher && !(pathList[1] === "publications") ? (
         <Grid container spacing={2}>
           <Grid item xs={12} md={6} className="text-right">
             <Link to={"/reports/" + pathList[1]}>
@@ -240,11 +239,13 @@ const Home = () => {
           </Grid>
         </Grid>
       ) : (
-        <Link to={"/reports/" + pathList[1]}>
-          <button className="w-[30%] border-1 border-[#27447e] rounded-2xl py-2 px-1 text-lg text-bold bg-[#b6def2] hover:bg-[#27447e] hover:text-white hover:bg-[#] transition duration-300">
-            All {pathList[1][0].toUpperCase() + pathList[1].slice(1)}
-          </button>
-        </Link>
+        !(pathList[1] === "publications") && (
+          <Link to={"/reports/" + pathList[1]}>
+            <button className="w-[30%] border-1 border-[#27447e] rounded-2xl py-2 px-1 text-lg text-bold bg-[#b6def2] hover:bg-[#27447e] hover:text-white hover:bg-[#] transition duration-300">
+              All {pathList[1][0].toUpperCase() + pathList[1].slice(1)}
+            </button>
+          </Link>
+        )
       )}
     </Container>
   );
