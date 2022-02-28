@@ -1,10 +1,5 @@
 import React from "react";
-import { useForm } from "react-hook-form";
 import semester_options from "../../constants/semesters";
-
-//yup
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
 
 // Bootstrap UI
 import { Form } from "react-bootstrap";
