@@ -124,7 +124,7 @@ const EditWorkshop = () => {
       users={users}
       handleSubmit={handleSubmit}
       errors={errors}
-      type="Create"
+      type="Edit"
     />
   );
 };
