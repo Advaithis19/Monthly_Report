@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import useAxios from "../../utils/axios";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -12,8 +12,11 @@ import Box from "@mui/material/Box";
 
 import ConfirmDialog from "../../utils/confirmDialog";
 
+import AuthContext from "../../context/AuthContext";
+
 const BookDetail = () => {
   let navigate = useNavigate();
+  const { user } = useContext(AuthContext);
 
   let api = useAxios();
   api.defaults.xsrfCookieName = "csrftoken";
@@ -110,38 +113,42 @@ const BookDetail = () => {
             </table>
           </Grid>
 
-          <div className="w-[100%] h-[0.25px] bg-gray-400 mx-auto mt-3" />
+          {user.is_teacher && (
+            <div>
+              <div className="w-[100%] h-[0.25px] bg-gray-400 mx-auto mt-3" />
 
-          <Grid item xs={6} className="text-center">
-            <Button
-              variant="outlined"
-              color="primary"
-              endIcon={<EditIcon />}
-              onClick={goToEdit}
-              className="w-[50%]"
-            >
-              Update
-            </Button>
-          </Grid>
-          <Grid item xs={6} className="text-center">
-            <Button
-              variant="outlined"
-              color="error"
-              startIcon={<DeleteIcon />}
-              onClick={() => setConfirmOpen(true)}
-              className="w-[50%]"
-            >
-              Delete
-            </Button>
-            <ConfirmDialog
-              title="Delete Book?"
-              open={confirmOpen}
-              setOpen={setConfirmOpen}
-              onConfirm={deleteBook}
-            >
-              Are you sure you want to delete this book?
-            </ConfirmDialog>
-          </Grid>
+              <Grid item xs={6} className="text-center">
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  endIcon={<EditIcon />}
+                  onClick={goToEdit}
+                  className="w-[50%]"
+                >
+                  Update
+                </Button>
+              </Grid>
+              <Grid item xs={6} className="text-center">
+                <Button
+                  variant="outlined"
+                  color="error"
+                  startIcon={<DeleteIcon />}
+                  onClick={() => setConfirmOpen(true)}
+                  className="w-[50%]"
+                >
+                  Delete
+                </Button>
+                <ConfirmDialog
+                  title="Delete Book?"
+                  open={confirmOpen}
+                  setOpen={setConfirmOpen}
+                  onConfirm={deleteBook}
+                >
+                  Are you sure you want to delete this book?
+                </ConfirmDialog>
+              </Grid>
+            </div>
+          )}
         </Grid>
       </Box>
     </Container>
