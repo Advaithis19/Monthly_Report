@@ -96,8 +96,6 @@ const SignIn = () => {
               label="Password"
               variant="outlined"
               fullWidth
-              //to override onChange
-              onChange={handleChange}
             />
             <small className="text-danger">
               {errors.password ? errors.password : <span></span>}
