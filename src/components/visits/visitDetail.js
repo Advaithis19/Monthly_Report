@@ -120,7 +120,7 @@ const Industrial_visitDetail = () => {
           </Grid>
 
           {user.is_teacher && (
-            <div>
+            <React.Fragment>
               <div className="w-[100%] h-[0.25px] bg-gray-400 mx-auto mt-3" />
 
               <Grid item xs={6} className="text-center">
@@ -153,7 +153,7 @@ const Industrial_visitDetail = () => {
                   Are you sure you want to delete this industrial_visit?
                 </ConfirmDialog>
               </Grid>
-            </div>
+            </React.Fragment>
           )}
         </Grid>
       </Box>
